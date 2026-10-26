@@ -81,7 +81,7 @@
     { id: 'own',       ...T('To own the hotel', 'このホテルのオーナーになること') },
     { id: 'secrets',   ...T('To learn the secrets of the hotel', 'このホテルの秘密を知ること') },
     { id: 'alone',     ...T('To be left alone', '誰にも邪魔されないこと') },
-    { id: 'god',       ...T('To get closer to God', '神に近づくこと') },
+    { id: 'god',       ...T('To get closer to God', '神様に近づくこと') },
     { id: 'wrong',     ...T('To never say something wrong again', '二度と間違ったことを言わないこと') },
   ];
 
@@ -114,8 +114,8 @@
     {
       id: 'chuck', name: T('Chuck Morrison', '受田 司'), kana: 'うけだ　つかさ', gender: 'M', wish: 'job', room: 3, checkIn: 21,
       fate: T(
-        `Chuck had been looking for work for a long time. When he walked into Room 3, he walked straight into a job: he became the hotel's receptionist, taking the place of the woman who had stood behind the desk all day. His own key card is still lying under the guest book. Today is his first day.`,
-        `受田司は長い間仕事を探していた。3号室に入ったその瞬間、彼はついに仕事を手に入れた。一日中フロントに立っていた女性に代わって、ホテルのフロント係になったのだ。彼自身のカードキーは今も宿帳の下に置かれたままで、今日が彼の勤務初日である。`),
+        `Chuck had been looking for work for a long time. When he walked into Room 3, he walked straight into a job: he became the hotel's receptionist, taking the place of the woman who had stood behind the desk all day. His own key card is still lying under the guest book.`,
+        `受田司は長い間仕事を探していた。3号室に入ったその瞬間、彼はついに仕事を手に入れた。一日中フロントに立っていた女性に代わって、ホテルのフロント係になったのだ。彼自身のカードキーは今も宿帳の下に置かれたままだ。`),
     },
     {
       id: 'sophia', name: T('Sophia Redstone', '木村 エマ'), kana: 'きむら　えま', gender: 'F', wish: 'target', room: 4, checkIn: 18,
@@ -275,7 +275,7 @@
       roomLabel: T('Room 777…7 (10¹⁰⁰ sevens)', '777…7号室（7が10¹⁰⁰個）'),
       fate: T(
         `Matthias wished to get closer to God. His room number turned out to be more sevens than anyone could ever write, on a floor so high that no elevator will ever reach it. He has been riding the left elevator upward since he checked in last night, and always will be.`,
-        `上田天馬は神に近づきたいと願った。彼の部屋番号は誰にも書ききれないほど7が並ぶ数で、その部屋はどんなエレベーターも辿り着けないほど高い階にあった。昨夜チェックインしてから、彼は左のエレベーターでずっと上昇を続けており、これからも永遠にそうだ。`),
+        `上田天馬は神様に近づきたいと願った。彼の部屋番号は誰にも書ききれないほど7が並ぶ数で、その部屋はどんなエレベーターも辿り着けないほど高い階にあった。昨夜チェックインしてから、彼は左のエレベーターでずっと上昇を続けており、これからも永遠にそうだ。`),
     },
     {
       id: 'kelly', name: T('Kelly Reyes', '坂本 葉月'), kana: 'さかもと　はづき', gender: 'F', wish: 'wrong', room: 6, checkIn: 22,
@@ -1109,7 +1109,7 @@ You find a piece of paper that reads: "Your target will arrive at 7pm."`,
       match: '@aida',
       text: T(
         `A woman has just stepped out of Room 76 and is pulling the door shut behind her.`,
-        `76号室から女性が出てきたところで、後ろ手にドアを閉めている。`),
+        `76号室から女性が出てきたところで、ドアを閉めている。`),
       dialogue: 'aida',
     },
     { match: '@you', text: NOTHING },
@@ -1388,10 +1388,10 @@ You find a piece of paper that reads: "Your target will arrive at 7pm."`,
           text: T(
             `Sure. At Hilbert's Hotel, we grant every wish. Just tell us your wish at check-in and go to your room, and it will be granted. We have infinitely many rooms. Tap your keycard in the elevator and it takes you to your floor. A warp device outside every room takes you instantly to any other room on the same floor. The dining room and other facilities are on this floor.
 
-Sorry, it's my first day on the job so that's about all I know so far.`,
+Sorry, I just started this job recently so that's about all I know so far.`,
             `もちろんです。ヒルベルト・ホテルでは、どんな願いも叶えてさしあげます。チェックインの際に願いをお伝えいただき、お部屋に入れば、その願いが叶います。客室は無限にございます。エレベーターでキーカードをかざせば、お部屋のある階へ参ります。各部屋の前にあるワープ装置で、同じ階のどの部屋の前へも一瞬で移動できます。ダイニングルームなどの施設はこの階にございます。
 
-申し訳ございません、今日が勤務初日でして、今お伝えできるのはこれくらいです。`),
+申し訳ございません、最近この仕事を始めたばかりで、今お伝えできるのはこれくらいです。`),
           next: 'menu',
         },
         corpse: {
@@ -1628,10 +1628,10 @@ Your phone buzzes. It's a message from an unknown number:
         const past = s.at !== null && s.at !== undefined;
         if (past && s.at < 22) return ride;
         const left = past
-          ? T(`The left elevator never comes. The indicator above it is lit, its number climbing steadily.`,
-            `左のエレベーターだけは来ない。その上の表示灯がともり、数字が着々と増えていく。`)
-          : T(`The left elevator never comes. The indicator above it is lit, its number already too long for the display.`,
-            `左のエレベーターだけは来ない。その上の表示灯はともっているが、数字はもう表示しきれないほど長くなっている。`);
+          ? T(`The left elevator is in use. The indicator above it is lit, its number climbing steadily.`,
+            `左のエレベーターは使用されている。その上の表示灯がともり、数字が着々と増えていく。`)
+          : T(`The left elevator is in use. The indicator above it is lit, its number already too long for the display.`,
+            `左のエレベーターは使用されている。その上の表示灯はともっているが、数字はもう表示しきれないほど長くなっている。`);
         return T(`${left.en}\n\n${ride.en}`, `${left.ja}\n\n${ride.ja}`);
       },
       landing: f => (f === 0 ? 'lobby' : f === 1 ? 1 : '7'.repeat(f - 1)),  // where the doors open
