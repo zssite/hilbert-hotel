@@ -521,9 +521,9 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 #2: "You don't remember anything?"
 
 #1: "Not really. I'm sure it'll come back to me."`,
-          `#1：「こんにちは、この席空いてますか？ 私、鈴木結衣です」
+          `#1：「こんにちは、この席空いてますか？ 私、結衣です」
 
-#2：「どうぞ。はじめまして、鈴木さん。どうしてこのホテルに？」
+#2：「どうぞ。はじめまして、結衣さん。どうしてこのホテルに？」
 
 #1：「それが不思議なんです。どうやってここに来たのか覚えていなくて。少し前に、上の階の部屋で目が覚めたばかりなんです」
 
@@ -537,7 +537,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 
 #2: "Lisa! We were watching your stream earlier! You disappeared right in the middle of it. Are you okay?"
 
-#3: "My stream? Oh… yes. Technical problems. I'm fine."
+#3: "My stream? Oh… yes. I'm fine."
 
 #1: "Happy birthday! I can't believe I get to say that to you in person!"
 
@@ -552,7 +552,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 
 #2：「七海！ さっき配信を見てたんです！ 途中で急に消えちゃって。大丈夫ですか？」
 
-#3：「配信……？ あ、はい。機材のトラブルで。もう大丈夫です」
+#3：「配信……？ あ、はい。もう大丈夫です」
 
 #1：「お誕生日おめでとうございます！ 直接言えるなんて信じられない！」
 
@@ -992,7 +992,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
       match: '@caleb',
       text: T(
         `You knock on the door. A woman answers. After talking for a while, you learn that her name is Megan and she has no idea how she got here.`,
-        `ドアをノックすると女性が出てきた。少し話してみると、彼女は鈴木結衣という名前で、どうやってここに来たのか全く覚えていないらしい。`),
+        `ドアをノックすると女性が出てきた。少し話してみると、彼女は結衣という名前で、どうやってここに来たのか全く覚えていないらしい。`),
     },
     { match: '@nigel', text: LOCKED },
     { match: '@chuck', text: LOCKED },
@@ -1399,7 +1399,7 @@ Sorry, I just started this job recently so that's about all I know so far.`,
             `Not another one… My boss says you're doing some detective work here. Take this Memory Device: it lets you replay scenes from yesterday. Come back once you've correctly identified 6 guests.
 
 The boss suggests going to Rooms 4, 5 and 14.`,
-            `またですか……。あなたが探偵のようなことをなさっていると、上司から伺っております。こちらの記憶装置をお使いください。昨日の出来事を再生できます。お客様を6人正しく特定できたら、またいらしてください。
+            `またですか……。昨日も人が死んだと聞きました。あなたが探偵のようなことをなさっていると、上司から伺っております。こちらの記憶装置をお使いください。昨日の出来事を再生できます。お客様を6人正しく特定できたら、またいらしてください。
 
 上司からは、4号室、5号室、14号室を調べてみるよう言付かっております。`),
           do: s => {
@@ -1692,7 +1692,10 @@ Should anything you read catch your eye, select the text to copy it into your no
 
 - Room 666 has the power to transport someone to another world.
 
-- Someone suddenly disappeared in Room 1214 earlier today.`,
+- Someone suddenly disappeared in Room 1214 earlier today.
+
+- Your check-in room determines whether you can leave the hotel alive.
+`,
           `- このホテルの他の階にも部屋がある。7号室は2階、77号室は3階、777号室は4階にある。
 
 - 誰かが真夜中からずっと7階にいる。
@@ -1701,7 +1704,10 @@ Should anything you read catch your eye, select the text to copy it into your no
 
 - 666号室には、人を異世界に転移させる力がある。
 
-- 今日、1214号室で誰かが忽然と姿を消した。`),
+- 今日、1214号室で誰かが忽然と姿を消した。
+
+- チェックインする部屋によって、生きてホテルを出られるかどうかが決まります。  
+`),
       },
     ],
 
