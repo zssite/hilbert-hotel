@@ -144,8 +144,8 @@
     {
       id: 'serena', name: T('Serena Becker', '九十九 百花'), kana: 'つくも　ももか', gender: 'F', wish: 'prophet', room: 24, checkIn: 14,
       fate: T(
-        `Serena wished to become a prophet. From the moment she entered Room 24, a new truth came to her every hour: who would die, and where. Every one of them came true. At 8 o'clock, the revelation was about her. She fled to her room, and before midnight her heart gave out, just as foretold.`,
-        `九十九百花は預言者になりたいと願った。24号室に入ってから、一時間ごとに未来が見えるようになり、その預言はことごとく的中した。そして20時の預言が告げたのは彼女自身の死で、彼女は真夜中を待たずに心臓発作で息を引き取った。`),
+        `Serena wished to become a prophet. From the moment she entered Room 24, a new truth came to her every hour: who would die, and where. Every one of them came true. At 8 o'clock, the revelation was about her. She fled to her room, and at the stroke of midnight her heart gave out, just as foretold.`,
+        `九十九百花は預言者になりたいと願った。24号室に入ってから、一時間ごとに未来が見えるようになり、その預言はことごとく的中した。そして20時の預言が告げたのは彼女自身の死で、真夜中ちょうどに、彼女は心臓発作で息を引き取った。`),
     },
     {
       id: 'emily', name: T('Emily Watson', '小鳥遊 莉花'), kana: 'たかなし　りか', gender: 'F', wish: 'animals', room: 25, checkIn: 14,
@@ -348,8 +348,9 @@
       match: 'lobby',
       text: T(
         // The key card is Chuck Morrison's: he checked into Room 3 and became the receptionist.
-        `You approach the receptionist, a young man in a uniform that looks brand new. Behind the desk, half hidden under the guest book, lies a room key card for Room 3.`,
-        `フロントには、真新しい制服に身を包んだ若い男性が立っている。カウンターの奥には、3号室のカードキーが宿帳の下に半分隠れるようにして置かれている。`),
+        // Cards never show a room number; it is written on the paper sleeve at check-in.
+        `You approach the receptionist, a young man in a uniform that looks brand new. Behind the desk, half hidden under the guest book, lies a key card in a paper sleeve. Someone has written "Room 3" on the sleeve.`,
+        `フロントには、真新しい制服に身を包んだ若い男性が立っている。カウンターの奥には、紙のケースに入ったカードキーが宿帳の下に半分隠れるようにして置かれている。ケースには手書きで「3号室」と書かれている。`),
       dialogue: 'receptionist',
       onEnter: s => {
         if (s.flag('diningCorpse')) s.set('lobbyAfterCorpse');
@@ -363,7 +364,7 @@
 #1: "No housekeeping. No room service. No knocking. Ever."
 
 *#1 rides the middle elevator alone. The floor indicator above it climbs: 1… 2… 3… and stops at 8.*`,
-          `*#1はフロント係が挨拶を言い終える前にキーカードを受け取る。*
+          `*#1はフロント係が挨拶を言い終える前にカードキーを受け取る。*
 
 #1：「掃除はいらない。ルームサービスもいらない。ノックもするな。絶対にだ」
 
@@ -402,7 +403,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 "Behold, my finest work, The Seven Dead Sins, is complete! The Sin of Pride has been executed."`,
           `床には男の死体が横たわっていて、そばにメモが落ちている。
 
-「見よ、我が最高傑作『七つの死罪』は完成した！ 傲慢の罪は執行された。」`);
+「見よ、我が最高傑作『七つの体罪』は完成した！ 傲慢の罪は執行された。」`);
         if (s.flag('lobbyAfterCorpse')) return body;
         // Until the player has been back to the lobby.
         return T(
@@ -427,7 +428,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 
 #2: "Yeah, the food here is awesome. By the way, nice to meet you. I'm Taylor. What's your name?"
 
-#1: "Nice to meet you too. I'm Dominique, a famous food reviewer. If you ever want to talk about food, come find me in Room 40."
+#1: "Nice to meet you too. I'm Dominique, a famous food reviewer. If you ever want to talk about food, come find me in Room 40. I'm heading back there now."
 
 *#1 leaves. A moment later, #3 walks in.*
 
@@ -444,7 +445,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 
 #2：「本当、ここの料理は最高ですよね。あ、はじめまして。和泉千尋と言います。あなたは？」
 
-#1：「おう、はじめまして！ 俺は田中博。これでも料理評論家として、ちょっとは名が知れてるんやで。料理の話がしたなったら、いつでも40号室に来てな」
+#1：「おう、はじめまして！ 俺は田中博。これでも料理評論家として、ちょっとは名が知れてるんやで。料理の話がしたなったら、いつでも40号室に来てな。ほな、いったん部屋に戻るわ」
 
 *#1が出ていく。少しして、#3が入ってくる。*
 
@@ -642,25 +643,6 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 *#3は部屋を飛び出していく。*`),
         21: anon(
-          `*#1, #2 and #3 sit around a poker table. Most of the chips are in front of #1.*
-
-#2: "All in."
-
-#1: "A pair of threes? Brave. I call."
-
-*#2 turns over a pair of threes. #1 shows a pair of fours and wins the pot.*
-
-*#3 stares at #1 in silence.*`,
-          `*#1、#2、#3がポーカーテーブルを囲んでいる。チップのほとんどは#1の前にある。*
-
-#2：「オールイン」
-
-#1：「スリーのワンペアで？ 攻めるね。コール」
-
-*#2がスリーのペアを表にする。#1はフォーのペアを見せ、ポットを手に入れる。*
-
-*#3は黙って#1を見つめている。*`),
-        22: anon(
           `*#1, #2, #3 and #4 sit around a mahjong table.*
 
 #1: "Riichi!"
@@ -703,6 +685,25 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 #1：「ロン！ 8000」
 
 #4：「だから言ったのに」`),
+        22: anon(
+          `*#1, #2 and #3 sit around a poker table. Most of the chips are in front of #1.*
+
+#2: "All in."
+
+#1: "A pair of threes? Brave. I call."
+
+*#2 turns over a pair of threes. #1 shows a pair of fours and wins the pot.*
+
+*#3 stares at #1 in silence.*`,
+          `*#1、#2、#3がポーカーテーブルを囲んでいる。チップのほとんどは#1の前にある。*
+
+#2：「オールイン」
+
+#1：「スリーのワンペアで？ 攻めるね。コール」
+
+*#2がスリーのペアを表にする。#1はフォーのペアを見せ、ポットを手に入れる。*
+
+*#3は黙って#1を見つめている。*`),
         23: anon(
           `*Only #1 and #2 are left at the table. #2's chips are stacked high.*
 
@@ -719,7 +720,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #1：「もう手持ちがない。残りはツケにしてもらえないか。明日まで――」
 
-#2：「今夜中に頼むよ。明日の朝一番でチェックアウトするから。1号室まで持ってきて」
+#2：「今夜中に頼むよ。明日の朝にチェックアウトするから。1号室まで持ってきて」
 
 #1：「分かった、分かったよ」
 
@@ -777,7 +778,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 #1: "Thanks, you too. Let me know if you find any leads on who the killer is. I'm in Room 848."
 
 #2: "I'm in Room 486 if you need me."`,
-          `#1：「座ってもいいですか？ 今日は何も手につかなくて。死体の話、聞きました？」
+          `#1：「座ってもいいですか？ 今日はどうにも落ち着かなくて。死体の話、聞きました？」
 
 #2：「死体？」
 
@@ -960,7 +961,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
         20: anon(
           `*#1 sits alone by the window. Suddenly, she goes rigid.*
 
-#1: "'The prophet will die before midnight.'"
+#1: "'The prophet will die at midnight.'"
 
 *The color drains from her face.*
 
@@ -969,7 +970,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 *#1 hurries out toward the elevators.*`,
           `*#1が窓際に一人で座っている。突然、彼女の体が強張る。*
 
-#1：「『預言者は真夜中までに死ぬ』」
+#1：「『預言者は真夜中に死ぬ』」
 
 *彼女の顔からみるみる血の気が引いていく。*
 
@@ -1371,6 +1372,12 @@ You find a piece of paper that reads: "Your target will arrive at 7pm."`,
               next: 'corpse',
               when: s => s.flag('diningCorpse') && !s.flag('reportedCorpse'),
             },
+            // Takes its place afterwards, so the lead to Rooms 4, 5 and 14 can be heard again.
+            {
+              text: T('Where should I start looking?', 'どこから調べればいいですか？'),
+              next: 'lead',
+              when: s => s.flag('reportedCorpse'),
+            },
             { text: T('Who is your boss?', 'あなたの上司は誰ですか？'), next: 'boss' },
             {
               text: T('I have identified 6 guests.', 'お客様を6人特定しました。'),
@@ -1386,12 +1393,12 @@ You find a piece of paper that reads: "Your target will arrive at 7pm."`,
         },
         hotel: {
           text: T(
-            `Sure. At Hilbert's Hotel, we grant every wish. Just tell us your wish at check-in and go to your room, and it will be granted. We have infinitely many rooms. Tap your keycard in the elevator and it takes you to your floor. A warp device outside every room takes you instantly to any other room on the same floor. The dining room and other facilities are on this floor.
+            `Sure. At Hilbert's Hotel, we grant every wish. Just tell us your wish at check-in and go to your room, and it will be granted. We have infinitely many rooms. Tap your key card in the elevator and it takes you to your floor. A warp device outside every room takes you instantly to any other room on the same floor. The dining room and other facilities are on this floor.
 
-Sorry, I just started this job recently so that's about all I know so far.`,
-            `もちろんです。ヒルベルト・ホテルでは、どんな願いも叶えてさしあげます。チェックインの際に願いをお伝えいただき、お部屋に入れば、その願いが叶います。客室は無限にございます。エレベーターでキーカードをかざせば、お部屋のある階へ参ります。各部屋の前にあるワープ装置で、同じ階のどの部屋の前へも一瞬で移動できます。ダイニングルームなどの施設はこの階にございます。
+Sorry, I just started this job recently. There are no shifts here and I'm the only one on the desk, so there's been nobody to show me the ropes. That's about all I know so far.`,
+            `もちろんです。ヒルベルト・ホテルでは、どんな願いも叶えてさしあげます。チェックインの際に願いをお伝えいただき、お部屋に入れば、その願いが叶います。客室は無限にございます。エレベーターでカードキーをかざせば、お部屋のある階へ参ります。各部屋の前にあるワープ装置で、同じ階のどの部屋の前へも一瞬で移動できます。ダイニングルームなどの施設はこの階にございます。
 
-申し訳ございません、最近この仕事を始めたばかりで、今お伝えできるのはこれくらいです。`),
+申し訳ございません、最近この仕事を始めたばかりでして。ここには交代のシフトもなく、フロント係は私一人ですので、教えてくれる人もおらず……。今お伝えできるのはこれくらいです。`),
           next: 'menu',
         },
         corpse: {
@@ -1411,6 +1418,12 @@ The boss suggests going to Rooms 4, 5 and 14.`,
         gotMemory: {
           speaker: '',
           text: T(`*You are given a Memory Device.*`, `*記憶装置を受け取った。*`),
+          next: 'menu',
+        },
+        lead: {
+          text: T(
+            `The boss suggests going to Rooms 4, 5 and 14.`,
+            `上司からは、4号室、5号室、14号室を調べてみるよう言付かっております。`),
           next: 'menu',
         },
         boss: {
@@ -1516,8 +1529,7 @@ The boss suggests going to Rooms 4, 5 and 14.`,
     //   { give: paperId, text }  hands over a paper (shown as an Inventory card)
     //   { read: paperId, text }  shows a paper's whole text on the page
     // Each step's paragraphs (split by blank lines) appear one at a time,
-    // `prologuePause` ms apart, or sooner when the player clicks.
-    prologuePause: 2000,
+    // each when the player clicks.
     prologue: [
       {
         ask: 'name',
@@ -1545,6 +1557,13 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
         text: T(
           `The sheet on top is headed *Instructions*. You read it carefully.`,
           `一番上の紙には「指示書」と書かれている。あなたはそれをじっくりと読んだ。`),
+      },
+      {
+        // The player's key card. No number on it, so it doesn't give away Room 78.
+        give: 'card',
+        text: T(
+          `Under the papers lies a key card stamped with the hotel's crest. You turn it over. There's no room number on it.`,
+          `紙の下には、ホテルの紋章が入ったカードキーがあった。裏返してみたが、部屋番号はどこにも書かれていない。`),
       },
       {
         // The room to the left is Aida's 76, which hints that the player's is 78
@@ -1602,9 +1621,9 @@ Your phone buzzes. It's a message from an unknown number:
       { id: 'common', name: T('Common Room', '談話室'),           floor: 0 },
     ],
 
-    // The only way between floors. Tapping a room card takes a guest to the
+    // The only way between floors. Tapping a key card takes a guest to the
     // floor their room is on; without one, the elevator goes to Floor 0. The
-    // player's card is for Room 78, on Floor 1, so from the lobby they tap it
+    // player's card (which, like every card here, shows no number) is for Room 78, on Floor 1, so from the lobby they tap it
     // and go up, and from Room 1 they ride down without it. The player never
     // gets the left car: Matthias Meyer is riding it up to his room, forever.
     elevators: {
@@ -1618,10 +1637,10 @@ Your phone buzzes. It's a message from an unknown number:
       to: s => (s.floor === 0 ? 1 : 0),
       inside: (s, to) => {
         const ride = to === 0
-          ? T(`Beside the doors is a panel for tapping a room card. You don't tap anything, and the elevator goes down to Floor 0.`,
-            `扉の横にルームカードをかざすパネルがある。何もかざさずにいると、エレベーターは0階へ降りていった。`)
-          : T(`Beside the doors is a panel for tapping a room card. You tap the card in your pocket, and the elevator takes you to Floor 1.`,
-            `扉の横にルームカードをかざすパネルがある。ポケットのカードをかざすと、エレベーターは1階へ上がっていった。`);
+          ? T(`Beside the doors is a panel for tapping a key card. You don't tap anything, and the elevator goes down to Floor 0.`,
+            `扉の横にカードキーをかざすパネルがある。何もかざさずにいると、エレベーターは0階へ降りていった。`)
+          : T(`Beside the doors is a panel for tapping a key card. You tap your key card, and the elevator takes you to Floor 1.`,
+            `扉の横にカードキーをかざすパネルがある。自分のカードキーをかざすと、エレベーターは1階へ上がっていった。`);
         // Matthias has been riding the left car up since 10 PM (and still is).
         // By now its floor number has outgrown the indicator: a hint that his
         // room is huge enough to write as 0.
@@ -1664,6 +1683,14 @@ Should anything you read catch your eye, select the text to copy it into your no
 宿帳は三件ずつ答え合わせをいたします。正しい行が三つそろうたびに、まとめて確定されます。
 
 気になる文章があれば、選択するだけでメモに書き写すことができます。`),
+      },
+      {
+        id: 'card',
+        title: T('Key Card', 'カードキー'),
+        start: false,  // found in the prologue
+        text: T(
+          `Your room's key card, black with the hotel's crest in gold. Like most hotel key cards, it shows no room number anywhere, so a lost card can't lead anyone to your door.`,
+          `自分の部屋のカードキー。黒地に金色でホテルの紋章が入っている。多くのホテルのカードキーと同じく、部屋番号はどこにも書かれていない。落としても、どの部屋の鍵なのか誰にも分からないようになっているのだ。`),
       },
       {
         id: 'names',

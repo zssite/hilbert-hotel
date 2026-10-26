@@ -69,6 +69,7 @@
       tooHigh: 'The warp device only accepts room numbers up to 999,999,999.',
       liftName: i => `Elevator ${i}`,
       useLift: 'Use Elevator',
+      liftPast: 'Back to the present to use the elevator.',
       liftEntered: name => `You entered the ${name}.`,
       noteAdd: 'Add note',
       notePlaceholder: 'Write something down…',
@@ -93,6 +94,9 @@
       fateShow: 'Show fate',
       fateHide: 'Hide fate',
       back: 'Back',
+      reset: 'Start over',
+      hide: 'Hide',
+      clickToContinue: 'Click to continue',
     },
     ja: {
       goTo: '部屋へ移動',
@@ -151,8 +155,9 @@
       tooHigh: 'ワープ装置が受け付けるのは999,999,999号室までだ。',
       liftName: i => `${i}号機`,
       useLift: 'エレベーターに乗る',
+      liftPast: 'エレベーターは現在に戻ってから使える。',
       liftEntered: name => `${name}に乗った。`,
-      noteAdd: '書き留める',
+      noteAdd: 'メモを追加',
       notePlaceholder: 'メモを書く…',
       clip: '＋ 手帳へ',
       clipped: '手帳に書き留めた。',
@@ -175,6 +180,9 @@
       fateShow: '結末を見る',
       fateHide: '結末を隠す',
       back: '戻る',
+      reset: '最初からやり直す',
+      hide: '閉じる',
+      clickToContinue: 'クリックして続ける',
     },
   };
 
@@ -439,7 +447,7 @@
       notePages: [{ uid: 'p1', title: '' }],
       notePage: 'p1', // the page of notes that is open
       history: [],    // recent rooms, newest first
-      taken: {},      // "dialogue/node/choiceIndex" -> true (for `once` choices)
+      taken: {},      // "dialogue/node/choiceIndex" -> true once picked (for `once` choices, and choices shown in order)
       ended: false,
     };
   }
@@ -742,7 +750,10 @@
       if (dlgRule) startDialogue(dlgRule.dialogue, view, s);
     }
 
+    // The elevators only run in the present, not in a scene from the Memory Device.
     $('#lift-button').hidden = !atElevators(room);
+    $('#lift-button').disabled = s.past;
+    $('#lift-button').title = s.past ? ui.liftPast : '';
     renderRecent();
     renderNav();
     renderMemory();
@@ -848,6 +859,7 @@
   function rideElevator() {
     const cfg = game.elevators;
     const s = ctx();
+    if (s.past) return;
     const car = cfg.board ? cfg.board(s) : Math.floor(Math.random() * (cfg.cars || [{}, {}, {}]).length);
     const to = cfg.to ? cfg.to(s) : (s.floor === 0 ? 1 : 0);
     goTo(cfg.landing(to, s), state.at, { car, to });
@@ -919,9 +931,17 @@
     // The choices, Continue, or end mark that follow the node's text.
     function finish(added) {
       const box = el('div', 'choices');
-      const choices = (node.choices || [])
+      let choices = (node.choices || [])
         .map((c, i) => ({ c, key: `${dlgId}/${nodeId}/${i}` }))
         .filter(({ c, key }) => (!c.when || c.when(s)) && !(c.once && state.taken[key]));
+      // Choices open up in order: only the first one not yet picked is shown
+      // (with every one already picked), so the conversation reads as written.
+      // Turn this off with `inOrder: false` on the dialogue or the node.
+      const inOrder = node.inOrder !== undefined ? !!node.inOrder : d.inOrder !== false;
+      if (inOrder) {
+        const unread = choices.findIndex(({ key }) => !state.taken[key]);
+        choices = choices.filter(({ key }, i) => i <= unread || state.taken[key]);
+      }
 
       const advance = (label, next, effect, key, isChoice) => {
         const b = el('button', 'choice', escapeHtml(label));
@@ -1434,7 +1454,7 @@
       const guest = g.cid ? charById[g.cid] : null;
       const locked = !!guest;
       const row = el('div', 'reg-row' + (locked ? ' locked' : ''));
-      row.appendChild(el('span', 'reg-idx', locked ? '<span class="tick" aria-label="confirmed">✓</span>' : String(i + 1)));
+      row.appendChild(el('span', 'reg-idx', locked ? `<span class="tick" aria-label="${escapeHtml(ui.confirmed)}">✓</span>` : String(i + 1)));
 
       const name = field('input', 'reg-name', i, 'name', ui.name);
       name.spellcheck = false;
@@ -1611,18 +1631,19 @@
   //   { give: paperId, text }    hands over a paper, shown as an Inventory card
   //   { read: paperId, text }    shows a paper's whole text on the page
   // Any step may also have `do(s)`, run when it appears. The newest step's
-  // paragraphs appear one at a time (see revealInTurn).
+  // paragraphs appear one at a time, each on a click (see revealInTurn).
   function prologue() { return game.prologue || []; }
 
-  // The newest step's paragraphs (and any paper card) appear one at a time:
-  // each after `game.prologuePause` ms (default 2000), or at once on a click
-  // or Space/Enter. Then `done` runs, which shows the step's controls.
+  // The newest step's paragraphs (and any paper card) appear one at a time,
+  // each on a click or Space/Enter, with a prompt at the bottom of the page
+  // until the last. Then `done` runs, which shows the step's controls.
   let stopReveal = () => {};
   function revealInTurn(items, done) {
     stopReveal();
-    const pause = game.prologuePause === undefined ? 2000 : game.prologuePause;
-    let i = 0, timer = null;
+    let i = 0;
     items.forEach((e, k) => e.classList.toggle('pending', k > 0));
+    const prompt = el('button', 'click-on', escapeHtml(ui.clickToContinue));
+    prompt.type = 'button';
     const onClick = () => advance();
     const onKey = e => {
       if (e.key !== ' ' && e.key !== 'Enter') return;
@@ -1635,23 +1656,23 @@
       document.addEventListener('keydown', onKey);
     }, 0);
     stopReveal = () => {
-      clearTimeout(timer);
+      prompt.remove();
       clearTimeout(listen);
       $('#screen').removeEventListener('click', onClick);
       document.removeEventListener('keydown', onKey);
       stopReveal = () => {};
     };
     function advance() {
-      clearTimeout(timer);
       i++;
       if (i < items.length) {
         items[i].classList.remove('pending');
         items[i].classList.add('reveal');
         items[i].scrollIntoView({ block: 'end' });
       }
-      if (i >= items.length - 1) { stopReveal(); done(); } else timer = setTimeout(advance, pause);
+      if (i >= items.length - 1) { stopReveal(); done(); }
     }
-    if (items.length <= 1) { stopReveal(); done(); } else timer = setTimeout(advance, pause);
+    if (items.length <= 1) { stopReveal(); done(); }
+    else $('#screen-actions').appendChild(prompt);
   }
 
   function runPrologue() {
@@ -1857,6 +1878,11 @@
     $('#note-add').textContent = ui.noteAdd;
     $('#note-page-delete').textContent = ui.deletePage;
     $('#clip').textContent = ui.clip;
+    $('#reset').title = ui.reset;
+    $('#reset').setAttribute('aria-label', ui.reset);
+    $('#nb-close').title = ui.hide;
+    $('#nb-close').setAttribute('aria-label', ui.hide);
+    $('#notebook').setAttribute('aria-label', ui.notebook);
     renderNav();
     renderMemory();
     renderNotebook();
