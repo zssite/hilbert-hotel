@@ -30,7 +30,7 @@
   // A body with one of the killer's notes beside it. who: 'man' or 'woman'.
   const sinNote = (who, sin, sinJa) => T(
     `A ${who} lies dead on the floor. A note lies beside ${who === 'man' ? 'him' : 'her'}:\n\n"The Sin of ${sin} has been executed."`,
-    `床には${who === 'man' ? '男' : '女性'}の死体が横たわっていて、そばにメモが落ちている。\n\n「${sinJa}の罪は執行された。」`);
+    `床には${who === 'man' ? '男' : '女性'}の死体が横たわっていて、そばにメモが落ちている。\n\n「${sinJa}の罪人は処刑された。」`);
 
   // A scene whose speakers are anonymized as #1, #2, …: adds a "Characters:"
   // line listing every #N that appears in the English text.
@@ -403,7 +403,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 "Behold, my finest work, The Seven Dead Sins, is complete! The Sin of Pride has been executed."`,
           `床には男の死体が横たわっていて、そばにメモが落ちている。
 
-「見よ、我が最高傑作『七つの体罪』は完成した！ 傲慢の罪は執行された。」`);
+「見よ、我が最高傑作『七つの体罪』は完成した！ 傲慢の罪人は処刑された。」`);
         if (s.flag('lobbyAfterCorpse')) return body;
         // Until the player has been back to the lobby.
         return T(
@@ -497,7 +497,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 *#2 and #3 leave the room.*`,
           `*床に男が倒れて死んでいる。そばにメモが落ちている。*
 
-「暴食の罪は執行された。」
+「暴食の罪人は処刑された。」
 
 *#1がやってきて、床の死体を見て悲鳴を上げる。*
 
@@ -1361,8 +1361,8 @@ You find a piece of paper that reads: "Your target will arrive at 7pm."`,
     },
 
     // The receptionist at the check-in desk in the lobby. She hands over the
-    // Memory Device once the player reports the body in the dining room, the
-    // Check-in List at 6 confirmed guests, and a last lead at 18.
+    // Memory Device once the player reports the body in the dining room, and a
+    // last lead at 15 confirmed guests.
     receptionist: {
       speaker: T('Receptionist', 'フロント係'),
       start: 'menu',
@@ -1384,14 +1384,9 @@ You find a piece of paper that reads: "Your target will arrive at 7pm."`,
             },
             { text: T('Who is your boss?', 'あなたの上司は誰ですか？'), next: 'boss' },
             {
-              text: T('I have identified 6 guests.', 'お客様を6人特定しました。'),
-              next: 'six',
-              when: s => s.confirmedCount() >= 6 && !s.hasPaper('checkin'),
-            },
-            {
-              text: T('I have identified 18 guests.', 'お客様を18人特定しました。'),
-              next: 'eighteen',
-              when: s => s.confirmedCount() >= 18 && !s.flag('told18'),
+              text: T('I have identified 15 guests.', 'お客様を15人特定しました。'),
+              next: 'fifteen',
+              when: s => s.confirmedCount() >= 15 && !s.flag('told15'),
             },
           ],
         },
@@ -1407,10 +1402,10 @@ Sorry, I just started this job recently. There are no shifts here and I'm the on
         },
         corpse: {
           text: T(
-            `Not another one… My boss says you're doing some detective work here. Take this Memory Device: it lets you replay scenes from yesterday. Come back once you've correctly identified 6 guests.
+            `Not another one… My boss says you're doing some detective work here. Take this Memory Device: it lets you replay scenes from yesterday. Come back once you've correctly identified 15 guests.
 
 The boss suggests going to Rooms 4, 5 and 14.`,
-            `またですか……。昨日も人が死んだと聞きました。あなたが探偵のようなことをなさっていると、上司から伺っております。こちらの記憶装置をお使いください。昨日の出来事を再生できます。お客様を6人正しく特定できたら、またいらしてください。
+            `またですか……。昨日も人が死んだと聞きました。あなたが探偵のようなことをなさっていると、上司から伺っております。こちらの記憶装置をお使いください。昨日の出来事を再生できます。お客様を15人正しく特定できたら、またいらしてください。
 
 上司からは、4号室、5号室、14号室を調べてみるよう言付かっております。`),
           do: s => {
@@ -1436,24 +1431,12 @@ The boss suggests going to Rooms 4, 5 and 14.`,
             `このホテルのオーナーです。7階にお住まいだと聞いておりますが、とても秘密主義な方で、直接お会いしたことはございません。指示はいつもメッセージで届きます。`),
           next: 'menu',
         },
-        six: {
-          text: T(
-            `It seems I underestimated your detective skills. I recovered the list of yesterday's check-ins and their times. Come back once you've identified 18 guests.`,
-            `どうやら、あなたの探偵としての腕を見くびっていたようです。昨日のチェックイン記録を、時刻とあわせて復元しました。お客様を18人特定できたら、またいらしてください。`),
-          do: s => s.give('checkin'),
-          next: 'gotList',
-        },
-        gotList: {
-          speaker: '',
-          text: T(`*You are given a Check-in List.*`, `*チェックイン一覧を受け取った。*`),
-          next: 'menu',
-        },
-        eighteen: {
+        fifteen: {
           text: T(
             `Nice work! The boss told me that someone might have left something interesting behind at Room 3333360. Good luck with the rest of the investigation.`,
             `お見事です！ 上司の話では、3333360号室に誰かが何か面白いものを残していったかもしれないとのことです。残りの調査も頑張ってください。`),
           do: s => {
-            s.set('told18');
+            s.set('told15');
             s.note(T('Receptionist: someone might have left something interesting in Room 3333360.', 'フロント係：3333360号室に誰かが何か面白いものを残していったかもしれない。'), 'lead-3333360');
           },
           next: 'menu',
@@ -1514,11 +1497,6 @@ The boss suggests going to Rooms 4, 5 and 14.`,
     // Extra buttons in the top bar while debugging.
     debugActions: [
       {
-        label: T('Dbg: Check-ins', 'Dbg: チェックイン'),
-        run: s => s.give('checkin'),
-        done: s => s.hasPaper('checkin'),
-      },
-      {
         // Fills every register row with its answer, which confirms them all
         // and opens the ending. Temporary: for checking the ending and fates.
         label: T('Dbg: Solve all', 'Dbg: 全員解決'),
@@ -1578,8 +1556,18 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
       },
     ],
 
-    // The Hints tab. A placeholder for now; give it text (or s => text) later.
-    hints: T('Hints will be added in the future.', 'ヒントは今後追加される予定です。'),
+    // The Hints tab. The player asks about a guest by name or wish, and sees
+    // the hints about that guest whose `needs` they have met:
+    //   { id, guest: charId, via: ['name', 'wish'] (default: both),
+    //     needs: ['dining@8' (a room seen at 8 o'clock yesterday), 'lobby'
+    //             (seen in the present), 'paper:id', 'flag:key', 'skill:id',
+    //             'confirmed:charId', '!flag:key' (not yet)], text: T(en, ja) }
+    // scenes.html's Hints view writes everything between the two markers, so
+    // edit the list either there or here, not in both at once.
+    // @hints-begin
+    hints: [
+    ],
+    // @hints-end
 
     // Shown once every row of the register is confirmed. The boss only ever
     // sends messages (see the receptionist's "Who is your boss?").
@@ -1705,7 +1693,6 @@ Should anything you read catch your eye, select the text to copy it into your no
       {
         id: 'checkin',
         title: T('Check-in List', 'チェックイン一覧'),
-        start: false,  // the receptionist hands it over once 6 guests are confirmed
         text: () => T(
           `Yesterday's check-ins at the front desk, by hour. Times are not exact: a guest listed at 11:00 checked in at some point between 11:00 and 11:59.\n\n${checkIns('en')}`,
           `昨日チェックインされたお客様の一覧です。時刻は正確ではありません。たとえば「11時台」のお客様は、11時00分から11時59分の間にチェックインされています。\n\n${checkIns('ja')}`),

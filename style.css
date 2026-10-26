@@ -261,6 +261,25 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .note-actions button:hover, .note-actions button:focus-visible { border-color: var(--ink-faint); color: var(--accent); }
 .muted { color: var(--ink-dim); font-style: italic; }
 
+/* hints: ask about a guest, then reveal hints one at a time */
+.hint-form { display: flex; gap: 0.4rem; align-items: center; padding: 0.2rem 0 0.8rem; border-bottom: 2px solid var(--ink-dim); }
+.hint-input {
+  flex: 1; min-width: 0;
+  background: transparent; border: none; border-bottom: 1px dashed var(--ink-dim);
+  padding: 0.3em 0.3em; font-family: var(--mono); font-size: 0.9rem;
+}
+.hint-form select {
+  min-width: 0; background: transparent; border: none; border-bottom: 1px dashed var(--ink-dim);
+  padding: 0.3em 0.2em; font-family: var(--mono); font-size: 0.9rem;
+}
+.hint-form select option { background: var(--paper); color: var(--ink); }
+.hint-wish { flex: 1; }
+.hint-input:focus, .hint-form select:focus { outline: none; border-bottom: 1px solid var(--accent); }
+.hint-result { padding-top: 0.8rem; }
+.hint-level { font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-dim); margin-bottom: 0.25rem; }
+.hint-text { border-left: 2px solid var(--accent); padding-left: 0.7rem; margin-bottom: 0.7rem; }
+.hint-more { font-size: 0.8rem; }
+
 .clip {
   position: fixed; z-index: 25;
   background: var(--accent); border-color: var(--accent); color: var(--paper);

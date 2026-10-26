@@ -57,6 +57,20 @@
       addedToInventory: 'Added to Inventory',
       hints: 'Hints',
       noHints: 'No hints yet.',
+      hintIntro: 'Ask about a guest by name or wish.',
+      hintBy: 'Ask by',
+      hintByName: 'Name',
+      hintByWish: 'Wish',
+      hintNamePlaceholder: 'Guest\'s name',
+      hintPickWish: 'Choose a wish',
+      hintAsk: 'Ask',
+      hintLevel: (n, of) => `Hint ${n} of ${of}`,
+      hintShow: n => `Show hint ${n}`,
+      hintUnknown: 'No guest by that name.',
+      hintLater: 'Hints will be added soon.',
+      hintMoreLater: 'Hints will be added soon.',
+      hintNoMore: 'There are no more hints about this guest.',
+      hintConfirmed: 'This guest is already confirmed in the register.',
       namesList: 'Guest list',
       wishesList: 'Wishes',
       namePlaceholder: 'name',
@@ -143,6 +157,20 @@
       addedToInventory: '持ち物に追加',
       hints: 'ヒント',
       noHints: 'ヒントはまだない。',
+      hintIntro: '宿泊客の名前か願いから、その人についてのヒントが見られる。',
+      hintBy: '調べ方',
+      hintByName: '名前',
+      hintByWish: '願い',
+      hintNamePlaceholder: '宿泊客の名前',
+      hintPickWish: '願いを選ぶ',
+      hintAsk: '調べる',
+      hintLevel: (n, of) => `ヒント ${n}／${of}`,
+      hintShow: n => `ヒント${n}を見る`,
+      hintUnknown: 'その名前の宿泊客は見つからない。',
+      hintLater: 'ヒントは近日追加予定。',
+      hintMoreLater: 'ヒントは近日追加予定。',
+      hintNoMore: 'この宿泊客のヒントはこれで全部だ。',
+      hintConfirmed: 'この宿泊客はすでに宿帳で確定している。',
       namesList: '宿泊客名簿',
       wishesList: '願いの一覧',
       namePlaceholder: '名前',
@@ -448,6 +476,7 @@
       notePage: 'p1', // the page of notes that is open
       history: [],    // recent rooms, newest first
       taken: {},      // "dialogue/node/choiceIndex" -> true once picked (for `once` choices, and choices shown in order)
+      hintsSeen: {},  // hint id -> true once the player has shown it
       ended: false,
     };
   }
@@ -606,6 +635,15 @@
       });
     });
     if (game.history) warn('"history" is now "memory": { from, to, except, empty }');
+    if (Array.isArray(game.hints)) {
+      game.hints.forEach((h, i) => {
+        if (!charById[h.guest]) warn(`hints[${i}] is about unknown guest "${h.guest}"`);
+        [].concat(h.needs || []).forEach(n => {
+          const m = String(n).replace(/^!/, '').match(/^(?:(paper|flag|skill|confirmed):.+|([^@]+)(?:@(\d{1,2}))?)$/);
+          if (!m || (m[2] !== undefined && normPlace(m[2]) === null)) warn(`hints[${i}] has a need it can't read: "${n}"`);
+        });
+      });
+    }
     memory.except.forEach(p => { if (p === null) warn('memory.except lists something that is neither a place id nor a room number'); });
     papers().forEach(p => {
       if (!p.id) warn('paper without id', p);
@@ -1500,12 +1538,145 @@
     renderHints();
   }
 
-  // Hints: a placeholder for now. A game may give `hints` as text.
+  // Hints. `hints` may be plain text, or a list of hints about guests:
+  //   { id, guest, via, needs, when, text }
+  // The player asks about a guest by name or wish (`via` limits a hint to one
+  // of these). A guest's hints are levels, shown one at a time in list order:
+  // each opens once its `needs` are all met and the level before it has been
+  // shown, so a level locked behind a paper holds back every level after it.
+  // A level stays open once shown.
+  let hintQuery = null; // { via: 'name' | 'wish', value } once the player asks
+  let hintVia = 'name';  // the way of asking picked in the form
+
+  // One of a hint's needs: 'room' or 'room@hour' visited (a place id or a room
+  // number), 'paper:id', 'flag:key', 'skill:id' or 'confirmed:charId'. A '!'
+  // in front means the opposite.
+  function hintNeed(need) {
+    const not = need[0] === '!';
+    const str = not ? need.slice(1) : need;
+    const m = str.match(/^(paper|flag|skill|confirmed):(.+)$/);
+    let ok;
+    if (m) ok = !!{ paper: state.papers, flag: state.flags, skill: state.skills, confirmed: state.confirmed }[m[1]][m[2]];
+    else {
+      const [r, h] = str.split('@');
+      const room = normPlace(r);
+      ok = room !== null && (state.visits[viewKey(room, h === undefined ? null : +h)] || 0) > 0;
+    }
+    return ok !== not;
+  }
+
+  // Who a query means: { label, guest } (guest null for a wish nobody made),
+  // or { error } for a name that matches no guest.
+  function hintTarget({ via, value }) {
+    if (via === 'wish') {
+      const wish = wishById[value];
+      return wish ? { label: L(wish), guest: game.characters.find(c => c.wish === wish.id) || null } : null;
+    }
+    const named = charsForName(value);
+    return named.length ? { label: charName(named[0]), guest: named[0] } : { error: ui.hintUnknown };
+  }
+
   function renderHints() {
     const panel = $('#hints');
-    const text = L(game.hints);
-    panel.innerHTML = text ? renderMarkup(text, ctx()) : '';
-    if (!text) panel.appendChild(el('p', 'muted', escapeHtml(ui.noHints)));
+    if (!Array.isArray(game.hints)) {
+      const text = L(game.hints);
+      panel.innerHTML = text ? renderMarkup(text, ctx()) : '';
+      if (!text) panel.appendChild(el('p', 'muted', escapeHtml(ui.noHints)));
+      return;
+    }
+    // Built once, so a re-render doesn't lose what is being typed.
+    if (!panel.querySelector('.hint-form')) {
+      panel.innerHTML = '';
+      panel.appendChild(el('p', 'reg-hint hint-intro'));
+      const form = el('form', 'hint-form');
+      form.autocomplete = 'off';
+      form.innerHTML = '<select class="hint-via"></select>'
+        + '<input class="hint-input" list="hint-names" spellcheck="false"><select class="hint-wish"></select>'
+        + '<button type="submit"></button><datalist id="hint-names"></datalist>';
+      const via = form.querySelector('.hint-via'), input = form.querySelector('.hint-input'), wish = form.querySelector('.hint-wish');
+      const ask = () => {
+        const value = hintVia === 'wish' ? wish.value : input.value.trim();
+        hintQuery = value ? { via: hintVia, value } : null;
+        renderHintResult();
+      };
+      form.addEventListener('submit', e => { e.preventDefault(); ask(); });
+      via.addEventListener('change', () => {
+        hintVia = via.value;
+        input.value = '';
+        wish.value = '';
+        renderHints();
+        (hintVia === 'wish' ? wish : input).focus();
+      });
+      wish.addEventListener('change', ask);
+      panel.appendChild(form);
+      panel.appendChild(el('div', 'hint-result'));
+    }
+    panel.querySelector('.hint-intro').textContent = ui.hintIntro;
+    const via = panel.querySelector('.hint-via');
+    via.setAttribute('aria-label', ui.hintBy);
+    via.innerHTML = '';
+    [['name', ui.hintByName], ['wish', ui.hintByWish]].forEach(([v, t]) => via.appendChild(new Option(t, v)));
+    via.value = hintVia;
+
+    const input = panel.querySelector('.hint-input');
+    input.hidden = hintVia === 'wish';
+    input.placeholder = ui.hintNamePlaceholder;
+    input.setAttribute('aria-label', input.placeholder);
+    // Suggest the names on the guest list.
+    const names = panel.querySelector('#hint-names');
+    names.innerHTML = '';
+    if (hintVia === 'name' && state.papers.names) {
+      game.characters.filter(c => !c.player).forEach(c => names.appendChild(new Option(L(c.name))));
+    }
+
+    const wish = panel.querySelector('.hint-wish');
+    const picked = wish.value;
+    wish.hidden = hintVia !== 'wish';
+    wish.setAttribute('aria-label', ui.hintByWish);
+    wish.innerHTML = '';
+    wish.appendChild(new Option(ui.hintPickWish, ''));
+    wishOrder.forEach(w => wish.appendChild(new Option(L(w), w.id)));
+    wish.value = picked;
+
+    panel.querySelector('.hint-form button').textContent = ui.hintAsk;
+    renderHintResult();
+  }
+
+  function renderHintResult() {
+    const out = $('#hints .hint-result');
+    if (!out) return;
+    out.innerHTML = '';
+    if (!hintQuery) return;
+    const t = hintTarget(hintQuery);
+    if (!t) return;
+    out.appendChild(el('h3', 'paper-title', escapeHtml(t.label || hintQuery.value)));
+    const say = msg => out.appendChild(el('p', 'muted', escapeHtml(msg)));
+    if (t.error) { say(t.error); return; }
+    if (t.guest && state.confirmed[t.guest.id]) { say(ui.hintConfirmed); return; }
+    const s = ctx();
+    const all = !t.guest ? [] : game.hints
+      .map((h, i) => Object.assign({ key: h.id || 'hint' + i }, h))
+      .filter(h => h.guest === t.guest.id && (![].concat(h.via || []).length || [].concat(h.via).includes(hintQuery.via)));
+    const unlocked = h => [].concat(h.needs || []).every(hintNeed) && (!h.when || h.when(s));
+    let n = 0;
+    while (n < all.length && state.hintsSeen[all[n].key]) n++;
+    all.slice(0, n).forEach((h, i) => {
+      out.appendChild(el('div', 'hint-level', escapeHtml(ui.hintLevel(i + 1, all.length))));
+      const text = L(h.text, s) || L(h.text && h.text.en, s);
+      out.appendChild(el('div', 'paper-text hint-text', renderMarkup(text, s)));
+    });
+    const next = all[n];
+    if (next && unlocked(next)) {
+      const b = el('button', 'hint-more', escapeHtml(ui.hintShow(n + 1)));
+      b.type = 'button';
+      b.addEventListener('click', () => {
+        state.hintsSeen[next.key] = true;
+        save();
+        renderHintResult();
+      });
+      out.appendChild(b);
+    } else if (next) say(n ? ui.hintMoreLater : ui.hintLater);
+    else say(n ? ui.hintNoMore : ui.hintLater);
   }
 
   // ---------------------------------------------------------------------------
@@ -1797,6 +1968,9 @@
     editing = null;
     openItem = null;
     notesShown = '';
+    hintQuery = null;
+    hintVia = 'name';
+    $('#hints').innerHTML = '';
     save();
     applyLanguage();
     ['#room-body', '#room-number', '#room-floor', '#room-name', '#room-time', '#recent', '#places'].forEach(sel => { $(sel).innerHTML = ''; });
