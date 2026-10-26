@@ -815,7 +815,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #1：「さっきから一度も映画を見ていませんね。大丈夫ですか？」
 
-#2：「失礼。ずいぶん長いあいだ会っていない人を探しに来たんですが、いまだにどこにいるのか見当もつかなくて」
+#2：「失礼。ずいぶん長い間会っていない人を探しに来たんですが、いまだにどこにいるのか見当もつかなくて」
 
 #1：「それなら、談話室にいる女の人と話してみたら？ これから起きることが分かるみたいなの」
 
@@ -1671,7 +1671,7 @@ Your phone buzzes. It's a message from an unknown number:
         text: T(
           `Welcome to Hilbert's Hotel, where every wish is granted.
 
-We hear you enjoy a good mystery, so we have prepared one for you. Yesterday, a number of guests checked into this hotel. Can you work out each guest's name, wish and room number?
+We hear you enjoy a good mystery, so we have prepared one for you. Since yesterday, a number of guests have checked into this hotel. Can you work out each guest's name, wish and room number?
 
 Write your answers in the **Register**: one row per guest, filled in any order. A room numbered above 999,999,999 may simply be written as 0.
 
@@ -1680,7 +1680,7 @@ The register checks your answers three at a time: whenever three rows are correc
 Should anything you read catch your eye, select the text to copy it into your notes.`,
           `ヒルベルト・ホテルへようこそ。当ホテルでは、どんな願いも叶えてさしあげます。
 
-謎解きがお好きだと伺いましたので、一つご用意いたしました。昨日、このホテルには何人ものお客様がチェックインされました。それぞれのお客様の名前、願い、部屋番号を突き止められるでしょうか？
+謎解きがお好きだと伺いましたので、一つご用意いたしました。昨日から、このホテルには何人ものお客様がチェックインされています。それぞれのお客様の名前、願い、部屋番号を突き止められるでしょうか？
 
 答えは **宿帳** にお書きください。お客様一人につき一行で、どの行から埋めてもかまいません。999,999,999より大きい部屋番号は0と書いてください。
 
@@ -1708,7 +1708,7 @@ Should anything you read catch your eye, select the text to copy it into your no
         start: false,  // the receptionist hands it over once 6 guests are confirmed
         text: () => T(
           `Yesterday's check-ins at the front desk, by hour. Times are not exact: a guest listed at 11:00 checked in at some point between 11:00 and 11:59.\n\n${checkIns('en')}`,
-          `昨日チェックインされたお客様の一覧です。時刻は正確ではありません。たとえば「11時台」のお客様は、11時00分から11時59分のあいだにチェックインされています。\n\n${checkIns('ja')}`),
+          `昨日チェックインされたお客様の一覧です。時刻は正確ではありません。たとえば「11時台」のお客様は、11時00分から11時59分の間にチェックインされています。\n\n${checkIns('ja')}`),
       },
       {
         id: 'secrets',
