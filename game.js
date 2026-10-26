@@ -82,7 +82,7 @@
     { id: 'secrets',   ...T('To learn the secrets of the hotel', 'このホテルの秘密を知ること') },
     { id: 'alone',     ...T('To be left alone', '誰にも邪魔されないこと') },
     { id: 'god',       ...T('To get closer to God', '神様に近づくこと') },
-    { id: 'wrong',     ...T('To never say something wrong again', '二度と間違ったことを言わないこと') },
+    { id: 'wrong',     ...T('To never say something wrong again', '二度と失言しないこと') },
   ];
 
   // ---------------------------------------------------------------------------
@@ -102,8 +102,8 @@
     {
       id: 'caleb', name: T('Caleb Williams', '鈴木 翔太'), kana: 'すずき　しょうた', gender: 'M', wish: 'revive', room: 14, checkIn: 11,
       fate: T(
-        `Caleb checked in hoping to bring his late wife back. The moment he stepped into Room 14, the hotel granted it, at a price: Caleb was gone, and Megan Williams woke up in his place. She has spent every hour since trying to remember how she got here.`,
-        `鈴木翔太は亡くした妻を生き返らせたいと願ってチェックインした。14号室に足を踏み入れた瞬間、その願いは叶ったが、それには代償があった。翔太の姿は消え、代わりに妻の結衣が目を覚ましたのだ。彼女はそれ以来ずっと自分がどうやってここに来たのかを思い出そうとしている。`),
+        `Caleb checked in hoping to bring his late wife back. He was given Room 14, and like every guest given a room with a 4, he would not live out the day. The hotel granted his wish with the life he was about to lose: the moment he stepped inside, Caleb was gone, and Megan Williams woke up in his place. She has spent every hour since trying to remember how she got here.`,
+        `鈴木翔太は亡くした妻を生き返らせたいと願ってチェックインした。割り当てられたのは14号室。4のつく部屋に泊まった客は皆、その日のうちに命を落とす。ホテルは、彼がどのみち失うはずだったその命で願いを叶えた。部屋に足を踏み入れた瞬間、翔太の姿は消え、代わりに妻の結衣が目を覚ましたのだ。彼女はそれ以来ずっと自分がどうやってここに来たのかを思い出そうとしている。`),
     },
     {
       id: 'nigel', name: T('Nigel Richmond', '羽生 直樹'), kana: 'はぶ　なおき', gender: 'M', wish: 'troubles', room: 2, checkIn: 10,
@@ -281,7 +281,7 @@
       id: 'kelly', name: T('Kelly Reyes', '坂本 葉月'), kana: 'さかもと　はづき', gender: 'F', wish: 'wrong', room: 6, checkIn: 22,
       fate: T(
         `Kelly wished never to say something wrong again. She hasn't: she can no longer say anything at all.`,
-        `坂本葉月は二度と間違ったことを言いたくないと願った。その願いどおり、彼女はあれから一度も間違ったことを言っていない。もう何も話せなくなってしまったからだ。`),
+        `坂本葉月は二度と失言したくないと願った。その願いどおり、彼女はあれから一度も失言していない。もう何も話せなくなってしまったからだ。`),
     },
   ];
 
