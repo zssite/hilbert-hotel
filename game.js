@@ -265,7 +265,7 @@
       id: 'levin', name: T('Levin Cook', '竹内 勇'), kana: 'たけうち　いさむ', gender: 'M', wish: 'alone', room: 7777777, checkIn: 13,
       fate: T(
         `Levin wished to be left alone. He rode the elevator up to Floor 8, shut himself in Room 7777777, and has not opened the door since. No housekeeping. No room service. No knocking. Ever.`,
-        `竹内勇は誰にも邪魔されないことを願った。エレベーターで8階へ上がり、7777777号室に閉じこもって以来、一度も扉を開けていない。「掃除もいらない。ルームサービスもいらない。ノックもするな。絶対にだ」という、彼の言葉どおりに。`),
+        `竹内勇は誰にも邪魔されないことを願った。エレベーターで8階へ上がり、7777777号室に閉じこもって以来、一度も扉を開けていない。「掃除はいらない。ルームサービスもいらない。ノックもするな。絶対にだ」という、彼の言葉どおりに。`),
     },
     {
       id: 'matthias', name: T('Matthias Meyer', '上田 天馬'), kana: 'うえだ　てんま', gender: 'M', wish: 'god', checkIn: 22,
@@ -432,7 +432,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 
 *#1 leaves. A moment later, #3 walks in.*
 
-#3: "Morning! Mind if I sit here?"
+#3: "Morning! Just checked in. Mind if I sit here?"
 
 #2: "…"
 
@@ -449,7 +449,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 
 *#1が出ていく。少しして、#3が入ってくる。*
 
-#3：「おはよ〜！ ここ、座っていい？」
+#3：「おはよ〜！ さっきチェックインしたばっかなんだけど、ここ座っていい？」
 
 #2：「……」
 
@@ -836,7 +836,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #2: "I suppose I am."
 
-#1: "Wait, I just saw this on my phone. The news says you became the richest person in the world this morning. Some deal went through overnight."
+#1: "Wait, I just saw this on my phone. The news says you became the richest person in the world today. Some deal went through overnight."
 
 #2: "Did it? How nice."
 
@@ -851,13 +851,13 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #2：「ええ、そうですわ」
 
-#1：「待って、今スマホで見たんですけど。ニュースによると、今朝あなたが世界一の金持ちになったって。一晩で大きな取引がまとまったらしい」
+#1：「待って、今スマホで見たんですけど。ニュースによると、今日あなたが世界一の金持ちになったって。一晩で大きな取引がまとまったらしい」
 
 #2：「あら、そうですの。それはよかったですわ」
 
 #1：「でも……どうしてあなたのような人がこんなところに？ もう何もかも持っているじゃないですか」
 
-#2：「何もかも？ そんなもの、ありませんわ。それがあなたとの違いですの。あなたは飢えが足りないのよ。だから庶民なのですわ。それで、あなたのような方がどうしてここに？」
+#2：「何もかも？ そんなもの、ありませんわ。それがあなたとの違いですの。あなたは飢えが足りないのよ。だから庶民なのですわ。それで、あなたみたいな庶民が、こんなところに何の用ですの？」
 
 #1：「僕は……失った大切な人を取り戻すために来たんです」
 
@@ -892,7 +892,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #1：「どんなことでも助かります。他に何か分かったら、教えてください。私は848号室にいます」
 
-#2：「私は24号室だよ。用があればノックして」`),
+#2：「私は24号室よ。用があればノックして」`),
         16: anon(
           `#1: "It happened again."
 
@@ -1566,11 +1566,11 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
           `紙の下には、ホテルの紋章が入ったカードキーがあった。裏返してみたが、部屋番号はどこにも書かれていない。`),
       },
       {
-        // The room to the left is Aida's 76, which hints that the player's is 78
-        // (77 is not on Floor 1).
+        // The room next door on the elevator side (lower numbers) is Aida's 76,
+        // which hints that the player's is 78 (77 is not on Floor 1).
         text: T(
-          `You step out of your room into the corridor and almost bump into a woman coming out of the room to your left.`,
-          `部屋を出て廊下に足を踏み出したとたん、左隣の部屋から出てきた女性とぶつかりそうになった。`),
+          `You step out of your room into the corridor and almost bump into a woman coming out of the room next to yours, on the elevator side.`,
+          `部屋を出て廊下に足を踏み出したとたん、エレベーター側の隣の部屋から出てきた女性とぶつかりそうになった。`),
       },
     ],
 
