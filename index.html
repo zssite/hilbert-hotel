@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hilbert's Mysterious Hotel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Limelight&family=Shippori+Mincho:wght@400;600&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1 id="game-title">Hilbert's Mysterious Hotel</h1>
+    <span id="progress" class="progress"></span>
+    <div class="topbar-actions">
+      <button id="debug-memory" class="debug" type="button" hidden></button>
+      <span id="debug-actions" class="debug-actions"></span>
+      <button id="fates-button" type="button" hidden></button>
+      <button id="prologue-button" type="button" hidden></button>
+      <button id="nb-toggle" type="button" aria-controls="notebook"><span id="nb-toggle-label"></span> <span id="nb-toggle-count"></span></button>
+      <button id="reset" type="button" title="Reset" aria-label="Reset">↺</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="room" aria-live="polite">
+      <div class="room-head">
+        <div id="room-number" class="room-number"></div>
+        <div class="room-meta"><span id="room-floor"></span><button id="lift-button" class="lift-call" type="button" hidden></button><span id="room-name"></span><span id="room-time" class="room-time"></span></div>
+      </div>
+      <div id="room-body" class="room-body"></div>
+
+      <form id="go-form" class="go" autocomplete="off">
+        <div id="memory" class="memory" hidden>
+          <span id="memory-label" class="memory-label"></span>
+          <div id="hours" class="hours"></div>
+          <button id="present-button" type="button" hidden></button>
+        </div>
+        <label id="go-label" for="go-input"></label>
+        <div id="places" class="places"></div>
+        <div id="go-row" class="go-row">
+          <input id="go-input" inputmode="numeric" spellcheck="false">
+          <button id="go-button" type="submit"></button>
+        </div>
+        <div id="go-error" class="go-error" role="alert"></div>
+        <div id="recent" class="recent"></div>
+      </form>
+    </section>
+
+    <aside id="notebook" class="notebook" aria-label="Notebook">
+      <div class="tabs" role="tablist">
+        <button id="tab-inventory" class="tab active" type="button" role="tab" aria-selected="true"></button>
+        <button id="tab-register" class="tab" type="button" role="tab" aria-selected="false"></button>
+        <button id="tab-notes" class="tab" type="button" role="tab" aria-selected="false"></button>
+        <button id="tab-hints" class="tab" type="button" role="tab" aria-selected="false"></button>
+        <button id="nb-close" class="nb-close" type="button" aria-label="Hide">×</button>
+      </div>
+      <div id="inventory" class="tab-panel inventory"></div>
+      <div id="register" class="tab-panel register" hidden></div>
+      <div id="notes" class="tab-panel notes" hidden>
+        <div id="note-pages" class="note-pages"></div>
+        <div class="note-page-head">
+          <input id="note-page-title" class="note-page-title" maxlength="40" spellcheck="false">
+          <button id="note-page-delete" type="button"></button>
+        </div>
+        <form id="note-form" class="note-form" autocomplete="off">
+          <textarea id="note-input" rows="3"></textarea>
+          <button id="note-add" type="submit"></button>
+        </form>
+        <div id="notes-list"></div>
+      </div>
+      <div id="hints" class="tab-panel hints" hidden></div>
+    </aside>
+  </main>
+
+  <div id="screen" class="screen" hidden>
+    <div class="screen-card">
+      <h1 id="screen-title" class="screen-title"></h1>
+      <div id="screen-body" class="screen-body"></div>
+      <div id="screen-actions" class="screen-actions"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+  <button id="clip" class="clip" type="button" hidden></button>
+
+  <div id="modal" class="modal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 id="modal-title"></h2>
+      <div id="modal-body"></div>
+      <div id="modal-buttons" class="modal-buttons"></div>
+    </div>
+  </div>
+
+  <script src="engine.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,1980 @@
+/*
+ * Hilbert Hotel engine
+ * --------------------
+ * A tiny engine for Obra-Dinn-style deduction games set in a hotel with a
+ * room for every positive integer. All content lives in game.js and is handed
+ * to the engine through HOTEL.define({...}). See README.md for the data format.
+ */
+(function () {
+  'use strict';
+
+  // ---------------------------------------------------------------------------
+  // Built-in UI strings. Games may override any of these via `ui: { en, ja }`.
+  // ---------------------------------------------------------------------------
+  const UI = {
+    en: {
+      goTo: 'Go to room',
+      go: 'Go',
+      placeholder: 'any positive integer',
+      notebook: 'Notebook',
+      register: 'Register',
+      notes: 'Notes',
+      noNotes: 'Nothing written down yet.',
+      name: 'Guest',
+      wish: 'Wish',
+      room: 'Room',
+      unknown: '—',
+      confirmed: 'Confirmed',
+      roomTitle: n => `Room ${n}`,
+      floorTitle: f => `Floor ${f}`,
+      recent: 'Recent',
+      invalid: 'Room numbers are positive integers: 1, 2, 3, …',
+      zero: 'There is no Room 0. The hotel begins at 1.',
+      startGame: 'Start Game',
+      chooseLanguage: 'Choose language',
+      langLocked: 'The language is fixed for this game. Start a new game to change it.',
+      yourName: 'your name',
+      resume: 'Continue',
+      newGame: 'New game',
+      prologueLog: 'Read the prologue',
+      resetConfirm: 'Erase all progress and start over?',
+      continue: 'Continue',
+      confirmToast: k => `${k} deductions confirmed.`,
+      close: 'Close',
+      memory: 'Memory Device',
+      noScenes: 'nothing to see',
+      debugMemory: 'Dbg: Memory',
+      present: 'Back to the present',
+      hour: h => `${pad2(h)}:00`,
+      hourShort: h => pad2(h),
+      span: h => `${pad2(h)}:00–${pad2(h + 1)}:00`,
+      pastTitle: t => `Yesterday, ${t}`,
+      pastEmpty: 'The room as it was then. Nothing here concerns the register.',
+      badTime: (a, b) => `The Memory Device only reaches the hours from ${pad2(a)}:00 to ${pad2(b)}:00 of yesterday.`,
+      inventory: 'Inventory',
+      noItems: 'You aren\'t carrying anything.',
+      inventoryBack: '‹ Inventory',
+      addedToInventory: 'Added to Inventory',
+      hints: 'Hints',
+      noHints: 'No hints yet.',
+      namesList: 'Guest list',
+      wishesList: 'Wishes',
+      namePlaceholder: 'name',
+      bigRoom: 'For a room above 999,999,999, you may write 0.',
+      gotPaper: t => `Received: ${t}`,
+      learned: name => `New skill: ${name}`,
+      obtained: name => `Obtained: ${name}`,
+      walkTo: 'Go to',
+      otherFloor: where => `The warp device fails to warp you to ${where}.`,
+      tooHigh: 'The warp device only accepts room numbers up to 999,999,999.',
+      liftName: i => `Elevator ${i}`,
+      useLift: 'Use Elevator',
+      liftEntered: name => `You entered the ${name}.`,
+      noteAdd: 'Add note',
+      notePlaceholder: 'Write something down…',
+      clip: '+ Notebook',
+      clipped: 'Added to the notebook.',
+      edit: 'Edit',
+      save: 'Save',
+      cancel: 'Cancel',
+      delete: 'Delete',
+      deleteConfirm: 'Delete this note?',
+      pageTitle: i => `Page ${i}`,
+      newPage: '+ Page',
+      deletePage: 'Delete page',
+      deletePageConfirm: 'Delete this page and the notes you wrote on it?',
+      fates: 'See everyone\'s fate',
+      fatesTitle: 'Everyone\'s fate',
+      fatesSort: 'Sort',
+      fatesByName: 'A–Z',
+      fatesByRoom: 'By room',
+      fatesShowAll: 'Show all fates',
+      fatesHideAll: 'Hide all fates',
+      fateShow: 'Show fate',
+      fateHide: 'Hide fate',
+      back: 'Back',
+    },
+    ja: {
+      goTo: '部屋へ移動',
+      go: '移動',
+      placeholder: '正の整数',
+      notebook: '手帳',
+      register: '宿帳',
+      notes: 'メモ',
+      noNotes: 'まだ何も書き留めていない。',
+      name: '宿泊客',
+      wish: '願い',
+      room: '部屋',
+      unknown: '—',
+      confirmed: '確定',
+      roomTitle: n => `${n}号室`,
+      floorTitle: f => `${f}階`,
+      recent: '最近',
+      invalid: '部屋番号は正の整数です（1, 2, 3, …）。',
+      zero: '0号室は存在しない。ホテルは1から始まる。',
+      startGame: 'ゲームを始める',
+      chooseLanguage: '言語を選ぶ',
+      langLocked: 'このゲームの言語は固定されています。変更するには最初から始めてください。',
+      yourName: 'あなたの名前',
+      resume: '続きから',
+      newGame: '最初から',
+      prologueLog: 'プロローグを読み返す',
+      resetConfirm: 'すべての進行状況を消去して最初からやり直しますか？',
+      continue: '続ける',
+      confirmToast: k => `${k}件の推理が確定した。`,
+      close: '閉じる',
+      memory: '記憶装置',
+      noScenes: '見るものはない',
+      debugMemory: 'Dbg: 記憶装置',
+      present: '現在に戻る',
+      hour: h => `${h}時`,
+      hourShort: h => `${h}時`,
+      span: h => `${h}時〜${h + 1}時`,
+      pastTitle: t => `昨日 ${t} の様子`,
+      pastEmpty: 'その時の部屋の姿。宿帳に関わるものは何もない。',
+      badTime: (a, b) => `記憶装置で見られるのは、昨日の${a}時台から${b}時台までです。`,
+      inventory: '持ち物',
+      noItems: '何も持っていない。',
+      inventoryBack: '‹ 持ち物',
+      addedToInventory: '持ち物に追加',
+      hints: 'ヒント',
+      noHints: 'ヒントはまだない。',
+      namesList: '宿泊客名簿',
+      wishesList: '願いの一覧',
+      namePlaceholder: '名前',
+      bigRoom: '999,999,999より大きい部屋番号は 0 と書いてもよい。',
+      gotPaper: t => `受け取った：${t}`,
+      learned: name => `新しいスキル：${name}`,
+      obtained: name => `入手した：${name}`,
+      walkTo: '移動先',
+      otherFloor: where => `ワープ装置は${where}へのワープに失敗した。`,
+      tooHigh: 'ワープ装置が受け付けるのは999,999,999号室までだ。',
+      liftName: i => `${i}号機`,
+      useLift: 'エレベーターに乗る',
+      liftEntered: name => `${name}に乗った。`,
+      noteAdd: '書き留める',
+      notePlaceholder: 'メモを書く…',
+      clip: '＋ 手帳へ',
+      clipped: '手帳に書き留めた。',
+      edit: '編集',
+      save: '保存',
+      cancel: 'キャンセル',
+      delete: '削除',
+      deleteConfirm: 'このメモを削除しますか？',
+      pageTitle: i => `${i}ページ`,
+      newPage: '＋ ページ',
+      deletePage: 'ページを削除',
+      deletePageConfirm: 'このページと、そこに書いたメモを削除しますか？',
+      fates: 'みんなの結末を見る',
+      fatesTitle: 'みんなの結末',
+      fatesSort: '並べ替え',
+      fatesByName: '名前順',
+      fatesByRoom: '部屋番号順',
+      fatesShowAll: 'すべての結末を表示',
+      fatesHideAll: 'すべての結末を隠す',
+      fateShow: '結末を見る',
+      fateHide: '結末を隠す',
+      back: '戻る',
+    },
+  };
+
+  const LANGS = ['en', 'ja'];
+  const LANG_NAMES = { en: 'English', ja: '日本語' };
+
+  // Rooms above 999,999,999 may be written in the register as 0.
+  const HUGE = 999999999n;
+  // The longest name the player may give in the prologue.
+  const MAX_NAME = 32;
+
+  let game = null;   // the definition passed to HOTEL.define
+  let state = null;  // mutable, saved to localStorage
+  let ui = null;     // merged UI strings
+  let memory = null; // game.memory with defaults: { from, to, except, empty }
+  const $ = sel => document.querySelector(sel);
+
+  // ---------------------------------------------------------------------------
+  // Helpers
+  // ---------------------------------------------------------------------------
+
+  // Normalise any room reference (number, bigint, string with full-width
+  // digits/commas/spaces) into a canonical decimal string, or null.
+  function normRoom(x) {
+    if (x === null || x === undefined) return null;
+    let str = String(x)
+      .replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+      .replace(/[\s,_，、]/g, '');
+    if (!/^\d+$/.test(str)) return null;
+    str = str.replace(/^0+/, '');
+    return str === '' ? '0' : str;
+  }
+
+  // Named places (Floor 0's lobby, dining room, …) are referred to by id.
+  // Returns a place id or a canonical room number, or null.
+  function normPlace(x) {
+    if (typeof x === 'string' && placeById[x]) return x;
+    return normRoom(x);
+  }
+
+  function roomLabel(room) {
+    return placeById[room] ? L(placeById[room].name) : ui.roomTitle(room);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Time (the Memory Device: a room's scenes from one hour of the previous day,
+  // between memory.from and memory.to)
+  // ---------------------------------------------------------------------------
+  const pad2 = v => String(v).padStart(2, '0');
+
+  const inMemory = h => h >= memory.from && h <= memory.to;
+
+  // Whether the Memory Device works in a room (every room but memory.except).
+  function remembers(room) {
+    return !memory.except.includes(room);
+  }
+
+  // Normalise an hour of yesterday to 0–23, or null. Accepts 2, '02', '14:00',
+  // '14:30' (that hour), '2pm', '2 a.m.', '14時', '午後2時' and full-width digits.
+  function normHour(x) {
+    if (x === null || x === undefined) return null;
+    let str = String(x)
+      .replace(/[０-９：]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+      .toLowerCase().replace(/[\s.]/g, '');
+    let pm = null;
+    str = str.replace(/^(午前|午後)/, (m, p) => { pm = p === '午後'; return ''; })
+      .replace(/(am|pm)$/, m => { pm = m === 'pm'; return ''; });
+    const m = str.match(/^(\d{1,2})(?:[:時](\d{2})?分?)?$/);
+    if (!m || +(m[2] || 0) > 59) return null;
+    const h = +m[1];
+    if (pm === null) return h <= 23 ? h : null;
+    return h <= 12 ? h % 12 + (pm ? 12 : 0) : null;
+  }
+
+  // A place the player can be: a room, optionally at an hour in the past.
+  function viewKey(room, at) { return at === null || at === undefined ? room : room + '@' + at; }
+
+  // The keys of a `scenes` table that cover hour h: the hour itself first,
+  // then every range like '9-17' that includes it, in the order written.
+  function hourKeys(table, h) {
+    const keys = Object.keys(table);
+    return keys.filter(k => !k.includes('-') && +k === h).concat(keys.filter(k => {
+      const [a, b] = k.split('-').map(Number);
+      return k.includes('-') && h >= a && h <= b;
+    }));
+  }
+
+  // A scene is text, or { title, text, dialogue, onEnter, when }.
+  function asScene(e) {
+    if (e === undefined || e === null) return {};
+    if (typeof e === 'object' && ['title', 'text', 'dialogue', 'onEnter', 'when'].some(k => k in e)) return e;
+    return { text: e };
+  }
+
+  // Typed names are matched loosely, ignoring case, accents, spaces and
+  // punctuation, but only in the language the game is played in.
+  function nameKey(str) {
+    // Lowercase first: some capitals (e.g. "İ") lowercase to a letter plus a mark.
+    // After NFKD (which also widens half-width katakana), katakana becomes
+    // hiragana, so a name typed in either matches the other.
+    return String(str || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '')
+      .replace(/[ァ-ヶ]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60))
+      .replace(/[\s\p{P}\p{S}]/gu, '');
+  }
+
+  // Every guest a typed name could mean. Usually one, but the player may have
+  // given themselves a guest's name, and then that name means either of them:
+  // the wish and room on the row tell which (no two guests share a room).
+  function charsForName(str) {
+    const k = nameKey(str);
+    if (!k) return [];
+    const out = [];
+    const id = (nameIndex[state.lang] || {})[k];
+    if (id) out.push(charById[id]);
+    const me = game.characters.find(c => c.player);
+    if (me && k === nameKey(state.player)) out.push(me);
+    return out;
+  }
+
+  // A guest's name in the current language. The guest marked `player: true`
+  // is the player, whose name is whatever they gave in the prologue.
+  function charName(c) {
+    return c.player ? state.player || '' : L(c.name);
+  }
+
+  // Whether a register room is right: exact, or 0 for a room above 999,999,999.
+  function roomMatches(typed, room) {
+    const r = normRoom(typed), want = normRoom(room);
+    return r !== null && (r === want || (r === '0' && BigInt(want) > HUGE));
+  }
+
+  // Resolve a localisable value: string | {en, ja} | function(s) -> either.
+  function L(value, s) {
+    if (value === null || value === undefined) return '';
+    if (typeof value === 'function') return L(value(s || ctx()), s);
+    if (typeof value === 'object' && !Array.isArray(value)) {
+      return value[state.lang] !== undefined ? value[state.lang] : (value.en !== undefined ? value.en : '');
+    }
+    return String(value);
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  // {n} current room, {floor} current floor, {room:id} a guest's room,
+  // {name:id} a guest's name, {wish:id} a wish's text, {flag:key} a stored value,
+  // {at} the hour being viewed in the past, {player} the player's name.
+  function template(str, s) {
+    return str.replace(/\{(\w+)(?::([\w-]+))?\}/g, (m, key, arg) => {
+      if (key === 'player') return state.player || '';
+      if (key === 'n') return placeById[s.room] ? L(placeById[s.room].name) : s.room;
+      if (key === 'at') return s.past ? ui.hour(s.at) : '';
+      if (key === 'floor') return String(floorOf(s.room));
+      if (key === 'room' && arg && charById[arg]) return normRoom(charById[arg].room);
+      if (key === 'name' && arg && charById[arg]) return charName(charById[arg]);
+      if (key === 'wish' && arg && wishById[arg]) return L(wishById[arg]);
+      if (key === 'flag' && arg) return String(state.flags[arg] !== undefined ? state.flags[arg] : '');
+      return m;
+    });
+  }
+
+  // Minimal markup: blank line = new paragraph, newline = <br>,
+  // **bold**, *italic*, ~~struck~~.
+  function renderMarkup(str, s) {
+    return template(str, s)
+      .split(/\n\s*\n/)
+      .map(p => p.trim())
+      .filter(Boolean)
+      .map(p => '<p>' + escapeHtml(p)
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/~~(.+?)~~/g, '<s>$1</s>')
+        .replace(/\n/g, '<br>') + '</p>')
+      .join('');
+  }
+
+  function floorOf(room) {
+    if (placeById[room]) return placeById[room].floor || 0;
+    const n = BigInt(room);
+    if (game.floors && typeof game.floors.of === 'function') return game.floors.of(n);
+    return room.length; // default: one floor per digit count
+  }
+
+  // Whether a floor has numbered rooms (Floor 0 holds only named places by default).
+  function hasNumberedRooms(f) {
+    if (game.floors && typeof game.floors.numbered === 'function') return !!game.floors.numbered(f);
+    return f !== 0;
+  }
+
+  function floorLabel(f, s) {
+    return game.floors && game.floors.name ? L(game.floors.name(f, s), s) : ui.floorTitle(f);
+  }
+
+  // Deterministic pseudo-random generator seeded by a string (for procedural rooms).
+  function seeded(seedStr) {
+    let h = 2166136261;
+    for (let i = 0; i < seedStr.length; i++) { h ^= seedStr.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return function () {
+      h += 0x6D2B79F5;
+      let t = h;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function isPrime(nb) {
+    const n = BigInt(nb);
+    if (n < 2n) return false;
+    if (n < 4n) return true;
+    if (n % 2n === 0n || n % 3n === 0n) return false;
+    if (n > 10n ** 12n) return null; // unknown: too large to check cheaply
+    for (let i = 5n; i * i <= n; i += 6n) if (n % i === 0n || n % (i + 2n) === 0n) return false;
+    return true;
+  }
+
+  // Integer square root by Newton's method (exact for any BigInt size).
+  function isqrt(n) {
+    if (n < 2n) return n;
+    let x = 1n << BigInt((n.toString(2).length >> 1) + 1);
+    for (;;) {
+      const y = (x + n / x) >> 1n;
+      if (y >= x) return x;
+      x = y;
+    }
+  }
+
+  function isSquare(nb) {
+    const n = BigInt(nb);
+    if (n < 0n) return false;
+    const r = isqrt(n);
+    return r * r === n;
+  }
+
+  function isPowerOf(nb, base) {
+    let n = BigInt(nb); const b = BigInt(base);
+    if (n < 1n) return false;
+    while (n % b === 0n) n /= b;
+    return n === 1n;
+  }
+
+  // ---------------------------------------------------------------------------
+  // State & persistence
+  // ---------------------------------------------------------------------------
+  function freshState() {
+    return {
+      lang: state ? state.lang : (navigator.language || '').startsWith('ja') ? 'ja' : 'en',
+      started: false,
+      step: 0,        // the prologue step being shown, or null once it's over
+      player: '',     // the name the player gave in the prologue
+      nbHidden: false, // the notebook is hidden (wide screens); a new game starts with it open
+      room: null,
+      at: null,       // hour of yesterday being viewed (memory.from–memory.to), or null for the present
+      visits: {},     // room (or "room@hour") -> count
+      skills: {},     // skillId -> true
+      flags: {},      // arbitrary author-defined values
+      entries: [],    // register rows { name, wish, room, cid } (cid once confirmed)
+      confirmed: {},  // charId -> true
+      papers: startPapers(), // paperId -> true
+      notes: [],      // game notes { id, text, page }; player notes { uid, user, text, page, quote?, from?, at? }
+      notePages: [{ uid: 'p1', title: '' }],
+      notePage: 'p1', // the page of notes that is open
+      history: [],    // recent rooms, newest first
+      taken: {},      // "dialogue/node/choiceIndex" -> true (for `once` choices)
+      ended: false,
+    };
+  }
+
+  function saveKey() { return 'hilbert-hotel:' + (game.id || 'game'); }
+
+  function save() {
+    try { localStorage.setItem(saveKey(), JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
+  }
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(saveKey());
+      if (raw) return upgrade(JSON.parse(raw));
+    } catch (e) { /* storage unavailable or corrupt */ }
+    return null;
+  }
+
+  // Bring older saves up to date: past times used to be dates, then any hour
+  // (the 'history' skill, now the Memory Device), the register used to list
+  // every guest by name, there was no prologue, notes were on a single page,
+  // and items were described in the notes rather than the Inventory.
+  function upgrade(saved) {
+    const s = Object.assign(freshState(), saved);
+    if (s.skills.history) {
+      delete s.skills.history;
+      s.skills.memory = true;
+      s.notes = s.notes.filter(n => n.id !== 'skill:history');
+    }
+    Object.entries(game.skills || {}).forEach(([id, sk]) => {
+      if (sk.item) s.notes = s.notes.filter(n => n.id !== 'skill:' + id);
+    });
+    if (!('step' in saved)) s.step = saved.started ? null : 0;
+    // Papers held from the start that were added to the game after this save.
+    papers().forEach(p => { if (p.start !== false && !(p.id in s.papers)) s.papers[p.id] = true; });
+    if (!Array.isArray(s.notePages) || !s.notePages.length) s.notePages = [{ uid: 'p1', title: '' }];
+    const pages = s.notePages.map(p => p.uid);
+    if (!pages.includes(s.notePage)) s.notePage = pages[0];
+    s.notes.forEach(n => { if (!pages.includes(n.page)) n.page = pages[0]; });
+    if (typeof s.at !== 'number' || !inMemory(s.at) || (s.room && !remembers(s.room))) s.at = null;
+    s.history = s.history.filter(k => {
+      const m = k.match(/@(\d{1,2})$/);
+      return !k.includes('@') || (m && inMemory(+m[1]) && remembers(k.split('@')[0]));
+    });
+    if (saved.guesses && !saved.entries) {
+      s.entries = game.characters.filter(c => saved.guesses[c.id]).map(c => {
+        const g = saved.guesses[c.id];
+        const name = c.name && typeof c.name === 'object' ? c.name[s.lang] || c.name.en : String(c.name);
+        return { name, wish: g.wish, room: g.room, cid: s.confirmed[c.id] ? c.id : undefined };
+      });
+      delete s.guesses;
+    }
+    return s;
+  }
+
+  // The object handed to every content function. `at` looks at the room at
+  // another hour than the one being viewed.
+  function ctx(at = state.at) {
+    const room = state.room || normPlace(game.startRoom || 1);
+    const place = !!placeById[room];
+    return {
+      lang: state.lang,
+      player: state.player || '',             // the name the player gave
+      room,                                   // canonical string, or a place id
+      place: place ? room : null,             // place id when in a named place
+      n: place ? null : BigInt(room),         // exact BigInt
+      num: place ? NaN : Number(room),        // convenient, may lose precision
+      floor: floorOf(room),
+      at,                                     // hour of yesterday (memory.from–memory.to), or null
+      past: at !== null,
+      firstVisit: (state.visits[viewKey(room, at)] || 0) <= 1,
+      flag: k => !!state.flags[k],
+      get: k => state.flags[k],
+      set: (k, v) => { state.flags[k] = v === undefined ? true : v; },
+      unset: k => { delete state.flags[k]; },
+      knows: id => !!state.skills[id],
+      learn: id => learn(id),
+      visits: r => state.visits[r === undefined ? viewKey(room, at) : normPlace(r)] || 0,
+      visited: r => (state.visits[normPlace(r)] || 0) > 0,
+      confirmed: id => !!state.confirmed[id],
+      confirmedCount: () => Object.keys(state.confirmed).length,
+      guess: id => {
+        const e = state.entries.find(e => e && (e.cid === id || charsForName(e.name).includes(charById[id])));
+        return e ? { name: e.name, wish: e.wish, room: e.room } : {};
+      },
+      note: (text, id) => addNote(text, id),
+      hasNote: id => state.notes.some(n => n.id === id),
+      give: id => give(id),
+      hasPaper: id => !!state.papers[id],
+      roomOf: id => charById[id] ? normRoom(charById[id].room) : null,
+      util: HOTEL.util,
+    };
+  }
+
+  // ---------------------------------------------------------------------------
+  // Validation (runs once at define time; prints authoring mistakes)
+  // ---------------------------------------------------------------------------
+  let charById = {};
+  let wishById = {};
+  let placeById = Object.create(null);
+  let nameIndex = {}; // lang -> nameKey -> charId
+
+  // Each language accepts its own version of every name. A plain-text name or
+  // alias counts in every language; { en, ja } counts in its own (a missing
+  // language falls back to English, as the name is shown).
+  function indexNames() {
+    nameIndex = {};
+    LANGS.forEach(l => { nameIndex[l] = Object.create(null); });
+    game.characters.forEach(c => {
+      [c.name].concat(c.aliases || []).forEach(n => {
+        LANGS.forEach(l => {
+          const str = n && typeof n === 'object' ? (n[l] !== undefined ? n[l] : n.en) : n;
+          const k = typeof str === 'string' ? nameKey(str) : '';
+          if (!k) return;
+          const seen = nameIndex[l][k];
+          if (seen && seen !== c.id) console.warn('[hotel]', `characters "${seen}" and "${c.id}" share the name "${str}"`);
+          else nameIndex[l][k] = c.id;
+        });
+      });
+    });
+  }
+
+  function validate() {
+    const warn = (...a) => console.warn('[hotel]', ...a);
+    (game.places || []).forEach(p => {
+      if (!p.id || normRoom(p.id) !== null || /[@\s]/.test(p.id)) warn('place ids must be words without "@" or spaces, not numbers', p);
+    });
+    if (game.elevators && typeof game.elevators.landing !== 'function') warn('elevators.landing(floor) must say where each floor\'s elevators open');
+    const rooms = {};
+    game.characters.forEach(c => {
+      if (!c.id) warn('character without id', c);
+      if (!wishById[c.wish]) warn(`character "${c.id}" has unknown wish "${c.wish}"`);
+      const r = normRoom(c.room);
+      if (!r || r === '0') warn(`character "${c.id}" has invalid room`, c.room);
+      if (rooms[r]) warn(`characters "${rooms[r]}" and "${c.id}" share room ${r}`);
+      rooms[r] = c.id;
+    });
+    (game.rooms || []).forEach((rule, i) => {
+      const ids = [].concat(rule.match).filter(m => typeof m === 'string' && m[0] === '@');
+      ids.forEach(m => { if (!charById[m.slice(1)]) warn(`rooms[${i}] references unknown character ${m}`); });
+      if (typeof rule.dialogue === 'string' && !(game.dialogues || {})[rule.dialogue]) warn(`rooms[${i}] references unknown dialogue "${rule.dialogue}"`);
+      if (rule.at !== undefined) warn(`rooms[${i}] uses "at", which is no longer supported: give the rule a "scenes" table of hours instead`);
+      if (rule.past !== undefined) warn(`rooms[${i}] uses "past", which is now "scenes": hours ${memory.from}–${memory.to}, each with a list of scenes`);
+      const unseen = [].concat(rule.match).map(normPlace).filter(r => r !== null && !remembers(r));
+      if (rule.scenes && unseen.length) warn(`rooms[${i}] has scenes, but the Memory Device doesn't work in ${unseen.join(', ')} (memory.except)`);
+      Object.entries(rule.scenes || {}).forEach(([key, list]) => {
+        const m = key.match(/^(\d{1,2})(?:-(\d{1,2}))?$/);
+        const a = m && +m[1], b = m && +(m[2] || m[1]);
+        if (!m || !inMemory(a) || !inMemory(b) || b < a) {
+          warn(`rooms[${i}].scenes has invalid hour "${key}" (use ${memory.from}–${memory.to} or a range like "9-17")`);
+        }
+        [].concat(list).forEach(e => {
+          const d = asScene(e).dialogue;
+          if (typeof d === 'string' && !game.dialogues[d]) warn(`rooms[${i}].scenes["${key}"] references unknown dialogue "${d}"`);
+        });
+      });
+    });
+    if (game.history) warn('"history" is now "memory": { from, to, except, empty }');
+    memory.except.forEach(p => { if (p === null) warn('memory.except lists something that is neither a place id nor a room number'); });
+    papers().forEach(p => {
+      if (!p.id) warn('paper without id', p);
+      else if (p.text === undefined && p.id !== 'names' && p.id !== 'wishes') warn(`paper "${p.id}" has no text`);
+    });
+    if (game.intro) warn('"intro" is no longer shown: the game opens with the home screen and then the "prologue"');
+    (game.prologue || []).forEach((st, i) => {
+      if (st.give && !papers().some(p => p.id === st.give)) warn(`prologue[${i}] gives unknown paper "${st.give}"`);
+      if (st.read && !papers().some(p => p.id === st.read)) warn(`prologue[${i}] reads unknown paper "${st.read}"`);
+      if (st.ask !== undefined && st.ask !== 'name') warn(`prologue[${i}] asks for "${st.ask}", but only ask: 'name' is supported`);
+    });
+    game.characters.forEach(c => {
+      if (typeof c.name === 'function') warn(`character "${c.id}" needs a plain name, so the player can type it`);
+      if (!c.player && !c.name) warn(`character "${c.id}" has no name`);
+    });
+    if (game.characters.filter(c => c.player).length > 1) warn('only one character can be the player (player: true)');
+    Object.entries(game.dialogues || {}).forEach(([id, d]) => {
+      if (typeof d.start === 'string' && !d.nodes[d.start]) warn(`dialogue "${id}" start node "${d.start}" missing`);
+      Object.entries(d.nodes).forEach(([nid, node]) => {
+        const nexts = [node.next].concat((node.choices || []).map(c => c.next));
+        nexts.forEach(nx => { if (typeof nx === 'string' && !d.nodes[nx]) warn(`dialogue "${id}" node "${nid}" -> missing "${nx}"`); });
+      });
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Room resolution
+  // ---------------------------------------------------------------------------
+  function matches(rule, room, s) {
+    const one = m => {
+      if (placeById[room]) return m === room; // places match only by their id
+      if (typeof m === 'function') return !!m(BigInt(room), s);
+      if (typeof m === 'string' && m[0] === '@') return charById[m.slice(1)] && normRoom(charById[m.slice(1)].room) === room;
+      if (m && typeof m === 'object' && !Array.isArray(m)) {
+        const n = BigInt(room);
+        if (m.from !== undefined && n < BigInt(m.from)) return false;
+        if (m.to !== undefined && n > BigInt(m.to)) return false;
+        return true;
+      }
+      return normRoom(m) === room;
+    };
+    if (rule.match === undefined) return false;
+    const ok = Array.isArray(rule.match) ? rule.match.some(one) : one(rule.match);
+    return ok && (!rule.when || !!rule.when(s));
+  }
+
+  function rulesFor(room, s) {
+    const out = [];
+    for (const rule of game.rooms || []) {
+      if (matches(rule, room, s)) {
+        out.push(rule);
+        if (rule.final) break;
+      }
+    }
+    return out;
+  }
+
+  // What a room shows. In the present, its matching rules. In the past, the
+  // scenes each matching rule lists for that hour, rule by rule.
+  function piecesFor(room, s, at = state.at) {
+    const rules = rulesFor(room, s);
+    if (at === null) return rules;
+    return rules.flatMap(r => hourKeys(r.scenes || {}, at)
+      .flatMap(k => [].concat(r.scenes[k]).map(asScene))
+      .filter(sc => !sc.when || sc.when(s)));
+  }
+
+  // ---------------------------------------------------------------------------
+  // Rendering
+  // ---------------------------------------------------------------------------
+  function el(tag, cls, html) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+
+  // `when` (optional) is an hour of yesterday; leave it empty for the present.
+  // Rooms the Memory Device doesn't work in always open in the present.
+  // Without `ride`, the player walks and can only reach places on the current floor.
+  // `ride` lets the player cross floors. An elevator passes { car, to } so the
+  // next room opens with what happened inside the car.
+  function goTo(input, when, ride) {
+    const room = normPlace(input);
+    const err = $('#go-error');
+    if (room === null) { err.textContent = ui.invalid; return; }
+    if (room === '0') { err.textContent = ui.zero; return; }
+    if (!ride && state.room && floorOf(room) !== floorOf(state.room)) {
+      err.textContent = ui.otherFloor(roomLabel(room));
+      return;
+    }
+    let at = null;
+    if (when !== undefined && when !== null && String(when).trim() !== '' && remembers(room)) {
+      at = normHour(when);
+      if (at === null || !inMemory(at)) { err.textContent = ui.badTime(memory.from, memory.to); return; }
+    }
+    err.textContent = '';
+    lastRide = typeof ride === 'object' ? ride : null;
+    state.room = room;
+    state.at = at;
+    const key = viewKey(room, at);
+    state.visits[key] = (state.visits[key] || 0) + 1;
+    state.history = [key].concat(state.history.filter(r => r !== key)).slice(0, 8);
+    const s = ctx();
+    piecesFor(room, s).forEach(p => { if (p.onEnter) p.onEnter(s); });
+    renderRoom(true);
+    save();
+  }
+
+  function renderRoom(animate) {
+    const room = state.room;
+    if (!room) return;
+    const s = ctx();
+    const pieces = piecesFor(room, s);
+    const view = $('#room-body');
+    view.innerHTML = '';
+    view.classList.toggle('animate', !!animate);
+    staggerIndex = 0;
+
+    // Room titles come from the room's rules, in the present and the past alike.
+    const titled = rulesFor(room, s).find(r => r.title);
+    $('#room-number').textContent = roomLabel(room);
+    $('#room-floor').textContent = floorLabel(floorOf(room), s);
+    $('#room-name').textContent = titled ? L(titled.title, s) : '';
+    $('#room-time').textContent = s.past ? ui.pastTitle(ui.span(state.at)) : '';
+    document.body.classList.toggle('past', s.past);
+
+    if (lastRide) {
+      const ride = el('div', 'lift-ride', renderRide(lastRide, s));
+      view.appendChild(ride);
+      stagger(ride);
+    }
+
+    if (s.past) renderScenes(pieces, view, s);
+    else {
+      let html = pieces.filter(r => r.text).map(r => renderMarkup(L(r.text, s), s)).join('');
+      if (!html && !s.place && game.emptyRoom) html = renderMarkup(L(game.emptyRoom(s), s), s);
+      const textBlock = el('div', 'room-text', html);
+      view.appendChild(textBlock);
+      stagger(textBlock);
+      const dlgRule = pieces.find(r => r.dialogue);
+      if (dlgRule) startDialogue(dlgRule.dialogue, view, s);
+    }
+
+    $('#lift-button').hidden = !atElevators(room);
+    renderRecent();
+    renderNav();
+    renderMemory();
+    $('#go-input').value = '';
+  }
+
+  // In the past, each scene is its own block: an optional heading, its text,
+  // then its dialogue. An hour with no scenes shows memory.empty.
+  function renderScenes(scenes, view, s) {
+    if (!scenes.some(sc => sc.text || sc.dialogue)) {
+      const empty = el('div', 'room-text', renderMarkup(L(memory.empty, s), s));
+      view.appendChild(empty);
+      stagger(empty);
+      return;
+    }
+    scenes.forEach(sc => {
+      const box = el('section', 'scene');
+      view.appendChild(box);
+      if (sc.title) {
+        const h = el('h3', 'scene-title', escapeHtml(L(sc.title, s)));
+        box.appendChild(h);
+        stagger(h);
+      }
+      if (sc.text) {
+        const textBlock = el('div', 'room-text', renderMarkup(L(sc.text, s), s));
+        box.appendChild(textBlock);
+        stagger(textBlock);
+      }
+      if (sc.dialogue) startDialogue(sc.dialogue, box, s);
+    });
+  }
+
+  function startDialogue(dialogue, parent, s) {
+    const id = typeof dialogue === 'function' ? dialogue(s) : dialogue;
+    if (!id || !game.dialogues[id]) return;
+    const log = el('div', 'dialogue');
+    parent.appendChild(log);
+    const d = game.dialogues[id];
+    const start = typeof d.start === 'function' ? d.start(s) : d.start;
+    if (start) showNode(id, start, log, viewKey(state.room, state.at));
+  }
+
+  // ---------------------------------------------------------------------------
+  // The Memory Device: once the player has the 'memory' skill, every room but
+  // memory.except shows one button per hour. The player stays in the room and
+  // can come back to the present (and its conversations) at any time; walking
+  // on keeps the hour, so they can follow one moment from room to room.
+  // Hours with no scenes in the room are grayed out.
+  // ---------------------------------------------------------------------------
+  function hasScenes(room, h) {
+    return piecesFor(room, ctx(h), h).some(sc => sc.text || sc.dialogue);
+  }
+
+  function renderMemory() {
+    const bar = $('#memory');
+    bar.hidden = !state.skills.memory || !state.room || !remembers(state.room);
+    if (bar.hidden) return;
+    $('#memory-label').textContent = skillName('memory');
+    const hours = $('#hours');
+    hours.innerHTML = '';
+    for (let h = memory.from; h <= memory.to; h++) {
+      const quiet = h !== state.at && !hasScenes(state.room, h);
+      const b = el('button', 'hour' + (h === state.at ? ' current' : '') + (quiet ? ' quiet' : ''), escapeHtml(ui.hourShort(h)));
+      b.type = 'button';
+      b.disabled = quiet;
+      b.title = quiet ? `${ui.span(h)} · ${ui.noScenes}` : ui.span(h);
+      b.setAttribute('aria-pressed', String(h === state.at));
+      b.addEventListener('click', () => goTo(state.room, h));
+      hours.appendChild(b);
+    }
+    $('#present-button').hidden = state.at === null;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Floors: walking within a floor, and elevators between floors
+  // ---------------------------------------------------------------------------
+
+  // On a floor of named places, show them as buttons instead of the number field.
+  function renderNav() {
+    const nav = $('#places');
+    nav.innerHTML = '';
+    if (!state.room) return;
+    const f = floorOf(state.room);
+    const numbered = hasNumberedRooms(f);
+    (game.places || []).filter(p => (p.floor || 0) === f).forEach(p => {
+      const b = el('button', 'place' + (p.id === state.room ? ' current' : ''), escapeHtml(L(p.name)));
+      b.type = 'button';
+      b.addEventListener('click', () => goTo(p.id, state.at));
+      nav.appendChild(b);
+    });
+    $('#go-label').textContent = numbered ? ui.goTo : ui.walkTo;
+    $('#go-row').hidden = !numbered;
+  }
+
+  function atElevators(room) {
+    return !!game.elevators && [].concat(game.elevators.at || []).some(a => normPlace(a) === room);
+  }
+
+  // The player doesn't pick a car: the Use Elevator button beside the floor
+  // label boards whichever car `board` chooses and rides straight to the
+  // floor `to` gives.
+  let lastRide = null;
+  function rideElevator() {
+    const cfg = game.elevators;
+    const s = ctx();
+    const car = cfg.board ? cfg.board(s) : Math.floor(Math.random() * (cfg.cars || [{}, {}, {}]).length);
+    const to = cfg.to ? cfg.to(s) : (s.floor === 0 ? 1 : 0);
+    goTo(cfg.landing(to, s), state.at, { car, to });
+  }
+
+  // What the player saw inside the car, shown above the room they arrive in.
+  function renderRide(ride, s) {
+    const cfg = game.elevators;
+    const name = L(((cfg.cars || [])[ride.car] || {}).name, s) || ui.liftName(ride.car + 1);
+    return renderMarkup(ui.liftEntered(name), s) + (cfg.inside ? renderMarkup(L(cfg.inside(s, ride.to), s), s) : '');
+  }
+
+  // Give paragraphs an increasing animation delay so they fade in one by one.
+  let staggerIndex = 0;
+  function stagger(...elements) {
+    if (!$('#room-body').classList.contains('animate')) return;
+    elements.forEach(e => {
+      const parts = e.matches('.room-text') ? e.querySelectorAll('p') : [e];
+      parts.forEach(p => { p.style.animationDelay = (staggerIndex++ * 0.18) + 's'; });
+    });
+  }
+
+  function showNode(dlgId, nodeId, log, view) {
+    if (viewKey(state.room, state.at) !== view) return; // player moved on
+    const d = game.dialogues[dlgId];
+    const node = d.nodes[nodeId];
+    if (!node) return;
+    const s = ctx();
+    if (node.do) node.do(s);
+
+    const added = [];
+    const text = L(node.text, s);
+    // With `byLine` (on the dialogue, or on a node to override it), the
+    // node's paragraphs appear one at a time, each after a click.
+    const byLine = node.byLine !== undefined ? !!node.byLine : !!d.byLine;
+    const paras = text.split(/\n\s*\n/).map(p => p.trim()).filter(Boolean);
+    let speech = null;
+    if (paras.length) {
+      const line = el('div', 'line');
+      const speaker = L(node.speaker !== undefined ? node.speaker : d.speaker, s);
+      if (speaker) line.appendChild(el('div', 'speaker', escapeHtml(speaker)));
+      speech = el('div', 'speech', renderMarkup(byLine ? paras[0] : text, s));
+      line.appendChild(speech);
+      log.appendChild(line);
+      added.push(line);
+    }
+
+    if (byLine && paras.length > 1) {
+      let shown = 1;
+      const more = el('div', 'choices');
+      const b = el('button', 'choice more', escapeHtml(ui.continue));
+      b.type = 'button';
+      b.addEventListener('click', () => {
+        speech.insertAdjacentHTML('beforeend', renderMarkup(paras[shown++], s));
+        speech.lastElementChild.classList.add('reveal');
+        staggerIndex = 0;
+        if (shown === paras.length) { more.remove(); finish([]); }
+        else log.appendChild(more); // keep the button below the newest line
+        speech.lastElementChild.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      });
+      more.appendChild(b);
+      log.appendChild(more);
+      added.push(more);
+      stagger(...added);
+      return;
+    }
+    finish(added);
+
+    // The choices, Continue, or end mark that follow the node's text.
+    function finish(added) {
+      const box = el('div', 'choices');
+      const choices = (node.choices || [])
+        .map((c, i) => ({ c, key: `${dlgId}/${nodeId}/${i}` }))
+        .filter(({ c, key }) => (!c.when || c.when(s)) && !(c.once && state.taken[key]));
+
+      const advance = (label, next, effect, key, isChoice) => {
+        const b = el('button', 'choice', escapeHtml(label));
+        b.addEventListener('click', () => {
+          box.remove();
+          staggerIndex = 0;
+          if (isChoice) log.appendChild(el('div', 'line player', renderMarkup('— ' + label, s)));
+          if (key) state.taken[key] = true;
+          if (effect) effect(ctx());
+          const nx = typeof next === 'function' ? next(ctx()) : next;
+          if (nx) showNode(dlgId, nx, log, view);
+          else log.appendChild(el('div', 'line end', '<span>◆</span>'));
+          renderNotebook();
+          save();
+          log.lastElementChild && log.lastElementChild.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        });
+        box.appendChild(b);
+      };
+
+      if (choices.length) {
+        choices.forEach(({ c, key }) => advance(L(c.text, s), c.next, c.do, key, true));
+      } else if (node.next) {
+        const nx = typeof node.next === 'function' ? node.next(s) : node.next;
+        // A next node that is only a menu (no text) is shown straight away.
+        if (d.nodes[nx] && !L(d.nodes[nx].text, s)) {
+          stagger(...added);
+          return showNode(dlgId, nx, log, view);
+        }
+        advance(ui.continue, nx, null, null, false);
+      } else {
+        const end = el('div', 'line end', '<span>◆</span>');
+        log.appendChild(end);
+        added.push(end);
+      }
+      if (box.children.length) { log.appendChild(box); added.push(box); }
+      stagger(...added);
+      renderNotebook();
+      save();
+    }
+  }
+
+  function renderRecent() {
+    const wrap = $('#recent');
+    wrap.innerHTML = '';
+    if (!state.history.length) return;
+    wrap.appendChild(el('span', 'recent-label', escapeHtml(ui.recent)));
+    const here = viewKey(state.room, state.at);
+    const floor = floorOf(state.room);
+    state.history.forEach(key => {
+      const [r, at] = key.split('@');
+      const name = placeById[r] ? L(placeById[r].name) : r;
+      const when = at === undefined ? '' : ' · ' + ui.hour(+at);
+      const b = el('button', 'recent-room' + (when ? ' past' : '') + (key === here ? ' current' : ''), escapeHtml(name + when));
+      b.title = roomLabel(r) + when;
+      // Rooms on other floors are only reachable by elevator.
+      b.disabled = floorOf(r) !== floor;
+      b.addEventListener('click', () => goTo(r, at));
+      wrap.appendChild(b);
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Skills: abilities the player learns through the story, via s.learn(id)
+  // ---------------------------------------------------------------------------
+  // A skill with `item: true` (like the Memory Device) is announced as
+  // something obtained rather than learned, and kept in the Inventory with its
+  // text; any other skill's text goes in the Notes.
+  function learn(id) {
+    if (state.skills[id]) return;
+    state.skills[id] = true;
+    const skill = (game.skills || {})[id] || {};
+    const name = skillName(id);
+    toast(skill.item ? ui.obtained(name) : ui.learned(name));
+    chime();
+    if (skill.item) { ping('inventory'); renderInventory(); }
+    else if (skill.text) addNote(skill.text, 'skill:' + id);
+    renderMemory();
+    renderDebug();
+  }
+
+  function skillName(id) {
+    return L(((game.skills || {})[id] || {}).name) || (id === 'memory' ? ui.memory : id);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Notebook: the inventory, the deduction register, notes, and hints
+  // ---------------------------------------------------------------------------
+  const newUid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+
+  function addNote(text, id) {
+    if (id && state.notes.some(n => n.id === id)) return;
+    state.notes.push({ id: id || null, text, page: state.notePage });
+    ping('notes');
+  }
+
+  function ping(tabName) {
+    const tab = $('#tab-' + tabName);
+    if (tab && !tab.classList.contains('active')) tab.classList.add('ping');
+  }
+
+  // Papers the player carries. 'names' and 'wishes' list the guests and the
+  // wishes (alphabetically) unless given their own text.
+  function papers() {
+    return game.papers || [{ id: 'names' }, { id: 'wishes' }];
+  }
+
+  function startPapers() {
+    const held = {};
+    papers().forEach(p => { if (p.start !== false) held[p.id] = true; });
+    return held;
+  }
+
+  function paperTitle(p) {
+    return L(p.title) || (p.id === 'names' ? ui.namesList : p.id === 'wishes' ? ui.wishesList : p.id);
+  }
+
+  function paperText(p, s) {
+    if (p.text !== undefined) return L(p.text, s);
+    // The player doesn't know they are a guest, so they aren't on the list.
+    const list = p.id === 'names' ? game.characters.filter(c => !c.player).map(c => L(c.name, s))
+      : p.id === 'wishes' ? wishOrder.map(w => L(w, s)) : [];
+    return list.map(x => `• ${x}`).join('\n');
+  }
+
+  // Hand the player a paper with { start: false } during the story.
+  function give(id) {
+    const p = papers().find(p => p.id === id);
+    if (!p || state.papers[id]) return;
+    state.papers[id] = true;
+    toast(ui.gotPaper(paperTitle(p)));
+    ping('inventory');
+    renderInventory();
+    renderDebug();
+  }
+
+  // The Inventory lists what the player carries: papers, then items (skills
+  // with `item: true`). Picking one shows what it says.
+  let openItem = null; // key of the item being read, or null for the list
+
+  function inventory(s) {
+    const items = papers().filter(p => state.papers[p.id])
+      .map(p => ({ key: 'paper:' + p.id, title: paperTitle(p), text: () => paperText(p, s) }));
+    Object.entries(game.skills || {}).forEach(([id, sk]) => {
+      if (sk.item && state.skills[id]) items.push({ key: 'skill:' + id, title: skillName(id), text: () => L(sk.text, s) });
+    });
+    return items;
+  }
+
+  function renderInventory() {
+    const panel = $('#inventory');
+    const s = ctx();
+    const items = inventory(s);
+    const open = items.find(it => it.key === openItem);
+    const button = (cls, label, onClick) => {
+      const b = el('button', cls, escapeHtml(label));
+      b.type = 'button';
+      b.addEventListener('click', onClick);
+      return b;
+    };
+    panel.innerHTML = '';
+    if (open) {
+      panel.appendChild(button('inv-back', ui.inventoryBack, () => { openItem = null; renderInventory(); }));
+      const box = el('section', 'paper');
+      box.appendChild(el('h3', 'paper-title', escapeHtml(open.title)));
+      box.appendChild(el('div', 'paper-text', renderMarkup(open.text(), s)));
+      panel.appendChild(box);
+      return;
+    }
+    if (!items.length) { panel.appendChild(el('p', 'muted', escapeHtml(ui.noItems))); return; }
+    const list = el('ul', 'inv-list');
+    items.forEach(it => {
+      const li = el('li');
+      li.appendChild(button('inv-item', it.title, () => { openItem = it.key; renderInventory(); panel.scrollTop = 0; }));
+      list.appendChild(li);
+    });
+    panel.appendChild(list);
+  }
+
+  // Notes the player writes or clips: { text } or { quote, from, at, text }.
+  function addPlayerNote(fields) {
+    state.notes.push(Object.assign({ id: null, uid: newUid(), user: true, text: '', page: state.notePage }, fields));
+    ping('notes');
+    save();
+    renderNotes();
+  }
+
+  let editing = null;    // uid of the player note being edited
+  let editDraft = '';
+  let focusEdit = false; // focus the edit box on its next render
+  let notesShown = '';   // what the notes list last rendered, to avoid needless rebuilds
+
+  // Notes are kept on pages the player adds, names and deletes. New notes,
+  // the hotel's included, go on the page that is open.
+  function currentPage() {
+    return state.notePages.find(p => p.uid === state.notePage) || state.notePages[0];
+  }
+
+  function pageTitle(p) {
+    return p.title.trim() || ui.pageTitle(state.notePages.indexOf(p) + 1);
+  }
+
+  function openPage(uid) {
+    state.notePage = uid;
+    editing = null;
+    save();
+    renderNotes();
+  }
+
+  function renderPages() {
+    const bar = $('#note-pages');
+    bar.innerHTML = '';
+    state.notePages.forEach(p => {
+      const b = el('button', 'note-page' + (p.uid === state.notePage ? ' current' : ''));
+      b.type = 'button';
+      b.textContent = pageTitle(p);
+      b.title = pageTitle(p);
+      b.setAttribute('aria-pressed', String(p.uid === state.notePage));
+      b.addEventListener('click', () => openPage(p.uid));
+      bar.appendChild(b);
+    });
+    const add = el('button', 'note-page add', escapeHtml(ui.newPage));
+    add.type = 'button';
+    add.addEventListener('click', () => {
+      const p = { uid: newUid(), title: '' };
+      state.notePages.push(p);
+      openPage(p.uid);
+      $('#note-page-title').focus();
+    });
+    bar.appendChild(add);
+    const page = currentPage();
+    const title = $('#note-page-title');
+    if (document.activeElement !== title) title.value = page.title;
+    title.placeholder = ui.pageTitle(state.notePages.indexOf(page) + 1);
+    $('#note-page-delete').disabled = state.notePages.length < 2;
+  }
+
+  // Deleting a page deletes the player's notes on it. The hotel's own notes
+  // can't be lost, so they move to the page before it.
+  function deletePage() {
+    if (state.notePages.length < 2 || !confirm(ui.deletePageConfirm)) return;
+    const i = state.notePages.indexOf(currentPage());
+    const gone = state.notePages.splice(i, 1)[0].uid;
+    const to = state.notePages[Math.max(0, i - 1)].uid;
+    state.notes = state.notes.filter(n => n.page !== gone || !n.user);
+    state.notes.forEach(n => { if (n.page === gone) n.page = to; });
+    openPage(to);
+  }
+
+  function renderNotes() {
+    const list = $('#notes-list');
+    const shown = JSON.stringify([state.lang, editing, state.notes, state.notePage, state.notePages]);
+    if (shown === notesShown) return;
+    notesShown = shown;
+    renderPages();
+    const refocus = focusEdit || (document.activeElement && document.activeElement.classList.contains('note-edit'));
+    focusEdit = false;
+    list.innerHTML = '';
+    const onPage = state.notes.filter(n => n.page === state.notePage);
+    if (!onPage.length) list.appendChild(el('p', 'muted', escapeHtml(ui.noNotes)));
+    const text = (cls, str) => { const e = el('div', cls); e.textContent = str; return e; };
+    const button = (label, onClick) => { const b = el('button', '', escapeHtml(label)); b.type = 'button'; b.addEventListener('click', onClick); return b; };
+    // Newest first, so fresh notes appear right under the box for writing them.
+    onPage.slice().reverse().forEach(n => {
+      if (!n.user) { list.appendChild(el('div', 'note', renderMarkup(L(n.text), ctx()))); return; }
+      const box = el('div', 'note mine');
+      if (n.quote) {
+        box.appendChild(text('note-quote', n.quote));
+        // Clips from older saves carry their time as a string.
+        const at = n.at === null || n.at === undefined ? '' : ' · ' + (typeof n.at === 'number' ? ui.hour(n.at) : n.at);
+        box.appendChild(text('note-from', roomLabel(n.from) + at));
+      }
+      const actions = el('div', 'note-actions');
+      if (editing === n.uid) {
+        const area = el('textarea', 'note-edit');
+        area.rows = 3;
+        area.value = editDraft;
+        area.placeholder = ui.notePlaceholder;
+        const commit = () => {
+          editing = null;
+          if (!editDraft.trim() && !n.quote) state.notes.splice(state.notes.indexOf(n), 1);
+          else n.text = editDraft.trim();
+          save();
+          renderNotes();
+        };
+        const cancel = () => { editing = null; renderNotes(); };
+        area.addEventListener('input', () => { editDraft = area.value; });
+        area.addEventListener('keydown', e => {
+          if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); commit(); }
+          if (e.key === 'Escape') { e.stopPropagation(); cancel(); }
+        });
+        box.appendChild(area);
+        actions.appendChild(button(ui.cancel, cancel));
+        actions.appendChild(button(ui.save, commit));
+        if (refocus) setTimeout(() => { area.focus(); area.setSelectionRange(area.value.length, area.value.length); });
+      } else {
+        if (n.text) box.appendChild(text('note-text', n.text));
+        actions.appendChild(button(ui.edit, () => { editing = n.uid; editDraft = n.text || ''; focusEdit = true; renderNotes(); }));
+        actions.appendChild(button(ui.delete, () => {
+          if (!confirm(ui.deleteConfirm)) return;
+          state.notes.splice(state.notes.indexOf(n), 1);
+          save();
+          renderNotes();
+        }));
+      }
+      box.appendChild(actions);
+      list.appendChild(box);
+    });
+  }
+
+  // Selecting text in the room shows a button that clips it into the notebook.
+  function initClipping() {
+    const btn = $('#clip');
+    let clip = null;
+    const place = () => {
+      const sel = window.getSelection();
+      const body = $('#room-body');
+      const quote = sel && !sel.isCollapsed ? sel.toString().replace(/[ \t]*\n\s*\n\s*/g, '\n\n').trim() : '';
+      if (!quote || !body.contains(sel.anchorNode) || !body.contains(sel.focusNode) || !$('#modal').hidden) {
+        btn.hidden = true;
+        clip = null;
+        return;
+      }
+      clip = { quote, from: state.room, at: state.at };
+      const r = sel.getRangeAt(sel.rangeCount - 1).getBoundingClientRect();
+      btn.hidden = false;
+      // Below the selection, where it won't cover the browser's own selection menu.
+      const top = r.bottom + 8 + btn.offsetHeight > window.innerHeight ? r.top - btn.offsetHeight - 8 : r.bottom + 8;
+      const left = Math.min(Math.max(8, r.left + r.width / 2 - btn.offsetWidth / 2), window.innerWidth - btn.offsetWidth - 8);
+      btn.style.top = Math.max(8, top) + 'px';
+      btn.style.left = left + 'px';
+    };
+    let timer = null;
+    document.addEventListener('selectionchange', () => { clearTimeout(timer); timer = setTimeout(place, 150); });
+    $('#room-body').addEventListener('scroll', place);
+    window.addEventListener('resize', place);
+    btn.addEventListener('mousedown', e => e.preventDefault()); // keep the selection
+    btn.addEventListener('click', () => {
+      if (!clip) return;
+      addPlayerNote(clip);
+      window.getSelection().removeAllRanges();
+      btn.hidden = true;
+      toast(ui.clipped);
+    });
+  }
+
+  // The guest a register row correctly describes, or null.
+  function correctGuest(e) {
+    if (!e) return null;
+    return charsForName(e.name).find(c => e.wish === c.wish && roomMatches(e.room, c.room)) || null;
+  }
+
+  // Obra Dinn rule: correct-but-unconfirmed deductions are locked in only
+  // once there are at least `confirmBatch` of them, in groups of that size.
+  // A guest written on two rows counts once.
+  function checkDeductions() {
+    const batch = game.confirmBatch || 3;
+    const pending = [];
+    state.entries.forEach(e => {
+      const c = e && !e.cid && correctGuest(e);
+      if (c && !state.confirmed[c.id] && !pending.some(p => p.c === c)) pending.push({ e, c });
+    });
+    const k = Math.floor(pending.length / batch) * batch;
+    if (!k) return;
+    pending.slice(0, k).forEach(({ e, c }) => { state.confirmed[c.id] = true; e.cid = c.id; });
+    toast(ui.confirmToast(k));
+    chime();
+    // `onConfirm(s)` lets the story react, e.g. hand over a paper after 9.
+    if (game.onConfirm) game.onConfirm(ctx());
+    renderNotebook();
+    // Room text that depends on confirmations updates on the next visit, so
+    // a conversation in progress is not interrupted.
+    save();
+    if (Object.keys(state.confirmed).length === game.characters.length && !state.ended) {
+      state.ended = true;
+      save();
+      renderNotebook();
+      const buttons = hasFates() ? [{ label: ui.fates, primary: true, action: showFates }, { label: ui.close }] : [{ label: ui.close }];
+      setTimeout(() => showModal(L(game.ending), buttons), 1400);
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Fates: once the game is cleared, a screen tells what became of each guest
+  // (each character's `fate`). The top bar keeps a button for it.
+  // ---------------------------------------------------------------------------
+  function hasFates() {
+    return game.characters.some(c => c.fate);
+  }
+
+  // A grid of cards, one per guest, sorted by name or by room. Each fate is
+  // hidden until the player opens it, so they can read them one at a time.
+  let fatesSort = 'name';        // 'name' or 'room'
+  const fatesOpen = new Set();   // ids of the guests whose fate is showing
+
+  function showFates(keepScroll) {
+    const s = ctx();
+    const scroll = keepScroll === true ? $('#screen-body').scrollTop : 0;
+    showScreen('fates');
+    $('#screen-title').textContent = L((game.fates || {}).title, s) || ui.fatesTitle;
+    const body = $('#screen-body');
+    const intro = L((game.fates || {}).intro, s);
+    if (intro) body.appendChild(el('div', 'fates-intro', renderMarkup(intro, s)));
+
+    const list = game.characters.filter(c => c.fate);
+    const allOpen = () => list.every(c => fatesOpen.has(c.id));
+
+    // Sorting on the left, Show all / Hide all on the right.
+    const bar = el('div', 'fates-bar');
+    const sort = el('div', 'fates-sort');
+    sort.appendChild(el('span', 'fates-label', escapeHtml(ui.fatesSort)));
+    [['name', ui.fatesByName], ['room', ui.fatesByRoom]].forEach(([key, label]) => {
+      const b = el('button', 'fates-sort-btn' + (fatesSort === key ? ' current' : ''), escapeHtml(label));
+      b.type = 'button';
+      b.setAttribute('aria-pressed', String(fatesSort === key));
+      b.addEventListener('click', () => { fatesSort = key; showFates(true); });
+      sort.appendChild(b);
+    });
+    bar.appendChild(sort);
+    const all = el('button', 'fates-all', escapeHtml(allOpen() ? ui.fatesHideAll : ui.fatesShowAll));
+    all.type = 'button';
+    all.addEventListener('click', () => {
+      const open = !allOpen();
+      list.forEach(c => (open ? fatesOpen.add(c.id) : fatesOpen.delete(c.id)));
+      showFates(true);
+    });
+    bar.appendChild(all);
+    body.appendChild(bar);
+
+    // A guest's optional `kana` (the reading of a Japanese name) sorts it in Japanese.
+    const sortName = c => (state.lang === 'ja' && c.kana) || charName(c);
+    const byName = (a, b) => sortName(a).localeCompare(sortName(b), state.lang);
+    const byRoom = (a, b) => {
+      const x = BigInt(normRoom(a.room)), y = BigInt(normRoom(b.room));
+      return x < y ? -1 : x > y ? 1 : 0;
+    };
+    const grid = el('div', 'fate-grid');
+    list.slice().sort(fatesSort === 'room' ? byRoom : byName).forEach(c => {
+      const open = fatesOpen.has(c.id);
+      const card = el('section', 'fate-card' + (open ? ' open' : ''));
+      const roomText = c.roomLabel ? L(c.roomLabel) : ui.roomTitle(normRoom(c.room));
+      card.appendChild(el('div', 'fate-room', escapeHtml(roomText)));
+      card.appendChild(el('h3', 'fate-name', escapeHtml(charName(c))));
+      card.appendChild(el('div', 'fate-wish', escapeHtml(L(wishById[c.wish]))));
+      const text = el('div', 'fate-text', renderMarkup(L(c.fate, s), s));
+      text.hidden = !open;
+      const toggle = el('button', 'fate-toggle', escapeHtml(open ? ui.fateHide : ui.fateShow));
+      toggle.type = 'button';
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.addEventListener('click', () => {
+        const now = !fatesOpen.has(c.id);
+        if (now) fatesOpen.add(c.id); else fatesOpen.delete(c.id);
+        text.hidden = !now;
+        card.classList.toggle('open', now);
+        toggle.textContent = now ? ui.fateHide : ui.fateShow;
+        toggle.setAttribute('aria-expanded', String(now));
+        all.textContent = allOpen() ? ui.fatesHideAll : ui.fatesShowAll;
+      });
+      card.appendChild(toggle);
+      card.appendChild(text);
+      grid.appendChild(card);
+    });
+    body.appendChild(grid);
+    screenButton(ui.back, true, () => { $('#screen').hidden = true; });
+    body.scrollTop = scroll;
+  }
+
+  function renderNotebook() {
+    const total = game.characters.length;
+    const done = Object.keys(state.confirmed).length;
+    $('#progress').textContent = `${ui.confirmed} ${done} / ${total}`;
+    $('#nb-toggle-count').textContent = `${done}/${total}`;
+    $('#fates-button').hidden = !state.ended || !hasFates();
+    $('#tab-inventory').textContent = ui.inventory;
+    $('#tab-register').textContent = ui.register;
+    $('#tab-notes').textContent = ui.notes;
+    $('#tab-hints').textContent = ui.hints;
+
+    // Register: one row per guest, filled in any order. The player types a
+    // name, picks a wish and types a room (0 for one above 999,999,999).
+    const table = $('#register');
+    const focused = document.activeElement && document.activeElement.dataset.row
+      ? { row: document.activeElement.dataset.row, field: document.activeElement.dataset.field } : null;
+    table.innerHTML = '';
+    table.appendChild(el('p', 'reg-hint', escapeHtml(ui.bigRoom)));
+    const head = el('div', 'reg-row reg-head');
+    head.appendChild(el('span', 'reg-idx'));
+    head.appendChild(el('span', 'reg-name', escapeHtml(ui.name)));
+    head.appendChild(el('span', 'reg-wish', escapeHtml(ui.wish)));
+    head.appendChild(el('span', 'reg-room', escapeHtml(ui.room)));
+    table.appendChild(head);
+
+    const update = (i, fields) => {
+      state.entries[i] = Object.assign({}, state.entries[i], fields);
+      save();
+      checkDeductions();
+    };
+    const field = (tag, cls, i, name, label) => {
+      const f = el(tag, cls);
+      f.dataset.row = i; f.dataset.field = name;
+      f.setAttribute('aria-label', `${ui.register} ${i + 1} — ${label}`);
+      return f;
+    };
+
+    // Wishes of confirmed guests are left out of the other rows' dropdowns:
+    // each wish belongs to one guest, so they can't be anyone else's.
+    const taken = new Set(Object.keys(state.confirmed).map(id => charById[id] && charById[id].wish));
+
+    for (let i = 0; i < total; i++) {
+      const g = state.entries[i] || {};
+      const guest = g.cid ? charById[g.cid] : null;
+      const locked = !!guest;
+      const row = el('div', 'reg-row' + (locked ? ' locked' : ''));
+      row.appendChild(el('span', 'reg-idx', locked ? '<span class="tick" aria-label="confirmed">✓</span>' : String(i + 1)));
+
+      const name = field('input', 'reg-name', i, 'name', ui.name);
+      name.spellcheck = false;
+      name.value = locked ? charName(guest) : g.name || '';
+      name.placeholder = ui.namePlaceholder;
+      name.disabled = locked;
+      name.addEventListener('change', () => {
+        name.value = name.value.trim();
+        update(i, { name: name.value || undefined });
+      });
+      name.addEventListener('keydown', e => { if (e.key === 'Enter') name.blur(); });
+      row.appendChild(name);
+
+      const sel = field('select', 'reg-wish', i, 'wish', ui.wish);
+      sel.appendChild(new Option(ui.unknown, ''));
+      // A row keeps its own choice, even if that wish has since been confirmed elsewhere.
+      wishOrder.forEach(w => { if (!taken.has(w.id) || w.id === g.wish) sel.appendChild(new Option(L(w), w.id)); });
+      sel.value = g.wish || '';
+      sel.disabled = locked;
+      sel.addEventListener('change', () => update(i, { wish: sel.value || undefined }));
+      row.appendChild(sel);
+
+      const inp = field('input', 'reg-room', i, 'room', ui.room);
+      inp.inputMode = 'numeric';
+      inp.value = g.room || '';
+      inp.disabled = locked;
+      inp.placeholder = '?';
+      inp.addEventListener('change', () => {
+        inp.value = normRoom(inp.value) || '';
+        update(i, { room: inp.value || undefined });
+      });
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') inp.blur(); });
+      row.appendChild(inp);
+      table.appendChild(row);
+    }
+    if (focused) {
+      const f = table.querySelector(`[data-row="${focused.row}"][data-field="${focused.field}"]`);
+      if (f && !f.disabled) f.focus();
+    }
+
+    renderInventory();
+    renderNotes();
+    renderHints();
+  }
+
+  // Hints: a placeholder for now. A game may give `hints` as text.
+  function renderHints() {
+    const panel = $('#hints');
+    const text = L(game.hints);
+    panel.innerHTML = text ? renderMarkup(text, ctx()) : '';
+    if (!text) panel.appendChild(el('p', 'muted', escapeHtml(ui.noHints)));
+  }
+
+  // ---------------------------------------------------------------------------
+  // Feedback: toast, chime, modal
+  // ---------------------------------------------------------------------------
+  // Toasts that arrive together (a confirmation and the paper it unlocks)
+  // are shown one after another rather than over each other.
+  const toasts = [];
+  let toastTimer = null;
+  function toast(msg) {
+    toasts.push(msg);
+    if (!toastTimer) nextToast();
+  }
+
+  function nextToast() {
+    if (!toasts.length) { toastTimer = null; return; }
+    const t = $('#toast');
+    t.textContent = toasts.shift();
+    t.classList.remove('show');
+    void t.offsetWidth;
+    t.classList.add('show');
+    toastTimer = setTimeout(nextToast, 2000);
+  }
+
+  function chime() {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      const ac = chime.ac || (chime.ac = new AC());
+      [392, 523.25, 783.99].forEach((f, i) => {
+        const o = ac.createOscillator(), g = ac.createGain();
+        const t0 = ac.currentTime + i * 0.16;
+        o.type = 'triangle';
+        o.frequency.value = f;
+        g.gain.setValueAtTime(0, t0);
+        g.gain.linearRampToValueAtTime(0.12, t0 + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.2);
+        o.connect(g).connect(ac.destination);
+        o.start(t0); o.stop(t0 + 1.3);
+      });
+    } catch (e) { /* audio unavailable */ }
+  }
+
+  function showModal(text, buttons) {
+    const m = $('#modal');
+    $('#modal-title').textContent = L(game.title);
+    $('#modal-body').innerHTML = renderMarkup(text, ctx());
+    const bar = $('#modal-buttons');
+    bar.innerHTML = '';
+    buttons.forEach(b => {
+      const btn = el('button', b.primary ? 'primary' : '', escapeHtml(b.label));
+      btn.addEventListener('click', () => { m.hidden = true; if (b.action) b.action(); });
+      bar.appendChild(btn);
+    });
+    m.hidden = false;
+    const first = bar.querySelector('button');
+    if (first) first.focus();
+  }
+
+  // ---------------------------------------------------------------------------
+  // The home screen and the prologue, shown full-page before the game proper
+  // ---------------------------------------------------------------------------
+  function showScreen(kind) {
+    stopReveal();
+    $('#screen').hidden = false;
+    $('#screen').className = 'screen ' + kind;
+    $('#screen-title').textContent = L(game.title);
+    $('#screen-body').innerHTML = '';
+    $('#screen-actions').innerHTML = '';
+  }
+
+  function screenButton(label, primary, onClick) {
+    const b = el('button', primary ? 'primary' : '', escapeHtml(label));
+    b.type = 'button';
+    b.addEventListener('click', onClick);
+    $('#screen-actions').appendChild(b);
+    return b;
+  }
+
+  // The language is chosen here, before starting, and is fixed for that game.
+  function renderHome() {
+    showScreen('home');
+    const body = $('#screen-body');
+    body.appendChild(el('div', 'lang-label', escapeHtml(ui.chooseLanguage)));
+    const row = el('div', 'lang-row');
+    LANGS.forEach(l => {
+      const b = el('button', 'lang' + (l === state.lang ? ' current' : ''), escapeHtml(LANG_NAMES[l]));
+      b.type = 'button';
+      b.lang = l;
+      b.setAttribute('aria-pressed', String(l === state.lang));
+      b.disabled = state.started && l !== state.lang;
+      b.addEventListener('click', () => {
+        if (state.started || l === state.lang) return;
+        state.lang = l;
+        save();
+        applyLanguage();
+        renderHome();
+      });
+      row.appendChild(b);
+    });
+    body.appendChild(row);
+    if (state.started) body.appendChild(el('p', 'muted lang-locked', escapeHtml(ui.langLocked)));
+    // A short note under the language buttons (credits, disclaimers, …).
+    if (game.homeNote) body.appendChild(el('div', 'home-note', renderMarkup(L(game.homeNote), ctx())));
+
+    if (!state.started) {
+      screenButton(ui.startGame, true, () => {
+        state.started = true;
+        state.step = prologue().length ? 0 : null;
+        save();
+        renderDebug();
+        runPrologue();
+      }).focus();
+    } else {
+      screenButton(ui.resume, true, runPrologue).focus();
+      screenButton(ui.newGame, false, () => { if (confirm(ui.resetConfirm)) reset(); });
+    }
+  }
+
+  // The prologue is a list of steps played once, in order:
+  //   { speaker, text }          a line, with a Continue button
+  //   { ask: 'name', text }      asks the player's name, kept as {player}
+  //   { give: paperId, text }    hands over a paper, shown as an Inventory card
+  //   { read: paperId, text }    shows a paper's whole text on the page
+  // Any step may also have `do(s)`, run when it appears. The newest step's
+  // paragraphs appear one at a time (see revealInTurn).
+  function prologue() { return game.prologue || []; }
+
+  // The newest step's paragraphs (and any paper card) appear one at a time:
+  // each after `game.prologuePause` ms (default 2000), or at once on a click
+  // or Space/Enter. Then `done` runs, which shows the step's controls.
+  let stopReveal = () => {};
+  function revealInTurn(items, done) {
+    stopReveal();
+    const pause = game.prologuePause === undefined ? 2000 : game.prologuePause;
+    let i = 0, timer = null;
+    items.forEach((e, k) => e.classList.toggle('pending', k > 0));
+    const onClick = () => advance();
+    const onKey = e => {
+      if (e.key !== ' ' && e.key !== 'Enter') return;
+      e.preventDefault();
+      advance();
+    };
+    // Listen from the next tick, so the click that opened this step doesn't skip it.
+    const listen = setTimeout(() => {
+      $('#screen').addEventListener('click', onClick);
+      document.addEventListener('keydown', onKey);
+    }, 0);
+    stopReveal = () => {
+      clearTimeout(timer);
+      clearTimeout(listen);
+      $('#screen').removeEventListener('click', onClick);
+      document.removeEventListener('keydown', onKey);
+      stopReveal = () => {};
+    };
+    function advance() {
+      clearTimeout(timer);
+      i++;
+      if (i < items.length) {
+        items[i].classList.remove('pending');
+        items[i].classList.add('reveal');
+        items[i].scrollIntoView({ block: 'end' });
+      }
+      if (i >= items.length - 1) { stopReveal(); done(); } else timer = setTimeout(advance, pause);
+    }
+    if (items.length <= 1) { stopReveal(); done(); } else timer = setTimeout(advance, pause);
+  }
+
+  function runPrologue() {
+    const steps = prologue();
+    if (state.step === null || state.step >= steps.length) return enterGame();
+    showScreen('story');
+    const body = $('#screen-body');
+    const s = ctx();
+    const cur = steps[state.step];
+    if (cur.do) cur.do(s);
+
+    // Earlier steps stay on the page, as in a conversation.
+    steps.slice(0, state.step + 1).forEach((st, i) => {
+      body.appendChild(prologueLine(st, s, i === state.step, i < state.step));
+    });
+
+    const next = () => { state.step++; save(); runPrologue(); };
+    const fresh = body.lastElementChild;
+    revealInTurn([...fresh.querySelectorAll('.speech > p, .item-card, .paper-sheet')], () => {
+      // The paper's card is the last thing revealed: hand it over (and toast) now.
+      if (cur.give) give(cur.give);
+      showPrologueControls(cur, next);
+      body.lastElementChild.scrollIntoView({ block: 'end' });
+    });
+    fresh.scrollIntoView({ block: 'end' });
+  }
+
+  // One prologue step as it appears on the page. `answered`: the step has
+  // been passed, so an `ask: 'name'` step shows the name the player gave.
+  function prologueLine(st, s, fresh, answered) {
+    const line = el('div', 'line' + (fresh ? ' fresh' : ''));
+    const speaker = L(st.speaker, s);
+    if (speaker) line.appendChild(el('div', 'speaker', escapeHtml(speaker)));
+    const text = L(st.text, s);
+    if (text) line.appendChild(el('div', 'speech', renderMarkup(text, s)));
+    const paper = st.give && papers().find(p => p.id === st.give);
+    if (paper) {
+      const card = el('div', 'item-card');
+      card.appendChild(el('span', 'item-label', escapeHtml(ui.addedToInventory)));
+      card.appendChild(el('strong', '', escapeHtml(paperTitle(paper))));
+      line.appendChild(card);
+    }
+    const sheet = st.read && papers().find(p => p.id === st.read);
+    if (sheet) {
+      const box = el('div', 'paper-sheet');
+      box.appendChild(el('div', 'paper-sheet-title', escapeHtml(paperTitle(sheet))));
+      box.appendChild(el('div', 'paper-sheet-text', renderMarkup(L(sheet.text, s), s)));
+      line.appendChild(box);
+    }
+    if (st.ask === 'name' && answered) {
+      const said = el('div', 'line player');
+      said.textContent = '— ' + state.player;
+      line.appendChild(said);
+    }
+    return line;
+  }
+
+  // The whole prologue again, read-only, from the top bar once it's over.
+  function showPrologueLog() {
+    showScreen('story');
+    const body = $('#screen-body');
+    const s = ctx();
+    prologue().forEach(st => body.appendChild(prologueLine(st, s, false, true)));
+    screenButton(ui.back, true, enterGame).focus();
+    body.scrollTop = 0;
+  }
+
+  // The Continue button, or the name form for an `ask: 'name'` step.
+  function showPrologueControls(cur, next) {
+    if (cur.ask === 'name') {
+      const form = el('form', 'name-form');
+      form.autocomplete = 'off';
+      const input = el('input');
+      input.maxLength = MAX_NAME;
+      input.spellcheck = false;
+      input.placeholder = ui.yourName;
+      input.setAttribute('aria-label', ui.yourName);
+      input.value = state.player;
+      const ok = el('button', 'primary', escapeHtml(ui.continue));
+      ok.type = 'submit';
+      ok.disabled = !input.value.trim();
+      input.addEventListener('input', () => { ok.disabled = !input.value.trim(); input.setCustomValidity(''); });
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        // Markup characters would turn {player} into italics or worse.
+        const name = input.value.replace(/[*~{}]/g, '').trim().slice(0, MAX_NAME);
+        if (!name) return;
+        // Any name is fine, even a guest's: the register tells the two apart
+        // by wish and room (see charsForName).
+        state.player = name;
+        next();
+      });
+      form.appendChild(input);
+      form.appendChild(ok);
+      $('#screen-actions').appendChild(form);
+      input.focus();
+    } else {
+      screenButton(ui.continue, true, next).focus();
+    }
+  }
+
+  // Into the game proper: the start room, or wherever the player left off.
+  function enterGame() {
+    // Straight after the prologue, the notebook opens (also as a drawer on
+    // small screens) so the player sees their papers and the register.
+    const fromPrologue = state.step !== null;
+    if (fromPrologue) { state.step = null; save(); }
+    $('#screen').hidden = true;
+    $('#prologue-button').hidden = !prologue().length;
+    if (state.room) renderRoom(true);
+    else goTo(game.startRoom || 1, null, true);
+    renderNotebook();
+    if (fromPrologue) showNotebook(true);
+    // Rows written before a game update (new aliases, fixed answers, …) may
+    // have become correct since: check them now, not only on the next edit.
+    checkDeductions();
+    $('#go-input').focus();
+  }
+
+  function reset() {
+    state = freshState();
+    editing = null;
+    openItem = null;
+    notesShown = '';
+    save();
+    applyLanguage();
+    ['#room-body', '#room-number', '#room-floor', '#room-name', '#room-time', '#recent', '#places'].forEach(sel => { $(sel).innerHTML = ''; });
+    document.body.classList.remove('past');
+    $('#memory').hidden = true;
+    $('#lift-button').hidden = true;
+    $('#prologue-button').hidden = true;
+    renderHome();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Showing and hiding the notebook: a drawer on small screens, a column that
+  // can be put away on wide ones
+  // ---------------------------------------------------------------------------
+  const narrow = () => window.matchMedia('(max-width: 820px)').matches;
+
+  function showNotebook(show) {
+    if (narrow()) document.body.classList.toggle('nb-open', show);
+    else {
+      state.nbHidden = !show;
+      save();
+    }
+    renderNotebookShown();
+  }
+
+  function renderNotebookShown() {
+    document.body.classList.toggle('nb-hidden', !!state.nbHidden);
+    const shown = narrow() ? document.body.classList.contains('nb-open') : !state.nbHidden;
+    $('#nb-toggle').setAttribute('aria-expanded', String(shown));
+  }
+
+  // ---------------------------------------------------------------------------
+  // Debugging: a button that hands over the Memory Device straight away, plus
+  // the game's own `debugActions`: [{ label, run(s), done(s) }], each a button
+  // that runs `run` and hides once `done` returns true.
+  // Shown when the game sets `debug: true` or the page is opened with ?debug.
+  // ---------------------------------------------------------------------------
+  const debugMode = () => !!game.debug || /[?&]debug\b/.test(location.search);
+
+  function renderDebug() {
+    const b = $('#debug-memory');
+    b.textContent = ui.debugMemory;
+    b.hidden = !debugMode() || !state.started || !!state.skills.memory;
+    const box = $('#debug-actions');
+    box.innerHTML = '';
+    if (!debugMode() || !state.started) return;
+    const s = ctx();
+    (game.debugActions || []).filter(a => !a.done || !a.done(s)).forEach(a => {
+      const btn = el('button', 'debug', escapeHtml(L(a.label, s)));
+      btn.type = 'button';
+      btn.addEventListener('click', () => { a.run(ctx()); renderNotebook(); renderDebug(); save(); });
+      box.appendChild(btn);
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Language: picked on the home screen and fixed for the rest of the game
+  // ---------------------------------------------------------------------------
+  // The wishes in alphabetical order for the game's language, so the order of
+  // the list and the dropdown never gives away the answer.
+  let wishOrder = [];
+
+  function applyLanguage() {
+    ui = Object.assign({}, UI[state.lang], (game.ui || {})[state.lang]);
+    wishOrder = game.wishes.slice().sort((a, b) => L(a).localeCompare(L(b), state.lang));
+    document.documentElement.lang = state.lang;
+    document.title = L(game.title);
+    $('#game-title').textContent = L(game.title);
+    $('#prologue-button').textContent = ui.prologueLog;
+    $('#go-label').textContent = ui.goTo;
+    $('#go-button').textContent = ui.go;
+    $('#go-input').placeholder = ui.placeholder;
+    $('#nb-toggle-label').textContent = ui.notebook;
+    $('#present-button').textContent = ui.present;
+    $('#lift-button').textContent = ui.useLift;
+    $('#fates-button').textContent = ui.fates;
+    $('#go-error').textContent = '';
+    $('#note-input').placeholder = ui.notePlaceholder;
+    $('#note-add').textContent = ui.noteAdd;
+    $('#note-page-delete').textContent = ui.deletePage;
+    $('#clip').textContent = ui.clip;
+    renderNav();
+    renderMemory();
+    renderNotebook();
+    renderNotebookShown();
+    renderDebug();
+    if (state.room && state.started) renderRoom(false);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Boot
+  // ---------------------------------------------------------------------------
+  function boot() {
+    state = load() || freshState();
+    applyLanguage();
+
+    $('#go-form').addEventListener('submit', e => {
+      e.preventDefault();
+      if (!state.started) state.started = true;
+      // The warp device only takes rooms up to 999,999,999 (the register's
+      // limit too), so huge numbers never reach the page.
+      const typed = $('#go-input').value.trim();
+      const r = normRoom(typed);
+      if (r !== null && /^\d+$/.test(r) && BigInt(r) > HUGE) {
+        $('#go-error').textContent = ui.tooHigh;
+        return;
+      }
+      // Walking keeps the hour the Memory Device is set to.
+      goTo(typed, state.at);
+    });
+    $('#present-button').addEventListener('click', () => goTo(state.room));
+    $('#lift-button').addEventListener('click', rideElevator);
+    $('#nb-toggle').addEventListener('click', () => {
+      showNotebook(narrow() ? !document.body.classList.contains('nb-open') : !!state.nbHidden);
+    });
+    $('#nb-close').addEventListener('click', () => showNotebook(false));
+    window.addEventListener('resize', renderNotebookShown);
+    $('#reset').addEventListener('click', () => { if (confirm(ui.resetConfirm)) reset(); });
+    $('#debug-memory').addEventListener('click', () => { learn('memory'); renderNotebook(); save(); });
+    $('#fates-button').addEventListener('click', showFates);
+    $('#prologue-button').addEventListener('click', showPrologueLog);
+    ['inventory', 'register', 'notes', 'hints'].forEach(tab => {
+      $('#tab-' + tab).addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => {
+          t.classList.toggle('active', t.id === 'tab-' + tab);
+          t.setAttribute('aria-selected', String(t.id === 'tab-' + tab));
+        });
+        document.querySelectorAll('.tab-panel').forEach(p => { p.hidden = p.id !== tab; });
+        $('#tab-' + tab).classList.remove('ping');
+      });
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && document.body.classList.contains('nb-open')) showNotebook(false);
+    });
+    $('#note-page-title').addEventListener('input', e => {
+      const page = currentPage();
+      page.title = e.target.value;
+      const chip = $('#note-pages .note-page.current');
+      if (chip) chip.textContent = chip.title = pageTitle(page);
+      save();
+    });
+    $('#note-page-title').addEventListener('change', e => { e.target.value = currentPage().title = e.target.value.trim(); save(); });
+    $('#note-page-title').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+    $('#note-page-delete').addEventListener('click', deletePage);
+    $('#note-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const input = $('#note-input');
+      if (!input.value.trim()) return;
+      addPlayerNote({ text: input.value.trim() });
+      input.value = '';
+    });
+    $('#note-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); $('#note-form').requestSubmit(); }
+    });
+    initClipping();
+
+    if (/[?&]debug\b/.test(location.search)) {
+      console.table(game.characters.map(c => ({ id: c.id, name: c.player ? '(the player)' : L(c.name), wish: c.wish, room: normRoom(c.room) })));
+    }
+    renderHome();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Public API
+  // ---------------------------------------------------------------------------
+  const HOTEL = window.HOTEL = {
+    define(def) {
+      game = def;
+      game.rooms = game.rooms || [];
+      game.dialogues = game.dialogues || {};
+      charById = {}; wishById = {}; placeById = Object.create(null);
+      game.characters.forEach(c => { charById[c.id] = c; });
+      indexNames();
+      (game.places || []).forEach(p => { placeById[p.id] = p; });
+      memory = Object.assign({ from: 7, to: 23, empty: () => ui.pastEmpty }, game.memory);
+      memory.except = [].concat(memory.except || []).map(normPlace);
+      game.wishes.forEach(w => { wishById[w.id] = w; });
+      validate();
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+      else boot();
+    },
+    util: { normRoom, normHour, isPrime, isSquare, isPowerOf, seeded, pick: (rnd, arr) => arr[Math.floor(rnd() * arr.length)] },
+    debug: {
+      get state() { return state; },
+      // Writes the guest's answer on their row, or on the first empty one.
+      solve(id) {
+        const c = charById[id];
+        if (!c || state.confirmed[id]) return;
+        // A row already right for someone else (same name, other guest) is kept.
+        let i = state.entries.findIndex(e => e && !e.cid && !correctGuest(e) && charsForName(e.name).includes(c));
+        if (i < 0) { i = 0; while (state.entries[i] && state.entries[i].name) i++; }
+        if (i >= game.characters.length) return;
+        state.entries[i] = { name: charName(c), wish: c.wish, room: normRoom(c.room) };
+        renderNotebook(); checkDeductions(); save();
+      },
+      solveAll() { game.characters.forEach(c => HOTEL.debug.solve(c.id)); },
+      learn(id) { learn(id); renderNotebook(); save(); },
+      give(id) { give(id); save(); },
+      go(room, hour) { goTo(room, hour, true); }, // ignores floors, elevators and whether the player has the Memory Device
+    },
+  };
+})();
