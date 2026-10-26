@@ -767,7 +767,9 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 *コメントが誰にも読めない速さで流れていく。*`),
         16: anon(
-          `#1: "Mind if I sit? I can't focus on anything today. Have you heard about the bodies?"
+          `*#2 sits alone in the back row, staring past the screen.*
+
+#1: "Mind if I sit? I can't focus on anything today. Have you heard about the bodies?"
 
 #2: "The bodies?"
 
@@ -777,8 +779,10 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #1: "Thanks, you too. Let me know if you find any leads on who the killer is. I'm in Room 848."
 
-#2: "I'm in Room 486 if you need me."`,
-          `#1：「座ってもいいですか？ 今日はどうにも落ち着かなくて。死体の話、聞きました？」
+#2: "If you need me and I'm not in the common spaces, find me in Room 486."`,
+          `*#2が最後列に一人で座り、画面の向こうをぼんやりと見つめている。*
+
+#1：「座ってもいいですか？ 今日はどうにも落ち着かなくて。死体の話、聞きました？」
 
 #2：「死体？」
 
@@ -788,9 +792,9 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #1：「ありがとう、あなたも。犯人の手がかりが見つかったら教えてください。私は848号室です」
 
-#2：「何かあれば、私は486号室にいます」`),
+#2：「何かあれば、共用スペースにいないときは486号室を訪ねてください」`),
         17: anon(
-          `*A film plays to a nearly empty room. #1 sits a few seats away from #2, not watching the screen.*
+          `*A film plays to a nearly empty room. #2 is still in the back row, where he has been for the last hour, not watching the screen. #1 sits a few seats away.*
 
 #1: "You haven't looked at the movie once. Is everything okay?"
 
@@ -807,7 +811,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 #1: "In this hotel? I'm not ruling anything out."
 
 #2: "If she really sees what's coming… maybe she can tell me where to find who I'm looking for. Thank you, young lady."`,
-          `*ほとんど人のいない部屋で映画が流れている。#1は#2から数席離れて座っているが、画面を見ていない。*
+          `*ほとんど人のいない部屋で映画が流れている。#2は一時間前と同じ最後列の席に座ったままで、相変わらず画面を見ていない。#1は数席離れたところに座っている。*
 
 #1：「さっきから一度も映画を見ていませんね。大丈夫ですか？」
 
