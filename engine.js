@@ -65,6 +65,12 @@
       hintPickWish: 'Choose a wish',
       hintAsk: 'Ask',
       hintShow: 'Show hint',
+      hintsLocked: n => n === 1
+        ? '1 more hint here is locked until you have made more progress.'
+        : `${n} more hints here are locked until you have made more progress.`,
+      hintBehind: n => n === 1
+        ? '1 more hint follows from this one, once you have made more progress.'
+        : `${n} more hints follow from this one, once you have made more progress.`,
       hintNone: 'No hints for now. Look around some more and come back later.',
       hintUnknown: 'No guest by that name.',
       hintConfirmed: 'This guest is already confirmed in the register.',
@@ -163,6 +169,8 @@
       hintPickWish: '願いを選ぶ',
       hintAsk: '調べる',
       hintShow: 'ヒントを見る',
+      hintsLocked: n => `ここには、調査を進めないと見られないヒントがあと${n}件ある。`,
+      hintBehind: n => `調査を進めると、このヒントに続くヒントがあと${n}件現れる。`,
       hintNone: '今見られるヒントはない。もう少し調べてから、また来よう。',
       hintUnknown: 'その名前の宿泊客は見つからない。',
       hintConfirmed: 'この宿泊客はすでに宿帳で確定している。',
@@ -1609,6 +1617,27 @@
         || ([].concat(h.needs || []).every(hintNeed) && (!h.when || h.when(s))));
   }
 
+  // How many hints that need hint `key` are still locked by something besides
+  // other hints (a room to see, a paper, a flag...). Those held back only by
+  // hints open up by reading, so they aren't counted.
+  function hintsBehind(key) {
+    return game.hints.filter((h, i) => [].concat(h.needs || []).includes('hint:' + key) && hintStuck(h, i)).length;
+  }
+  // Not shown yet, and held back by more than other hints.
+  function hintStuck(h, i) {
+    if (state.hintsSeen[hintKey(h, i)]) return false;
+    const needs = [].concat(h.needs || []).filter(n => !/^hint:/.test(n));
+    return !needs.every(hintNeed) || !!(h.when && !h.when(ctx()));
+  }
+  // How many hints of `pick` (a hint → bool) are locked in that way.
+  function hintsLocked(pick) {
+    return game.hints.filter((h, i) => pick(h) && hintStuck(h, i)).length;
+  }
+  function sayLocked(out, pick) {
+    const n = hintsLocked(pick);
+    if (n) out.appendChild(el('p', 'muted hint-locked-count', escapeHtml(ui.hintsLocked(n))));
+  }
+
   // Questions, each with a Show hint button, or once shown, with its text
   // folded under the question: clicking the question hides or shows it.
   function hintItems(list) {
@@ -1641,6 +1670,8 @@
         });
         item.appendChild(b);
       }
+      const behind = hintsBehind(h.key);
+      if (behind) item.appendChild(el('p', 'hint-behind', escapeHtml(ui.hintBehind(behind))));
       box.appendChild(item);
     });
     return box;
@@ -1742,6 +1773,7 @@
           const list = hintsShown(pick);
           if (list.length) out.appendChild(hintItems(list));
           else say(ui.hintNone);
+          sayLocked(out, pick);
         }
       }
     }
@@ -1751,6 +1783,7 @@
       out.appendChild(el('h3', 'paper-title hint-general', escapeHtml(ui.hintGeneral)));
       out.appendChild(hintItems(general));
     }
+    if (general.length) sayLocked(out, h => !h.guest && !h.wish);
   }
 
   // ---------------------------------------------------------------------------
