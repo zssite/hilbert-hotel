@@ -1481,23 +1481,28 @@
       save();
       checkDeductions();
     };
-    const field = (tag, cls, i, name, label) => {
-      const f = el(tag, cls);
-      f.dataset.row = i; f.dataset.field = name;
-      f.setAttribute('aria-label', `${ui.register} ${i + 1} — ${label}`);
-      return f;
-    };
-
     // Wishes of confirmed guests are left out of the other rows' dropdowns:
     // each wish belongs to one guest, so they can't be anyone else's.
     const taken = new Set(Object.keys(state.confirmed).map(id => charById[id] && charById[id].wish));
 
-    for (let i = 0; i < total; i++) {
+    // Confirmed rows are shown first; the rest keep their order below them.
+    // Rows are numbered by where they appear, not where they're stored.
+    const isLocked = i => { const g = state.entries[i]; return !!(g && g.cid && charById[g.cid]); };
+    const order = [...Array(total).keys()];
+    order.sort((a, b) => isLocked(b) - isLocked(a) || a - b);
+
+    order.forEach((i, pos) => {
       const g = state.entries[i] || {};
       const guest = g.cid ? charById[g.cid] : null;
       const locked = !!guest;
       const row = el('div', 'reg-row' + (locked ? ' locked' : ''));
-      row.appendChild(el('span', 'reg-idx', locked ? `<span class="tick" aria-label="${escapeHtml(ui.confirmed)}">✓</span>` : String(i + 1)));
+      row.appendChild(el('span', 'reg-idx', locked ? `<span class="tick" aria-label="${escapeHtml(ui.confirmed)}">✓</span>` : String(pos + 1)));
+      const field = (tag, cls, i, name, label) => {
+        const f = el(tag, cls);
+        f.dataset.row = i; f.dataset.field = name;
+        f.setAttribute('aria-label', `${ui.register} ${pos + 1} — ${label}`);
+        return f;
+      };
 
       const name = field('input', 'reg-name', i, 'name', ui.name);
       name.spellcheck = false;
@@ -1532,7 +1537,7 @@
       inp.addEventListener('keydown', e => { if (e.key === 'Enter') inp.blur(); });
       row.appendChild(inp);
       table.appendChild(row);
-    }
+    });
     if (focused) {
       const f = table.querySelector(`[data-row="${focused.row}"][data-field="${focused.field}"]`);
       if (f && !f.disabled) f.focus();
