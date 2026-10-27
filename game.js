@@ -1612,6 +1612,13 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
           `一番上の紙には「指示書」と書かれている。あなたはそれをじっくりと読んだ。`),
       },
       {
+        // Points the player at the papers held from the start, which are
+        // otherwise easy to miss in the Inventory.
+        text: T(
+          `Beneath it are the other sheets: a *Guest List*, a *List of Wishes* and a *Check-in List*. You can look through them, and the Instructions, any time in your **Inventory**.`,
+          `その下には、ほかの紙が重なっていた。「宿泊客名簿」「願いの一覧」「チェックイン一覧」だ。これらの紙と指示書は、いつでも **持ち物** から見返すことができる。`),
+      },
+      {
         // The player's key card. No number on it, so it doesn't give away Room 78.
         give: 'card',
         text: T(
