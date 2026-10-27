@@ -261,7 +261,7 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .note-actions button:hover, .note-actions button:focus-visible { border-color: var(--ink-faint); color: var(--accent); }
 .muted { color: var(--ink-dim); font-style: italic; }
 
-/* hints: ask about a guest, then reveal hints one at a time */
+/* hints: ask about a guest by name or wish, then open its questions one by one */
 .hint-form { display: flex; gap: 0.4rem; align-items: center; padding: 0.2rem 0 0.8rem; border-bottom: 2px solid var(--ink-dim); }
 .hint-input {
   flex: 1; min-width: 0;
@@ -276,9 +276,20 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .hint-wish { flex: 1; }
 .hint-input:focus, .hint-form select:focus { outline: none; border-bottom: 1px solid var(--accent); }
 .hint-result { padding-top: 0.8rem; }
-.hint-level { font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-dim); margin-bottom: 0.25rem; }
-.hint-text { border-left: 2px solid var(--accent); padding-left: 0.7rem; margin-bottom: 0.7rem; }
-.hint-more { font-size: 0.8rem; }
+.hint-general { margin-top: 1.4rem; }
+.hint-list { list-style: disc; margin: 0; padding: 0.3rem 0 0 1.2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.hint-item { font-size: 0.85rem; }
+.hint-item::marker { color: var(--ink-dim); }
+.hint-q { font-weight: 600; margin-bottom: 0.3rem; }
+.hint-q p { margin: 0; }
+/* a shown hint folds under its question: the disclosure arrow takes the bullet's place */
+.hint-seen { list-style-type: none; }
+.hint-seen summary { cursor: pointer; list-style-position: outside; }
+.hint-seen summary::marker { color: var(--ink-dim); font-size: 0.8em; }
+.hint-seen summary:hover, .hint-seen summary:focus-visible { color: var(--accent); }
+.hint-seen details:not([open]) summary { font-weight: 400; color: var(--ink-dim); margin-bottom: 0; }
+.hint-text { font-size: 0.85rem; border-left: 2px solid var(--accent); padding-left: 0.6rem; }
+.hint-more { font-size: 0.75rem; }
 
 .clip {
   position: fixed; z-index: 25;

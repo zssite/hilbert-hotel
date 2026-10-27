@@ -29,7 +29,6 @@
       floorTitle: f => `Floor ${f}`,
       recent: 'Recent',
       invalid: 'Room numbers are positive integers: 1, 2, 3, …',
-      zero: 'There is no Room 0. The hotel begins at 1.',
       startGame: 'Start Game',
       chooseLanguage: 'Choose language',
       langLocked: 'The language is fixed for this game. Start a new game to change it.',
@@ -58,19 +57,18 @@
       hints: 'Hints',
       noHints: 'No hints yet.',
       hintIntro: 'Ask about a guest by name or wish.',
+      hintLocked: 'Some hints only appear once you have made more progress or read other hints.',
       hintBy: 'Ask by',
       hintByName: 'Name',
       hintByWish: 'Wish',
-      hintNamePlaceholder: 'Guest\'s name',
+      hintNamePlaceholder: "Guest's name",
       hintPickWish: 'Choose a wish',
       hintAsk: 'Ask',
-      hintLevel: (n, of) => `Hint ${n} of ${of}`,
-      hintShow: n => `Show hint ${n}`,
+      hintShow: 'Show hint',
+      hintNone: 'No hints for now. Look around some more and come back later.',
       hintUnknown: 'No guest by that name.',
-      hintLater: 'Hints will be added soon.',
-      hintMoreLater: 'Hints will be added soon.',
-      hintNoMore: 'There are no more hints about this guest.',
       hintConfirmed: 'This guest is already confirmed in the register.',
+      hintGeneral: 'General',
       namesList: 'Guest list',
       wishesList: 'Wishes',
       namePlaceholder: 'name',
@@ -80,7 +78,7 @@
       obtained: name => `Obtained: ${name}`,
       walkTo: 'Go to',
       otherFloor: where => `The warp device fails to warp you to ${where}.`,
-      tooHigh: 'The warp device only accepts room numbers up to 999,999,999.',
+      tooHigh: 'You cannot enter a room above 999,999,999.',
       liftName: i => `Elevator ${i}`,
       useLift: 'Use Elevator',
       liftPast: 'Back to the present to use the elevator.',
@@ -115,7 +113,7 @@
     ja: {
       goTo: '部屋へ移動',
       go: '移動',
-      placeholder: '正の整数',
+      placeholder: '正整数',
       notebook: '手帳',
       register: '宿帳',
       notes: 'メモ',
@@ -128,8 +126,7 @@
       roomTitle: n => `${n}号室`,
       floorTitle: f => `${f}階`,
       recent: '最近',
-      invalid: '部屋番号は正の整数です（1, 2, 3, …）。',
-      zero: '0号室は存在しない。ホテルは1から始まる。',
+      invalid: '部屋番号は正整数です（1, 2, 3, …）。',
       startGame: 'ゲームを始める',
       chooseLanguage: '言語を選ぶ',
       langLocked: 'このゲームの言語は固定されています。変更するには最初から始めてください。',
@@ -158,19 +155,18 @@
       hints: 'ヒント',
       noHints: 'ヒントはまだない。',
       hintIntro: '宿泊客の名前か願いから、その人についてのヒントが見られる。',
+      hintLocked: 'ヒントの中には、調査を進めたり、他のヒントを見たりしないと現れないものもある。',
       hintBy: '調べ方',
       hintByName: '名前',
       hintByWish: '願い',
       hintNamePlaceholder: '宿泊客の名前',
       hintPickWish: '願いを選ぶ',
       hintAsk: '調べる',
-      hintLevel: (n, of) => `ヒント ${n}／${of}`,
-      hintShow: n => `ヒント${n}を見る`,
+      hintShow: 'ヒントを見る',
+      hintNone: '今見られるヒントはない。もう少し調べてから、また来よう。',
       hintUnknown: 'その名前の宿泊客は見つからない。',
-      hintLater: 'ヒントは近日追加予定。',
-      hintMoreLater: 'ヒントは近日追加予定。',
-      hintNoMore: 'この宿泊客のヒントはこれで全部だ。',
       hintConfirmed: 'この宿泊客はすでに宿帳で確定している。',
+      hintGeneral: '全般',
       namesList: '宿泊客名簿',
       wishesList: '願いの一覧',
       namePlaceholder: '名前',
@@ -180,7 +176,7 @@
       obtained: name => `入手した：${name}`,
       walkTo: '移動先',
       otherFloor: where => `ワープ装置は${where}へのワープに失敗した。`,
-      tooHigh: 'ワープ装置が受け付けるのは999,999,999号室までだ。',
+      tooHigh: '999,999,999より大きい番号の部屋には入れない。',
       liftName: i => `${i}号機`,
       useLift: 'エレベーターに乗る',
       liftPast: 'エレベーターは現在に戻ってから使える。',
@@ -477,6 +473,7 @@
       history: [],    // recent rooms, newest first
       taken: {},      // "dialogue/node/choiceIndex" -> true once picked (for `once` choices, and choices shown in order)
       hintsSeen: {},  // hint id -> true once the player has shown it
+      hintsClosed: {}, // hint id -> true when the player has folded a shown hint away
       ended: false,
     };
   }
@@ -564,6 +561,7 @@
       },
       note: (text, id) => addNote(text, id),
       hasNote: id => state.notes.some(n => n.id === id),
+      toast: text => toast(L(text)),                // a short notification
       give: id => give(id),
       hasPaper: id => !!state.papers[id],
       roomOf: id => charById[id] ? normRoom(charById[id].room) : null,
@@ -636,11 +634,18 @@
     });
     if (game.history) warn('"history" is now "memory": { from, to, except, empty }');
     if (Array.isArray(game.hints)) {
+      const keys = game.hints.map(hintKey);
       game.hints.forEach((h, i) => {
-        if (!charById[h.guest]) warn(`hints[${i}] is about unknown guest "${h.guest}"`);
+        if (h.guest !== undefined && !charById[h.guest]) warn(`hints[${i}] is about unknown guest "${h.guest}"`);
+        if (h.wish !== undefined && !wishById[h.wish]) warn(`hints[${i}] is about unknown wish "${h.wish}"`);
+        if (h.guest && h.wish) warn(`hints[${i}] has both a guest and a wish: give it one, for the way of asking it answers`);
+        if (!h.question) warn(`hints[${i}] has no question`);
+        if (h.via) warn(`hints[${i}] has "via", which is no longer used: a hint with a guest is shown when asked by name, one with a wish when asked by wish`);
+        if (keys.indexOf(keys[i]) !== i) warn(`hints[${i}] has the same id as an earlier hint: "${keys[i]}"`);
         [].concat(h.needs || []).forEach(n => {
-          const m = String(n).replace(/^!/, '').match(/^(?:(paper|flag|skill|confirmed):.+|([^@]+)(?:@(\d{1,2}))?)$/);
-          if (!m || (m[2] !== undefined && normPlace(m[2]) === null)) warn(`hints[${i}] has a need it can't read: "${n}"`);
+          const m = String(n).replace(/^!/, '').match(/^(?:(paper|flag|skill|confirmed|hint):(.+)|([^@]+)(?:@(\d{1,2}))?)$/);
+          if (!m || (m[3] !== undefined && normPlace(m[3]) === null)) warn(`hints[${i}] has a need it can't read: "${n}"`);
+          else if (m[1] === 'hint' && (!keys.includes(m[2]) || m[2] === keys[i])) warn(`hints[${i}] needs a hint that isn't in the list (or itself): "${n}"`);
         });
       });
     }
@@ -729,8 +734,8 @@
   function goTo(input, when, ride) {
     const room = normPlace(input);
     const err = $('#go-error');
-    if (room === null) { err.textContent = ui.invalid; return; }
-    if (room === '0') { err.textContent = ui.zero; return; }
+    // Room 0, negative numbers and anything else that isn't a positive integer.
+    if (room === null || room === '0') { err.textContent = ui.invalid; return; }
     if (!ride && state.room && floorOf(room) !== floorOf(state.room)) {
       err.textContent = ui.otherFloor(roomLabel(room));
       return;
@@ -1538,25 +1543,51 @@
     renderHints();
   }
 
-  // Hints. `hints` may be plain text, or a list of hints about guests:
-  //   { id, guest, via, needs, when, text }
-  // The player asks about a guest by name or wish (`via` limits a hint to one
-  // of these). A guest's hints are levels, shown one at a time in list order:
-  // each opens once its `needs` are all met and the level before it has been
-  // shown, so a level locked behind a paper holds back every level after it.
-  // A level stays open once shown.
+  // Hints. `hints` may be plain text, or a list of hints:
+  //   { id, guest | wish, question, needs, when, text }
+  // The player asks about a guest, by typing a name or picking a wish. Asking
+  // by name shows the hints with that `guest`; asking by wish, the hints with
+  // that `wish`. (Hints with neither are always listed, under "General".)
+  // Each shows the question of every hint the player can see, in list order:
+  // one whose `needs` are all met (progress, and 'hint:id' for each hint that
+  // must have been shown first) and whose `when` holds. Its text stays hidden
+  // behind Show hint until the player asks for it, and stays shown
+  // afterwards. Once the guest a hint is about (the guest, or whoever made
+  // the wish) is confirmed, it is no longer offered, and counts as seen for
+  // the hints that need it.
   let hintQuery = null; // { via: 'name' | 'wish', value } once the player asks
   let hintVia = 'name';  // the way of asking picked in the form
 
+  function hintKey(h, i) { return h.id || 'hint' + i; }
+  let hintIndex = null; // hint key -> hint, built on first use
+  function hintByKey(key) {
+    if (!hintIndex) {
+      hintIndex = {};
+      if (Array.isArray(game.hints)) game.hints.forEach((h, i) => { hintIndex[hintKey(h, i)] = h; });
+    }
+    return hintIndex[key];
+  }
+  // The guest a hint is about, if any.
+  function hintGuest(h) {
+    if (h.guest) return charById[h.guest] || null;
+    if (h.wish) return game.characters.find(c => c.wish === h.wish) || null;
+    return null;
+  }
+  const hintDone = h => { const c = hintGuest(h); return !!(c && state.confirmed[c.id]); };
+
   // One of a hint's needs: 'room' or 'room@hour' visited (a place id or a room
-  // number), 'paper:id', 'flag:key', 'skill:id' or 'confirmed:charId'. A '!'
-  // in front means the opposite.
+  // number), 'paper:id', 'flag:key', 'skill:id', 'confirmed:charId' or
+  // 'hint:id' (that hint shown, or its guest confirmed). A '!' in front means
+  // the opposite.
   function hintNeed(need) {
     const not = need[0] === '!';
     const str = not ? need.slice(1) : need;
-    const m = str.match(/^(paper|flag|skill|confirmed):(.+)$/);
+    const m = str.match(/^(paper|flag|skill|confirmed|hint):(.+)$/);
     let ok;
-    if (m) ok = !!{ paper: state.papers, flag: state.flags, skill: state.skills, confirmed: state.confirmed }[m[1]][m[2]];
+    if (m && m[1] === 'hint') {
+      const h = hintByKey(m[2]);
+      ok = !!state.hintsSeen[m[2]] || !!(h && hintDone(h));
+    } else if (m) ok = !!{ paper: state.papers, flag: state.flags, skill: state.skills, confirmed: state.confirmed }[m[1]][m[2]];
     else {
       const [r, h] = str.split('@');
       const room = normPlace(r);
@@ -1565,15 +1596,49 @@
     return ok !== not;
   }
 
-  // Who a query means: { label, guest } (guest null for a wish nobody made),
-  // or { error } for a name that matches no guest.
-  function hintTarget({ via, value }) {
-    if (via === 'wish') {
-      const wish = wishById[value];
-      return wish ? { label: L(wish), guest: game.characters.find(c => c.wish === wish.id) || null } : null;
-    }
-    const named = charsForName(value);
-    return named.length ? { label: charName(named[0]), guest: named[0] } : { error: ui.hintUnknown };
+  // The hints of `pick` (a hint → bool) the player can see now, with their keys.
+  function hintsShown(pick) {
+    const s = ctx();
+    return game.hints.map((h, i) => Object.assign({ key: hintKey(h, i) }, h)).filter(pick)
+      .filter(h => state.hintsSeen[h.key]
+        || (!hintDone(h) && [].concat(h.needs || []).every(hintNeed) && (!h.when || h.when(s))));
+  }
+
+  // Questions, each with a Show hint button, or once shown, with its text
+  // folded under the question: clicking the question hides or shows it.
+  function hintItems(list) {
+    const s = ctx();
+    const box = el('ul', 'hint-list');
+    list.forEach(h => {
+      const item = el('li', 'hint-item');
+      const question = renderMarkup(L(h.question, s) || L(h.question && h.question.en, s) || '', s);
+      if (state.hintsSeen[h.key]) {
+        item.classList.add('hint-seen');
+        const fold = el('details');
+        fold.open = !(state.hintsClosed && state.hintsClosed[h.key]);
+        fold.addEventListener('toggle', () => {
+          state.hintsClosed = state.hintsClosed || {};
+          if (fold.open) delete state.hintsClosed[h.key]; else state.hintsClosed[h.key] = true;
+          save();
+        });
+        fold.appendChild(el('summary', 'hint-q', question.replace(/<\/?p>/g, '')));
+        const text = L(h.text, s) || L(h.text && h.text.en, s);
+        fold.appendChild(el('div', 'paper-text hint-text', renderMarkup(text, s)));
+        item.appendChild(fold);
+      } else {
+        item.appendChild(el('div', 'hint-q', question));
+        const b = el('button', 'hint-more', escapeHtml(ui.hintShow));
+        b.type = 'button';
+        b.addEventListener('click', () => {
+          state.hintsSeen[h.key] = true;
+          save();
+          renderHintResult();
+        });
+        item.appendChild(b);
+      }
+      box.appendChild(item);
+    });
+    return box;
   }
 
   function renderHints() {
@@ -1588,6 +1653,7 @@
     if (!panel.querySelector('.hint-form')) {
       panel.innerHTML = '';
       panel.appendChild(el('p', 'reg-hint hint-intro'));
+      panel.appendChild(el('p', 'reg-hint hint-locked'));
       const form = el('form', 'hint-form');
       form.autocomplete = 'off';
       form.innerHTML = '<select class="hint-via"></select>'
@@ -1604,6 +1670,7 @@
         hintVia = via.value;
         input.value = '';
         wish.value = '';
+        hintQuery = null;
         renderHints();
         (hintVia === 'wish' ? wish : input).focus();
       });
@@ -1612,6 +1679,7 @@
       panel.appendChild(el('div', 'hint-result'));
     }
     panel.querySelector('.hint-intro').textContent = ui.hintIntro;
+    panel.querySelector('.hint-locked').textContent = ui.hintLocked;
     const via = panel.querySelector('.hint-via');
     via.setAttribute('aria-label', ui.hintBy);
     via.innerHTML = '';
@@ -1646,37 +1714,38 @@
     const out = $('#hints .hint-result');
     if (!out) return;
     out.innerHTML = '';
-    if (!hintQuery) return;
-    const t = hintTarget(hintQuery);
-    if (!t) return;
-    out.appendChild(el('h3', 'paper-title', escapeHtml(t.label || hintQuery.value)));
     const say = msg => out.appendChild(el('p', 'muted', escapeHtml(msg)));
-    if (t.error) { say(t.error); return; }
-    if (t.guest && state.confirmed[t.guest.id]) { say(ui.hintConfirmed); return; }
-    const s = ctx();
-    const all = !t.guest ? [] : game.hints
-      .map((h, i) => Object.assign({ key: h.id || 'hint' + i }, h))
-      .filter(h => h.guest === t.guest.id && (![].concat(h.via || []).length || [].concat(h.via).includes(hintQuery.via)));
-    const unlocked = h => [].concat(h.needs || []).every(hintNeed) && (!h.when || h.when(s));
-    let n = 0;
-    while (n < all.length && state.hintsSeen[all[n].key]) n++;
-    all.slice(0, n).forEach((h, i) => {
-      out.appendChild(el('div', 'hint-level', escapeHtml(ui.hintLevel(i + 1, all.length))));
-      const text = L(h.text, s) || L(h.text && h.text.en, s);
-      out.appendChild(el('div', 'paper-text hint-text', renderMarkup(text, s)));
-    });
-    const next = all[n];
-    if (next && unlocked(next)) {
-      const b = el('button', 'hint-more', escapeHtml(ui.hintShow(n + 1)));
-      b.type = 'button';
-      b.addEventListener('click', () => {
-        state.hintsSeen[next.key] = true;
-        save();
-        renderHintResult();
-      });
-      out.appendChild(b);
-    } else if (next) say(n ? ui.hintMoreLater : ui.hintLater);
-    else say(n ? ui.hintNoMore : ui.hintLater);
+    if (hintQuery) {
+      let label, guest, pick;
+      if (hintQuery.via === 'wish') {
+        const w = wishById[hintQuery.value];
+        if (w) {
+          label = L(w);
+          guest = game.characters.find(c => c.wish === w.id);
+          pick = h => h.wish === w.id;
+        }
+      } else {
+        guest = charsForName(hintQuery.value)[0];
+        label = guest ? charName(guest) : hintQuery.value;
+        pick = guest && (h => h.guest === guest.id);
+      }
+      if (label) {
+        out.appendChild(el('h3', 'paper-title', escapeHtml(label)));
+        if (!pick) say(ui.hintUnknown);
+        else if (guest && state.confirmed[guest.id]) say(ui.hintConfirmed);
+        else {
+          const list = hintsShown(pick);
+          if (list.length) out.appendChild(hintItems(list));
+          else say(ui.hintNone);
+        }
+      }
+    }
+    // Hints about no one guest or wish are always listed.
+    const general = hintsShown(h => !h.guest && !h.wish);
+    if (general.length) {
+      out.appendChild(el('h3', 'paper-title hint-general', escapeHtml(ui.hintGeneral)));
+      out.appendChild(hintItems(general));
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -2075,8 +2144,8 @@
     $('#go-form').addEventListener('submit', e => {
       e.preventDefault();
       if (!state.started) state.started = true;
-      // The warp device only takes rooms up to 999,999,999 (the register's
-      // limit too), so huge numbers never reach the page.
+      // Rooms above 999,999,999 can't be entered (the register's limit
+      // too), so huge numbers never reach the page.
       const typed = $('#go-input').value.trim();
       const r = normRoom(typed);
       if (r !== null && /^\d+$/.test(r) && BigInt(r) > HUGE) {
