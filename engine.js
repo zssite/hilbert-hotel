@@ -79,6 +79,29 @@
       wishesList: 'Wishes',
       namePlaceholder: 'name',
       bigRoom: 'For a room above 999,999,999, you may write 0.',
+      rowRef: n => `row ${n}`,
+      wishesFree: 'Not written yet',
+      wishesUsed: 'Written in another row',
+      leftover: 'Not written yet',
+      leftoverNone: 'Every name and wish is written down.',
+      leftoverNames: 'Names',
+      leftoverWishes: 'Wishes',
+      gridOpen: 'Elimination grid',
+      gridHelp: 'How it works',
+      gridWidth: 'Width',
+      gridHeight: 'Height',
+      gridText: 'Text',
+      gridFit: 'Fit',
+      gridTitle: 'Elimination grid',
+      gridIntro: 'Click a square to mark it: ✗ (not this wish), ? (maybe), ✓ (this wish). A ✓ crosses out the rest of its row and column for you. The grid is only your own working: it doesn\'t change the register.',
+      gridShowConfirmed: 'Show confirmed guests',
+      gridClear: 'Clear marks',
+      gridClearConfirm: 'Erase every mark in the grid?',
+      gridDone: 'Every guest on the Guest List is confirmed.',
+      gridCell: (guest, wish) => `${guest}: ${wish}`,
+      gridIntroHours: 'The guests are grouped by their hours on the Check-in List. Give a wish a range of hours (or a single hour), and everyone not listed in that range is crossed out of its row.',
+      gridFrom: wish => `From: ${wish}`,
+      gridTo: wish => `To: ${wish}`,
       gotPaper: t => `Received: ${t}`,
       learned: name => `New skill: ${name}`,
       obtained: name => `Obtained: ${name}`,
@@ -179,6 +202,29 @@
       wishesList: '願いの一覧',
       namePlaceholder: '名前',
       bigRoom: '999,999,999より大きい部屋番号は 0 と書いてもよい。',
+      rowRef: n => `${n}行目`,
+      wishesFree: 'まだ書いていない',
+      wishesUsed: '他の行に記入済み',
+      leftover: '未記入',
+      leftoverNone: 'すべての名前と願いを書き込んだ。',
+      leftoverNames: '名前',
+      leftoverWishes: '願い',
+      gridOpen: '消去法の表',
+      gridHelp: '使い方',
+      gridWidth: '横',
+      gridHeight: '縦',
+      gridText: '文字',
+      gridFit: '画面に合わせる',
+      gridTitle: '消去法の表',
+      gridIntro: 'マスをクリックすると印がつく：✗（この願いではない）、?（もしかして）、✓（この願い）。✓をつけると、同じ行と列の残りのマスには自動で✗がつく。この表は自分用のメモで、宿帳には影響しない。',
+      gridShowConfirmed: '確定した宿泊客も表示',
+      gridClear: '印を消す',
+      gridClearConfirm: '表の印をすべて消しますか？',
+      gridDone: '宿泊客名簿の全員が確定した。',
+      gridCell: (guest, wish) => `${guest}：${wish}`,
+      gridIntroHours: '宿泊客はチェックイン一覧の時刻ごとにまとめてある。願いに時刻の範囲（または一つの時刻）をつけると、その範囲の一覧にいない人は、その行で自動的に✗になる。',
+      gridFrom: wish => `開始：${wish}`,
+      gridTo: wish => `終了：${wish}`,
       gotPaper: t => `受け取った：${t}`,
       learned: name => `新しいスキル：${name}`,
       obtained: name => `入手した：${name}`,
@@ -482,6 +528,8 @@
       taken: {},      // "dialogue/node/choiceIndex" -> true once picked (for `once` choices, and choices shown in order)
       hintsSeen: {},  // hint id -> true once the player has shown it
       hintsClosed: {}, // hint id -> true when the player has folded a shown hint away
+      grid: {},       // "charId|wishId" -> 'x', '?' or 'v': the player's marks in the elimination grid
+      gridHours: {},  // wishId -> [from, to]: the range of hours the player has tagged it with in the grid
       ended: false,
     };
   }
@@ -563,6 +611,9 @@
       visited: r => (state.visits[normPlace(r)] || 0) > 0,
       confirmed: id => !!state.confirmed[id],
       confirmedCount: () => Object.keys(state.confirmed).length,
+      // A line of a paper listing guests or wishes, marked by the register.
+      markGuest: (id, text) => markLine(L(text), !!state.confirmed[id], registerUse().guests[id]),
+      markWish: (id, text) => markLine(L(text), confirmedWishes().has(id), registerUse().wishes[id]),
       guess: id => {
         const e = state.entries.find(e => e && (e.cid === id || charsForName(e.name).includes(charById[id])));
         return e ? { name: e.name, wish: e.wish, room: e.room } : {};
@@ -1112,9 +1163,47 @@
   function paperText(p, s) {
     if (p.text !== undefined) return L(p.text, s);
     // The player doesn't know they are a guest, so they aren't on the list.
-    const list = p.id === 'names' ? game.characters.filter(c => !c.player).map(c => L(c.name, s))
-      : p.id === 'wishes' ? wishOrder.map(w => L(w, s)) : [];
+    const list = p.id === 'names' ? game.characters.filter(c => !c.player).map(c => s.markGuest(c.id, c.name))
+      : p.id === 'wishes' ? wishOrder.map(w => s.markWish(w.id, w)) : [];
     return list.map(x => `• ${x}`).join('\n');
+  }
+
+  // Where the register stands on each guest and wish, for the papers and the
+  // register's reminders. It only reflects what the player wrote: whether an
+  // unconfirmed row is right is never shown.
+  function isLocked(i) {
+    const g = state.entries[i];
+    return !!(g && g.cid && charById[g.cid]);
+  }
+
+  // Confirmed rows are shown first; the rest keep their order below them.
+  // Rows are numbered by where they appear, not where they're stored.
+  function registerOrder() {
+    return [...Array(game.characters.length).keys()].sort((a, b) => isLocked(b) - isLocked(a) || a - b);
+  }
+
+  // The unconfirmed rows (by their shown number) each guest and wish is written on.
+  function registerUse() {
+    const guests = {}, wishes = {};
+    const add = (map, id, row) => (map[id] = map[id] || []).push(row);
+    registerOrder().forEach((i, pos) => {
+      const e = state.entries[i];
+      if (!e || isLocked(i)) return;
+      charsForName(e.name).forEach(c => add(guests, c.id, pos + 1));
+      if (e.wish) add(wishes, e.wish, pos + 1);
+    });
+    return { guests, wishes };
+  }
+
+  function confirmedWishes() {
+    return new Set(Object.keys(state.confirmed).map(id => charById[id] && charById[id].wish));
+  }
+
+  // A line of the Guest List or the List of Wishes: struck through once
+  // confirmed, otherwise followed by the rows it's written on.
+  function markLine(text, confirmed, rows) {
+    if (confirmed) return `~~${text}~~`;
+    return rows && rows.length ? `${text} — ${rows.map(ui.rowRef).join(', ')}` : text;
   }
 
   // Hand the player a paper with { start: false } during the story.
@@ -1459,6 +1548,413 @@
     body.scrollTop = scroll;
   }
 
+  // Above the register: the names on the Guest List and the wishes that no
+  // row mentions yet, folded away (with no counts: the Guest List is one name
+  // short of the wishes, which the player shouldn't be told). Near the end,
+  // when the last few guests are found by elimination, this is what's left.
+  let leftoverOpen = false;
+
+  function fillLeftover(box) {
+    const use = registerUse();
+    const taken = confirmedWishes();
+    const sortName = c => (state.lang === 'ja' && c.kana) || charName(c);
+    const names = game.characters.filter(c => !c.player && !state.confirmed[c.id] && !use.guests[c.id])
+      .sort((a, b) => sortName(a).localeCompare(sortName(b), state.lang));
+    const wishes = wishOrder.filter(w => !taken.has(w.id) && !use.wishes[w.id]);
+    box.innerHTML = '';
+    if (!names.length && !wishes.length) {
+      box.appendChild(el('summary', null, escapeHtml(ui.leftoverNone)));
+      box.classList.add('empty');
+      return;
+    }
+    box.classList.remove('empty');
+    box.appendChild(el('summary', null, escapeHtml(ui.leftover)));
+    const cols = el('div', 'reg-left-cols');
+    [[ui.leftoverNames, names.map(charName)], [ui.leftoverWishes, wishes.map(w => L(w))]].forEach(([title, items]) => {
+      const col = el('div');
+      col.appendChild(el('h4', null, escapeHtml(title)));
+      col.appendChild(el('ul', null, items.map(x => `<li>${escapeHtml(x)}</li>`).join('')));
+      cols.appendChild(col);
+    });
+    box.appendChild(cols);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Elimination grid: a page of the notebook for working out who made which
+  // wish. Wishes run down the side, the guests on the Guest List across the
+  // top. The player marks squares ✗, ? or ✓; the grid fills in only what
+  // follows from one wish per guest (the rest of a ✓'s row and column, and
+  // everything crossed by a confirmed guest). It never looks at the answers
+  // of unconfirmed guests. The player isn't on the Guest List, so one wish
+  // row ends up crossed out all the way along.
+  //
+  // With `grid: { hours: c => [...], label: h => text, when: s => … }`, the
+  // guests are grouped by those hours (the Check-in List's, in the sample),
+  // and each wish can be tagged with one of them: guests without that hour
+  // are then crossed out of its row. Tagged wishes are listed first, by hour,
+  // so each hour's wishes line up with its guests.
+  // ---------------------------------------------------------------------------
+  let gridConfirmed = false; // show the confirmed guests and their wishes too
+  const GRID_NEXT = { '': 'x', x: '?', '?': 'v', v: '' };
+  const GRID_MARK = { x: '✗', '?': '?', v: '✓' };
+
+  // The grid's hours, or null when the game has none (or not yet).
+  function gridTimes() {
+    const cfg = game.grid;
+    if (!cfg || typeof cfg.hours !== 'function' || (cfg.when && !cfg.when(ctx()))) return null;
+    const of = c => [].concat(cfg.hours(c) ?? []).map(Number).filter(h => Number.isInteger(h)).sort((a, b) => a - b);
+    const all = [...new Set(game.characters.filter(c => !c.player).flatMap(of))].sort((a, b) => a - b);
+    const label = h => L(cfg.label ? cfg.label(h) : ui.hour(h));
+    return { of, all, label };
+  }
+
+  function showGrid() {
+    showScreen('grid');
+    $('#screen-title').textContent = ui.gridTitle;
+    const body = $('#screen-body');
+    const times = gridTimes();
+    // Everything above the grid fits on one line, to leave the grid the most
+    // room: the title, How it works, the options, and Back.
+    const bar = el('div', 'grid-bar');
+    bar.appendChild(el('h2', 'grid-title', escapeHtml(ui.gridTitle)));
+    // How it works is folded away once the player has marked something.
+    const helpText = el('p', 'grid-help', escapeHtml(ui.gridIntro + (times ? ' ' + ui.gridIntroHours : '')));
+    helpText.hidden = !!(Object.keys(state.grid).length || Object.keys(state.gridHours).length);
+    const help = el('button', 'grid-help-button', escapeHtml(ui.gridHelp));
+    help.type = 'button';
+    help.setAttribute('aria-expanded', String(!helpText.hidden));
+    help.addEventListener('click', () => {
+      helpText.hidden = !helpText.hidden;
+      help.setAttribute('aria-expanded', String(!helpText.hidden));
+      fitGrid(wrap);
+    });
+    bar.appendChild(help);
+    bar.appendChild(el('span', 'grid-spacer'));
+    const toggle = el('label', 'grid-toggle');
+    const box = el('input');
+    box.type = 'checkbox';
+    box.checked = gridConfirmed;
+    box.addEventListener('change', () => { gridConfirmed = box.checked; fillGrid(wrap); });
+    toggle.appendChild(box);
+    toggle.appendChild(document.createTextNode(' ' + ui.gridShowConfirmed));
+    bar.appendChild(toggle);
+    const clear = el('button', 'grid-clear', escapeHtml(ui.gridClear));
+    clear.type = 'button';
+    clear.addEventListener('click', () => {
+      if (!confirm(ui.gridClearConfirm)) return;
+      state.grid = {};
+      state.gridHours = {};
+      save();
+      fillGrid(wrap);
+    });
+    bar.appendChild(clear);
+    // Width and Height: scale the columns and the rows from their fit to the
+    // window (100%). Fit to window puts both back.
+    const fit = el('button', 'grid-fit', escapeHtml(ui.gridFit));
+    fit.type = 'button';
+    // Text: scales the writing alone; the grid is fitted again around it.
+    const sliders = [['w', ui.gridWidth], ['h', ui.gridHeight], ['t', ui.gridText]].map(([axis, label]) => {
+      const zoom = el('label', 'grid-zoom');
+      zoom.appendChild(document.createTextNode(label + ' '));
+      const slider = el('input');
+      slider.type = 'range';
+      slider.min = axis === 't' ? 60 : 50; slider.max = 200; slider.step = 5;
+      slider.value = gridZoom[axis];
+      const shown = el('span', 'grid-zoom-value');
+      const show = () => {
+        slider.value = gridZoom[axis];
+        shown.textContent = gridZoom[axis] + '%';
+        fit.disabled = gridZoom.w === 100 && gridZoom.h === 100;
+      };
+      slider.addEventListener('input', () => {
+        setGridZoom(Object.assign({}, gridZoom, { [axis]: Number(slider.value) }));
+        show();
+        fitGrid(wrap);
+      });
+      zoom.appendChild(slider);
+      zoom.appendChild(shown);
+      bar.appendChild(zoom);
+      return show;
+    });
+    fit.addEventListener('click', () => {
+      setGridZoom(Object.assign({}, gridZoom, { w: 100, h: 100 }));
+      sliders.forEach(show => show());
+      fitGrid(wrap);
+    });
+    sliders.forEach(show => show());
+    bar.appendChild(fit);
+    const back = el('button', 'primary grid-back', escapeHtml(ui.back));
+    back.type = 'button';
+    back.addEventListener('click', () => { $('#screen').hidden = true; });
+    bar.appendChild(back);
+    body.appendChild(bar);
+    body.appendChild(helpText);
+
+    const wrap = el('div', 'grid-wrap');
+    body.appendChild(wrap);
+    fillGrid(wrap);
+    if (!gridResize) {
+      gridResize = true;
+      const refit = measure => {
+        const w = $('#screen').hidden ? null : document.querySelector('.grid .grid-wrap');
+        if (!w) return;
+        if (measure) gridFit.key = '';
+        fitGrid(w);
+      };
+      window.addEventListener('resize', () => refit(false));
+      // Text measured before the web fonts arrive is the wrong size: measure again.
+      if (document.fonts) document.fonts.addEventListener('loadingdone', () => refit(true));
+    }
+    if (document.fonts && document.fonts.status !== 'loaded') {
+      document.fonts.ready.then(() => {
+        gridFit.key = '';
+        if (!$('#screen').hidden && wrap.isConnected) fitGrid(wrap);
+      });
+    }
+  }
+
+  // The grid is sized to the window. Rows get the largest height (from the
+  // minimum to GRID_MAX pixels) at which the whole grid fits top to bottom,
+  // then columns the largest width (up to GRID_COL_MAX) at which it fits side
+  // to side, so a wide window gets wide columns rather than empty space.
+  // Columns are never much narrower than rows are tall. Where even the
+  // minimum doesn't fit, the grid scrolls. Fingers get bigger squares than a
+  // mouse. The fit is kept while the window and the table's shape stay the
+  // same, so marking a square doesn't measure again.
+  //
+  // The player's Width and Height sliders then scale the fitted columns and
+  // rows (gridZoom, in percent, kept in this browser as a preference rather
+  // than in the save; an older single number scales both).
+  const GRID_MAX = 44, GRID_COL_MAX = 80;
+  const gridMin = () => (window.matchMedia && matchMedia('(pointer: coarse)').matches ? 26 : 18);
+  const GRID_ZOOM_KEY = 'hilbert-hotel:grid-zoom';
+  let gridResize = false;
+  let gridFit = { key: '', cw: 30, rh: 30 };
+  let gridZoom = (() => {
+    const ok = (z, min = 50) => (Number(z) >= min && Number(z) <= 200 ? Number(z) : 100);
+    try {
+      const raw = JSON.parse(localStorage.getItem(GRID_ZOOM_KEY));
+      return typeof raw === 'number' ? { w: ok(raw), h: ok(raw), t: 100 }
+        : { w: ok(raw && raw.w), h: ok(raw && raw.h), t: ok(raw && raw.t, 60) };
+    } catch (e) { return { w: 100, h: 100, t: 100 }; }
+  })();
+
+  function setGridZoom(z) {
+    gridZoom = z;
+    try { localStorage.setItem(GRID_ZOOM_KEY, JSON.stringify(z)); } catch (e) { /* storage unavailable */ }
+  }
+
+  function fitGrid(wrap) {
+    const table = wrap.querySelector('.grid-table');
+    if (!table || !wrap.offsetWidth) return;
+    // Inside the 1px border, whether or not scrollbars are showing now.
+    const W = wrap.offsetWidth - 2, H = wrap.offsetHeight - 2;
+    // The text size goes in first: it changes how much room the wishes and
+    // names take, and so the fit.
+    table.style.setProperty('--ts', gridZoom.t / 100);
+    const key = [W, H, table.rows.length, table.rows[table.rows.length - 1].cells.length, state.lang, gridZoom.t].join(',');
+    const size = (cw, rh) => {
+      table.style.setProperty('--cw', cw + 'px');
+      table.style.setProperty('--rh', rh + 'px');
+      stickNames(table);
+      return [table.offsetWidth, table.offsetHeight];
+    };
+    if (key !== gridFit.key) {
+      const min = gridMin();
+      const largest = (lo, hi, ok) => {
+        let best = null;
+        while (lo <= hi) {
+          const mid = (lo + hi) >> 1;
+          if (ok(mid)) { best = mid; lo = mid + 1; } else hi = mid - 1;
+        }
+        return best;
+      };
+      let rh = largest(min, GRID_MAX, r => size(min, r)[1] <= H) ?? min;
+      const cw = largest(min, GRID_COL_MAX, c => size(c, rh)[0] <= W) ?? min;
+      // Not much taller than wide: a narrow window gets shorter rows too.
+      rh = Math.max(min, Math.min(rh, Math.round(cw * 1.25)));
+      gridFit = { key, cw, rh };
+    }
+    const zw = gridZoom.w / 100, zh = gridZoom.h / 100;
+    size(Math.round(gridFit.cw * zw), Math.round(gridFit.rh * zh));
+  }
+
+  // The names stick just below the row of hours, whose height follows the squares.
+  function stickNames(table) {
+    const rows = table.tHead ? table.tHead.rows : [];
+    if (rows.length < 2) return;
+    const top = rows[0].getBoundingClientRect().height + 'px';
+    [...rows[1].cells].forEach(th => { th.style.top = top; });
+  }
+
+  // Rebuilds the table inside `wrap`, which keeps its scroll position.
+  // `refocus` selects the control to focus afterwards.
+  function fillGrid(wrap, refocus) {
+    const taken = confirmedWishes();
+    const times = gridTimes();
+    const hoursOf = c => (times ? times.of(c) : []);
+    // A wish's tag: the range of hours [from, to] the player gave it (a lone
+    // hour in older saves), or null.
+    const tagOf = w => {
+      const t = state.gridHours[w.id];
+      if (!times || t === undefined) return null;
+      const [from, to] = [].concat(t).map(Number);
+      return Number.isInteger(from) ? [from, Number.isInteger(to) && to >= from ? to : from] : null;
+    };
+    const sameTag = (a, b) => !!(a && b && a[0] === b[0] && a[1] === b[1]);
+    const sortName = c => (state.lang === 'ja' && c.kana) || charName(c);
+    // Guests with the same hours sit together, earliest first; no hours, last.
+    const firstHour = c => (hoursOf(c).length ? hoursOf(c)[0] : Infinity);
+    const group = c => hoursOf(c).join(',');
+    const guests = game.characters.filter(c => !c.player && (gridConfirmed || !state.confirmed[c.id]))
+      .sort((a, b) => firstHour(a) - firstHour(b) || group(a).localeCompare(group(b))
+        || sortName(a).localeCompare(sortName(b), state.lang));
+    // Tagged wishes first, by the start and then the end of their range.
+    const tagKey = (w, k) => (tagOf(w) === null ? Infinity : tagOf(w)[k]);
+    const wishes = wishOrder.filter(w => gridConfirmed || !taken.has(w.id))
+      .map((w, i) => [w, i])
+      .sort((a, b) => tagKey(a[0], 0) - tagKey(b[0], 0) || tagKey(a[0], 1) - tagKey(b[0], 1) || a[1] - b[1])
+      .map(([w]) => w);
+    wrap.innerHTML = '';
+    if (!guests.length) { wrap.appendChild(el('p', 'muted', escapeHtml(ui.gridDone))); return; }
+
+    const mark = (c, w) => state.grid[c.id + '|' + w.id] || '';
+    const offHour = (c, tag) => tag !== null && !hoursOf(c).some(h => h >= tag[0] && h <= tag[1]);
+    // The player's own ✓s in each row and column, to cross out the rest and
+    // to flag two ✓s that can't both be right.
+    const ticksByGuest = {}, ticksByWish = {};
+    guests.forEach(c => wishes.forEach(w => {
+      if (mark(c, w) !== 'v') return;
+      ticksByGuest[c.id] = (ticksByGuest[c.id] || 0) + 1;
+      ticksByWish[w.id] = (ticksByWish[w.id] || 0) + 1;
+    }));
+    // The first column of each group of hours gets a heavier rule.
+    const starts = new Set(times ? guests.filter((c, ci) => ci === 0 || group(guests[ci - 1]) !== group(c)).map(c => c.id) : []);
+
+    const table = el('table', 'grid-table' + (times ? ' timed' : ''));
+    const thead = el('thead');
+    const head = el('tr');
+    const corner = el('th', 'grid-corner');
+    if (times) {
+      // A row of hours above the names.
+      const hours = el('tr', 'grid-hours');
+      corner.rowSpan = 2;
+      hours.appendChild(corner);
+      guests.forEach((c, ci) => {
+        if (!starts.has(c.id)) return;
+        let span = 1;
+        while (ci + span < guests.length && !starts.has(guests[ci + span].id)) span++;
+        const th = el('th', 'grid-hour grp-start', escapeHtml(hoursOf(c).map(times.label).join(', ') || ui.unknown));
+        th.colSpan = span;
+        hours.appendChild(th);
+      });
+      thead.appendChild(hours);
+    } else head.appendChild(corner);
+    guests.forEach((c, ci) => {
+      const th = el('th', 'grid-guest' + (state.confirmed[c.id] ? ' done' : '') + (starts.has(c.id) ? ' grp-start' : ''),
+        `<span>${escapeHtml(charName(c))}</span>`);
+      th.dataset.c = ci;
+      head.appendChild(th);
+    });
+    thead.appendChild(head);
+    table.appendChild(thead);
+
+    const tbody = el('tbody');
+    wishes.forEach((w, ri) => {
+      const tag = tagOf(w);
+      // A rule under the last wish with each range.
+      const last = tag !== null && (ri === wishes.length - 1 || !sameTag(tagOf(wishes[ri + 1]), tag));
+      const tr = el('tr', last ? 'grp-end' : '');
+      const th = el('th', 'grid-wish' + (taken.has(w.id) ? ' done' : ''));
+      th.dataset.r = ri;
+      const inner = th.appendChild(el('div', 'grid-wish-in'));
+      if (times) {
+        // From and to. "To" offers the hours from "from" on, and follows it
+        // when "from" moves past it; a single hour is from = to.
+        const range = el('span', 'grid-range');
+        const pick = (end, label, hours, value, set) => {
+          const sel = el('select', 'grid-tag');
+          sel.dataset.w = w.id; sel.dataset.end = end;
+          sel.setAttribute('aria-label', label);
+          sel.appendChild(new Option(ui.unknown, ''));
+          hours.forEach(h => sel.appendChild(new Option(times.label(h), h)));
+          sel.value = value === null ? '' : String(value);
+          sel.disabled = taken.has(w.id) || !hours.length;
+          sel.addEventListener('change', () => {
+            set(sel.value === '' ? null : Number(sel.value));
+            save();
+            fillGrid(wrap, `select[data-w="${w.id}"][data-end="${end}"]`);
+          });
+          range.appendChild(sel);
+        };
+        pick('from', ui.gridFrom(L(w)), times.all, tag && tag[0], h => {
+          if (h === null) delete state.gridHours[w.id];
+          else state.gridHours[w.id] = [h, tag && tag[1] >= h ? tag[1] : h];
+        });
+        range.appendChild(el('span', 'grid-range-dash', '–'));
+        pick('to', ui.gridTo(L(w)), tag ? times.all.filter(h => h >= tag[0]) : [], tag && tag[1], h => {
+          state.gridHours[w.id] = [tag[0], h === null ? tag[0] : h];
+        });
+        inner.appendChild(range);
+      }
+      inner.appendChild(el('span', null, escapeHtml(L(w))));
+      tr.appendChild(th);
+      guests.forEach((c, ci) => {
+        const td = el('td', 'grid-cell' + (starts.has(c.id) ? ' grp-start' : ''));
+        td.dataset.r = ri; td.dataset.c = ci;
+        const solved = state.confirmed[c.id] && c.wish === w.id;
+        const m = mark(c, w);
+        let shown = m;
+        if (solved) { td.classList.add('locked'); shown = 'v'; }
+        else if (state.confirmed[c.id] || taken.has(w.id)) { td.classList.add('locked', 'auto'); shown = 'x'; }
+        else if (!m && (ticksByGuest[c.id] || ticksByWish[w.id] || offHour(c, tag))) { td.classList.add('auto'); shown = 'x'; }
+        // Two ✓s in a row or column, or a ✓ outside the wish's hour, can't be right.
+        if (m === 'v' && !solved && (ticksByGuest[c.id] > 1 || ticksByWish[w.id] > 1 || offHour(c, tag))) td.classList.add('clash');
+        if (shown) td.classList.add('m-' + (shown === '?' ? 'q' : shown));
+        const label = ui.gridCell(charName(c), L(w));
+        if (td.classList.contains('locked')) {
+          td.textContent = GRID_MARK[shown];
+          td.title = label;
+        } else {
+          const b = el('button', null, shown ? GRID_MARK[shown] : '');
+          b.type = 'button';
+          b.title = label;
+          b.dataset.cell = c.id + '|' + w.id;
+          b.setAttribute('aria-label', label + (shown ? ` — ${GRID_MARK[shown]}` : ''));
+          b.addEventListener('click', () => {
+            const next = GRID_NEXT[m];
+            if (next) state.grid[c.id + '|' + w.id] = next;
+            else delete state.grid[c.id + '|' + w.id];
+            save();
+            fillGrid(wrap, `button[data-cell="${c.id}|${w.id}"]`);
+          });
+          td.appendChild(b);
+        }
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+
+    // Light up the row and column under the pointer or the keyboard focus.
+    const light = target => {
+      table.querySelectorAll('.hl').forEach(x => x.classList.remove('hl'));
+      const cell = target && target.closest('td, th');
+      if (!cell) return;
+      if (cell.dataset.r !== undefined) table.querySelectorAll(`[data-r="${cell.dataset.r}"]`).forEach(x => x.classList.add('hl'));
+      if (cell.dataset.c !== undefined) table.querySelectorAll(`[data-c="${cell.dataset.c}"]`).forEach(x => x.classList.add('hl'));
+    };
+    table.addEventListener('mouseover', e => light(e.target));
+    table.addEventListener('focusin', e => light(e.target));
+    table.addEventListener('mouseleave', () => light(null));
+    wrap.appendChild(table);
+    fitGrid(wrap);
+    if (refocus) {
+      const f = wrap.querySelector(refocus);
+      if (f) f.focus();
+    }
+  }
+
   function renderNotebook() {
     const total = game.characters.length;
     const done = Object.keys(state.confirmed).length;
@@ -1477,6 +1973,14 @@
       ? { row: document.activeElement.dataset.row, field: document.activeElement.dataset.field } : null;
     table.innerHTML = '';
     table.appendChild(el('p', 'reg-hint', escapeHtml(ui.bigRoom)));
+    const gridButton = el('button', 'reg-grid-button', escapeHtml(ui.gridOpen));
+    gridButton.type = 'button';
+    gridButton.addEventListener('click', () => showGrid());
+    table.appendChild(gridButton);
+    const leftover = el('details', 'reg-left');
+    leftover.open = leftoverOpen;
+    leftover.addEventListener('toggle', () => { leftoverOpen = leftover.open; });
+    table.appendChild(leftover);
     const head = el('div', 'reg-row reg-head');
     head.appendChild(el('span', 'reg-idx'));
     head.appendChild(el('span', 'reg-name', escapeHtml(ui.name)));
@@ -1488,18 +1992,36 @@
       state.entries[i] = Object.assign({}, state.entries[i], fields);
       save();
       checkDeductions();
+      // The rows themselves aren't rebuilt (that would close a dropdown the
+      // player is opening); each dropdown refills itself when opened.
+      fillLeftover(leftover);
+      renderInventory();
     };
-    // Wishes of confirmed guests are left out of the other rows' dropdowns:
-    // each wish belongs to one guest, so they can't be anyone else's.
-    const taken = new Set(Object.keys(state.confirmed).map(id => charById[id] && charById[id].wish));
 
-    // Confirmed rows are shown first; the rest keep their order below them.
-    // Rows are numbered by where they appear, not where they're stored.
-    const isLocked = i => { const g = state.entries[i]; return !!(g && g.cid && charById[g.cid]); };
-    const order = [...Array(total).keys()];
-    order.sort((a, b) => isLocked(b) - isLocked(a) || a - b);
+    // Each wish belongs to one guest, so wishes of confirmed guests are left
+    // out of the other rows' dropdowns. Wishes written on other rows are
+    // listed after the rest, with the rows they're on.
+    const fillWishes = (sel, i, pos) => {
+      const g = state.entries[i] || {};
+      const taken = confirmedWishes();
+      const use = registerUse().wishes;
+      sel.innerHTML = '';
+      sel.appendChild(new Option(ui.unknown, ''));
+      const free = el('optgroup'), used = el('optgroup');
+      free.label = ui.wishesFree;
+      used.label = ui.wishesUsed;
+      wishOrder.forEach(w => {
+        // A row keeps its own choice, even if that wish has since been confirmed elsewhere.
+        if (taken.has(w.id) && w.id !== g.wish) return;
+        const rows = (use[w.id] || []).filter(r => r !== pos + 1);
+        const label = rows.length ? `${L(w)} — ${rows.map(ui.rowRef).join(', ')}` : L(w);
+        (rows.length ? used : free).appendChild(new Option(label, w.id));
+      });
+      [free, used].forEach(group => { if (group.children.length) sel.appendChild(group); });
+      sel.value = g.wish || '';
+    };
 
-    order.forEach((i, pos) => {
+    registerOrder().forEach((i, pos) => {
       const g = state.entries[i] || {};
       const guest = g.cid ? charById[g.cid] : null;
       const locked = !!guest;
@@ -1525,11 +2047,11 @@
       row.appendChild(name);
 
       const sel = field('select', 'reg-wish', i, 'wish', ui.wish);
-      sel.appendChild(new Option(ui.unknown, ''));
-      // A row keeps its own choice, even if that wish has since been confirmed elsewhere.
-      wishOrder.forEach(w => { if (!taken.has(w.id) || w.id === g.wish) sel.appendChild(new Option(L(w), w.id)); });
-      sel.value = g.wish || '';
+      fillWishes(sel, i, pos);
       sel.disabled = locked;
+      // Refill before the list opens (mouse) or the keyboard steps through it.
+      sel.addEventListener('mousedown', () => fillWishes(sel, i, pos));
+      sel.addEventListener('focus', () => fillWishes(sel, i, pos));
       sel.addEventListener('change', () => update(i, { wish: sel.value || undefined }));
       row.appendChild(sel);
 
@@ -1546,6 +2068,7 @@
       row.appendChild(inp);
       table.appendChild(row);
     });
+    fillLeftover(leftover);
     if (focused) {
       const f = table.querySelector(`[data-row="${focused.row}"][data-field="${focused.field}"]`);
       if (f && !f.disabled) f.focus();

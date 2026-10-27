@@ -1513,17 +1513,21 @@ The boss suggests going to Rooms 4, 5 and 14.`,
   // gives nothing away (in Japanese, by the reading in `kana`), with their
   // gender. In Japanese, a name in kanji also shows its reading.
   const hasKanji = s => /[一-鿿々]/.test(s);
-  const guestList = lang => characters.filter(c => !c.player)
+  // `s.markGuest` strikes out confirmed guests and tags the register rows a
+  // name is written on (the scenes viewer passes no `s`).
+  const guestList = (lang, s) => characters.filter(c => !c.player)
     .map(c => ({
+      id: c.id,
       name: c.name[lang],
       reading: lang === 'ja' && c.kana && hasKanji(c.name.ja) ? c.kana : '',
       key: lang === 'ja' && c.kana ? c.kana : c.name[lang],
       gender: GENDER[c.gender] ? GENDER[c.gender][lang] : '',
     }))
     .sort((a, b) => a.key.localeCompare(b.key, lang))
-    .map(g => (lang === 'ja'
-      ? `• ${g.name}${g.reading ? `（${g.reading}）` : ''}${g.gender ? `（${g.gender}）` : ''}`
-      : `• ${g.name}${g.gender ? ` (${g.gender})` : ''}`))
+    .map(g => [g.id, lang === 'ja'
+      ? `${g.name}${g.reading ? `（${g.reading}）` : ''}${g.gender ? `（${g.gender}）` : ''}`
+      : `${g.name}${g.gender ? ` (${g.gender})` : ''}`])
+    .map(([id, line]) => `• ${s && s.markGuest ? s.markGuest(id, line) : line}`)
     .join('\n');
 
   // The Check-in List: one line per hour, naming everyone who checked in
@@ -1551,6 +1555,14 @@ The boss suggests going to Rooms 4, 5 and 14.`,
       `The story, scenario and mystery of this game are the author's original work. AI assistance was used only to build the interface and to help with editing and translation, and the author reviewed and revised everything it produced.`,
       `本作のストーリー、シナリオ、謎解きは、全て作者によるオリジナルです。AIはUIの制作と文章の推敲・翻訳の補助にのみ使用しており、生成された内容は全て作者が確認・修正しています。`),
     confirmBatch: 3,
+
+    // The elimination grid groups the guests by their hours on the Check-in
+    // List, and lets the player tag each wish with one of those hours.
+    grid: {
+      when: s => s.hasPaper('checkin'),
+      hours: c => c.checkIn,
+      label: h => T(hourLabel.en(h), hourLabel.ja(h)),
+    },
 
     // Once 15 guests are confirmed, remind the player that the receptionist
     // asked them to come back (her lead to Room 3333360), until they have.
@@ -2774,7 +2786,7 @@ Should anything you read catch your eye, select the text to copy it into your no
       {
         id: 'names',
         title: T('Guest List', '宿泊客名簿'),
-        text: () => T(guestList('en'), guestList('ja')),
+        text: s => T(guestList('en', s), guestList('ja', s)),
       },
       { id: 'wishes', title: T('List of Wishes', '願いの一覧') },
       {
