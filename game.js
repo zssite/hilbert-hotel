@@ -2648,6 +2648,11 @@ The name can be figured out using the check-in times and process of elimination.
         question: T(`I need some more hints.`, `もっとヒントがほしい。`),
         text: T(`Nigel is one of the people you talked to today.`, `羽生直樹は、今日あなたが話をした人物の一人だ。`),
       },
+      {
+        id: 'hwfrll', wish: 'attract', needs: ['hint:hxzz4c'],
+        question: T(`How do I find out their name?`, `この人物の名前はどうやって分かる？`),
+        text: T(`The person is in the Dining Room at 8am, so there are only a few candidates.`, `その人物は8時にダイニングルームにいる。そのため、候補になる人物は限られる。`),
+      },
     ],
     // @hints-end
 
