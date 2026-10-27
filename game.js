@@ -1650,7 +1650,7 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
       {
         id: 'h0sjvb', wish: 'help',
         question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
-        text: T(`Do you remember talking to someone who said they wished to help?`, `「誰かの役に立ちたい」と願ったと話していた人がいなかっただろうか？`),
+        text: T(`Do you remember talking to someone who said they wished to help?`, `「誰かの役に立ちたい」と願ったと話していた人を、覚えていないだろうか？`),
       },
       {
         id: 'h3v2ly', guest: 'kelly',
@@ -1665,12 +1665,12 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
       {
         id: 'h9szqe', guest: 'kelly', needs: ['hint:hqwzqi'],
         question: T(`How do I figure out her wish? (Part 2)`, `坂本葉月の願いはどうやって分かる？ #2`),
-        text: T(`She was not mute before coming to the hotel. What could have made her lose her voice?`, `彼女は、ホテルに来る前から話せなかったわけではない。何が彼女から声を奪ったのだろう？`),
+        text: T(`She was not mute before coming to the hotel. What could have made her lose her voice?`, `彼女は、ホテルに来る前は普通に話せていた。何が彼女から声を奪ったのだろう？`),
       },
       {
         id: 'h4ygvx', wish: 'wrong', needs: ['common'],
         question: T(`Who made this wish? (Part 1)`, `この願いの持ち主は誰？ #1`),
-        text: T(`Has anyone you talked to appeared to be in a state that could be related to this wish?`, `話をした相手の中に、この願いと関係がありそうな様子の人はいなかっただろうか？`),
+        text: T(`Has anyone you talked to appeared to be in a state that could be related to this wish?`, `話をした人の中に、この願いと関係がありそうな人はいなかっただろうか？`),
       },
       {
         id: 'hsm5gs', wish: 'wrong', needs: ['hint:h4ygvx'],
@@ -1695,7 +1695,7 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
       {
         id: 'hjbj9p', guest: 'sophia', needs: ['hint:hpgtl2', '4@19'],
         question: T(`How do I figure out her wish? (Part 4)`, `木村エマの願いはどうやって分かる？ #4`),
-        text: T(`Did someone say something in one of the scenes you have visited that shows the relationship between her and another guest?`, `これまでに見た場面の中で、彼女と別の宿泊客との関係が分かるようなことを言っていた人はいなかっただろうか？`),
+        text: T(`Did someone say something in one of the scenes you have visited that shows the relationship between her and another guest?`, `これまでに見た場面で、彼女と他の宿泊客との関係が分かる台詞はなかっただろうか？`),
       },
       {
         id: 'h5a18i', guest: 'sophia', needs: ['hint:hjbj9p'],
@@ -1770,7 +1770,7 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
       {
         id: 'hnb6hi', guest: 'alice', needs: ['hint:himdc5'],
         question: T(`How do I figure out her wish? (Part 2)`, `アリス・ミラーの願いはどうやって分かる？ #2`),
-        text: T(`Someone had a revelation that "Alice will go to Wonderland." Have you seen anything that explains how Alice could go to Wonderland?`, `「アリスはワンダーランドへ行く」という預言があった。アリスがどうやってワンダーランドへ行けるのか、手がかりになりそうな情報は見つけただろうか？`),
+        text: T(`Someone had a revelation that "Alice will go to Wonderland." Have you seen anything that explains how Alice could go to Wonderland?`, `「アリスはワンダーランドへ行く」という預言があった。アリスがどうやってワンダーランドへ行くのか、手がかりは見つかっただろうか？`),
       },
       {
         id: 'hfp8s1', guest: 'alice', needs: ['hint:hnb6hi'],
@@ -1780,12 +1780,12 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
       {
         id: 'hi9va2', guest: 'alice', needs: ['hint:hfp8s1'],
         question: T(`What exactly am I looking for?`, `具体的に何を探せばいい？`),
-        text: T(`One of the lines in the paper explains what happened to Alice.`, `その紙のある一文が、アリスに何が起きたのかを説明している。`),
+        text: T(`One of the lines in the paper explains what happened to Alice.`, `その紙の中に、アリスに何が起きたのかを示す一文がある。`),
       },
       {
         id: 'hz0smt', guest: 'alice', needs: ['hint:hi9va2'],
         question: T(`But how do I figure out her wish?`, `でも、肝心の願いはどうやって分かる？`),
-        text: T(`Look for a wish that can be satisfied by transporting the wish owner to another world.`, `願った本人を別の世界へ連れていくことで叶えられる願いを探そう。`),
+        text: T(`Look for a wish that can be satisfied by transporting the wish owner to another world.`, `本人を別の世界へ連れていけば叶う願いを探そう。`),
       },
       {
         id: 'h9sune', wish: 'peace',
@@ -1820,7 +1820,7 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
       {
         id: 'hk41c1', wish: 'streamer', needs: ['movie@15'],
         question: T(`How do I figure out the owner of this wish? (Part 1)`, `この願いの持ち主はどうやって分かる？ #1`),
-        text: T(`Have you come across a streamer with a lot of subscribers?`, `大勢の視聴者を持つ配信者を、どこかで見かけなかっただろうか？`),
+        text: T(`Have you come across a streamer with a lot of subscribers?`, `大人気の配信者を、どこかで見かけなかっただろうか？`),
       },
       {
         id: 'hduea5', wish: 'streamer', needs: ['hint:hk41c1'],
@@ -1830,7 +1830,7 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
       {
         id: 'hcah2z', wish: 'two',
         question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
-        text: T(`This one is a bit tricky. There is a person who was in two places simultaneously yesterday. You might want to keep this in mind and approach this from some other angle.`, `これは少し難しい。昨日、同時に二か所にいた人物がいる。このことを頭に入れたうえで、別の方向から考えてみよう。`),
+        text: T(`This one is a bit tricky. There is a person who was in two places simultaneously yesterday. You might want to keep this in mind and approach this from some other angle.`, `これはちょっと難しい。昨日、同時に二か所にいた人物がいる。このことを頭に入れたうえで、別の方向から考えてみよう。`),
       },
       {
         id: 'hkarew', wish: 'fly',
@@ -1909,12 +1909,12 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'ha2ok2', wish: 'richest', needs: ['dining', 'hint:hdrlia'],
         question: T(`What other hints are there for this person?`, `この人物について、他にヒントはある？`),
-        text: T(`They are one of the seven sins who were killed. You can find information about this person by tracing the footsteps of another character.`, `この人物は、殺された七つの大罪の一人だ。別の登場人物の足取りを辿ると、この人物の情報が見つかる。`),
+        text: T(`They are one of the seven sins who were killed. You can find information about this person by tracing the footsteps of another character.`, `この人物は、殺された七つの大罪の一人だ。別の登場人物の足取りを辿ると、手がかりが見つかる。`),
       },
       {
         id: 'h1s4l8', wish: 'richest', needs: ['hint:ha2ok2'],
         question: T(`Can you give another place to start looking?`, `他に手がかりを探せる場所はある？`),
-        text: T(`They were also in the Dining Room scene at 12pm.`, `12時のダイニングルームの場面にもいた。`),
+        text: T(`They were also in the Dining Room scene at 12pm.`, `この人物は、12時のダイニングルームの場面にも登場している。`),
       },
       {
         id: 'h46j4b', wish: 'richest', needs: ['hint:h1s4l8'],
@@ -1929,7 +1929,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hvuz5x', wish: 'famous',
         question: T(`How should I start?`, `何から始めればいい？`),
-        text: T(`This one is a bit tricky. Think about different ways this wish could be satisfied.`, `これは少し難しい。この願いが叶う方法を、色々考えてみよう。`),
+        text: T(`This one is a bit tricky. Think about different ways this wish could be satisfied.`, `これはちょっと難しい。この願いが叶う方法を、色々考えてみよう。`),
       },
       {
         id: 'hkhix5', wish: 'famous', needs: ['hint:hvuz5x'],
@@ -1949,7 +1949,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hnneak', wish: 'famous', needs: ['paper:secrets'],
         question: T(`I can't figure out the person's room!`, `この人物の部屋が分からない！`),
-        text: T(`Make sure you have checked all the rooms mentioned in the Secrets of the Hotel paper.`, `「ホテルの秘密」に書かれた部屋を、全て確認したか見直そう。`),
+        text: T(`Make sure you have checked all the rooms mentioned in the Secrets of the Hotel paper.`, `「ホテルの秘密」に出てくる部屋は、全て調べただろうか？`),
       },
       {
         id: 'h9q3kt', wish: 'prophet', needs: ['skill:memory'],
@@ -1969,7 +1969,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hqylm5', wish: 'revive',
         question: T(`How should I start?`, `何から始めればいい？`),
-        text: T(`The wish was granted. The wife is in the hotel.`, `この願いは叶えられた。妻は今、このホテルにいる。`),
+        text: T(`The wish was granted. The wife is in the hotel.`, `この願いは叶っている。妻は今、このホテルにいる。`),
       },
       {
         id: 'hu0iqx', wish: 'revive',
@@ -2009,7 +2009,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hksdvi', wish: 'job', needs: ['lobby', 'hint:hh85qt'],
         question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
-        text: T(`When did they start their job? Pay attention to the gender of the person with the job. Use the check-in times and process of elimination to get their name.`, `その人物は、いつから働き始めたのだろう？ 働いている人物の性別にも注目しよう。名前は、チェックイン時刻と消去法で割り出せる。`),
+        text: T(`When did they start their job? Pay attention to the gender of the person with the job. Use the check-in times and process of elimination to get their name.`, `その人物は、いつから働き始めたのだろう？ その人物の性別にも注目しよう。名前は、チェックイン時刻と消去法で割り出せる。`),
       },
       {
         id: 'hoe6po', wish: 'job', needs: ['hint:hksdvi'],
@@ -2024,7 +2024,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hdqs9l', wish: 'minds', needs: ['hint:hpl3kx'],
         question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
-        text: T(`Someone at the mahjong table knows what the others are holding. Someone at the poker table knows their opponent's hand.`, `麻雀卓に、他の人の手牌を見抜いている人物がいる。ポーカーの卓にも、相手の手札を見抜いている人物がいる。`),
+        text: T(`Someone at the mahjong table knows what the others are holding. Someone at the poker table knows their opponent's hand.`, `麻雀卓に、他の人の手牌を見抜いているような人物がいる。ポーカーでも、相手の手札が分かっているかのような人物がいる。`),
       },
       {
         id: 'h5ljyi', wish: 'minds', needs: ['hint:hdqs9l'],
@@ -2044,7 +2044,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hhiff5', wish: 'daughter', needs: ['hint:hk31f6', 'dining@18'],
         question: T(`How do I figure out the owner of this wish? (Part 2)`, `この願いの持ち主はどうやって分かる？ #2`),
-        text: T(`They are told where and when to find the person they are looking for. Check that place at that time.`, `その人物は、探している相手にいつ、どこで会えるかを告げられる。その時刻に、その場所を見てみよう。`),
+        text: T(`They are told where and when to find the person they are looking for. Check that place at that time.`, `その人物は、探している相手に会える時刻と場所を教えてもらう。その時刻に、その場所を見てみよう。`),
       },
       {
         id: 'ho4cll', wish: 'daughter', needs: ['hint:hsg242'],
@@ -2064,7 +2064,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hb2bfc', wish: 'animals', needs: ['hint:hwwhw3'],
         question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
-        text: T(`Someone in the Common Room at 3pm saw her neighbor talking to a bird.`, `15時の談話室にいた人物が、隣の部屋の人が鳥と話しているのを見ている。`),
+        text: T(`Someone in the Common Room at 3pm saw her neighbor talking to a bird.`, `15時の談話室で、隣の部屋の人が鳥と話していたと言っている人物がいる。`),
       },
       {
         id: 'hzpnmg', wish: 'fun',
@@ -2199,7 +2199,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hoc2t1', wish: 'troubles', needs: ['hint:htmd77'],
         question: T(`I still don't understand their wish.`, `この願いの意味が、まだよく分からない。`),
-        text: T(`What is one way to forget all the troubles in life? Did any character show signs that might be related to this?`, `人生のあらゆる悩みを忘れるには、どんな方法があるだろう？ それに関係していそうな様子の人物はいなかっただろうか？`),
+        text: T(`What is one way to forget all the troubles in life? Did any character show signs that might be related to this?`, `人生のあらゆる悩みを忘れるには、どんな方法があるだろう？ それらしい様子を見せていた人はいなかっただろうか？`),
       },
       {
         id: 'hhnyyb', wish: 'troubles', needs: ['hint:hdob4i'],
@@ -2214,7 +2214,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'h8ddwi', wish: 'god', needs: ['hint:h7girf'],
         question: T(`How do I know their name?`, `この人物の名前はどうやって分かる？`),
-        text: T(`When could they have checked in? One of the scenes shows that someone else was at their current location. Use the check-in times and process of elimination to work out their name.`, `いつチェックインできたのだろう？ ある場面から、その人物が今いる場所に、以前は別の誰かがいたことが分かる。チェックイン時刻と消去法で名前を割り出そう。`),
+        text: T(`When could they have checked in? One of the scenes shows that someone else was at their current location. Use the check-in times and process of elimination to work out their name.`, `いつチェックインできたのだろう？ ある場面を見ると、その人物が今いる場所に、以前は別の誰かがいたことが分かる。チェックイン時刻と消去法で名前を割り出そう。`),
       },
       {
         id: 'hqz6t7', wish: 'god', needs: ['hint:h7girf'],
@@ -2239,7 +2239,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'h0vy8r', guest: 'mark', needs: ['5'],
         question: T(`How do I figure out his wish?`, `青木大輔の願いはどうやって分かる？`),
-        text: T(`His suitcase is in his room, but he isn't. Where could he have gone? This one is best left for the end. Once most of the other guests are placed, see which wishes are left.`, `部屋にはスーツケースが残っているのに、本人はいない。どこへ行ったのだろう？ これは最後に回すのがいい。他の宿泊客をほとんど特定したら、残った願いを見てみよう。`),
+        text: T(`His suitcase is in his room, but he isn't. Where could he have gone? This one is best left for the end. Once most of the other guests are placed, see which wishes are left.`, `部屋にはスーツケースが残っているのに、本人はいない。どこへ行ったのだろう？ これは最後に回した方がいい。他の宿泊客をほとんど特定したら、残った願いを見てみよう。`),
       },
       {
         id: 'houh68', guest: 'gabriel', needs: ['4'],
@@ -2324,7 +2324,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hd9kwu', guest: 'lorenzo', needs: ['hint:h8r966'],
         question: T(`How do I figure out his wish? (Part 1)`, `ロレンツォ・コンティの願いはどうやって分かる？ #1`),
-        text: T(`Why would someone need to check in over and over?`, `何度もチェックインしなければならない理由とは、何だろう？`),
+        text: T(`Why would someone need to check in over and over?`, `何度もチェックインする理由は、何だろう？`),
       },
       {
         id: 'h2vvmy', guest: 'lorenzo', needs: ['hint:hd9kwu', 'lobby'],
@@ -2334,7 +2334,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hti8k6', guest: 'lorenzo', needs: ['hint:hd9kwu', 'paper:secrets'],
         question: T(`How do I figure out his room number?`, `ロレンツォ・コンティの部屋番号はどうやって分かる？`),
-        text: T(`One of the lines in the Secrets of the Hotel paper fits someone who keeps dying and coming back.`, `「ホテルの秘密」のある一文が、死んでは戻ってくる人物に当てはまる。`),
+        text: T(`One of the lines in the Secrets of the Hotel paper fits someone who keeps dying and coming back.`, `「ホテルの秘密」の中に、何度死んでも戻ってくる人物のことを指していそうな一文がある。`),
       },
       {
         id: 'hvc0sq', guest: 'taylor', needs: ['skill:memory'],
@@ -2637,7 +2637,7 @@ The name can be figured out using the check-in times and process of elimination.
         text: T(`Matthias checked in at 10pm. Use the check-in times and process of elimination.`, `上田天馬がチェックインしたのは22時台だ。チェックイン時刻と消去法を使おう。`),
       },
       {
-        id: 'hi84y4', guest: 'nigel', needs: ['hint:hm5d8w'],
+        id: 'hi84y4', guest: 'nigel', needs: ['hint:hm5d8w', 'game'],
         question: T(`I need some more hints.`, `もっとヒントがほしい。`),
         text: T(`Nigel is one of the people you talked to today.`, `羽生直樹は、今日あなたが話をした人物の一人だ。`),
       },
