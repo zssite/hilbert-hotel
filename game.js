@@ -2479,7 +2479,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hsl31f', guest: 'caleb', needs: ['hint:h82ow3'],
         question: T(`How do I figure out his room number?`, `鈴木翔太の部屋番号はどうやって分かる？`),
-        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `どの願いが彼のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `彼の願いが分かれば、その願いのヒントから部屋番号も分かるはずだ。`),
       },
       {
         id: 'hrqj1o', guest: 'caleb', needs: ['hint:h82ow3'],
@@ -2494,7 +2494,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hpfurm', guest: 'chuck', needs: ['hint:h6iqxg'],
         question: T(`How do I figure out his room number?`, `受田司の部屋番号はどうやって分かる？`),
-        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `どの願いが彼のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `彼の願いが分かれば、その願いのヒントから部屋番号も分かるはずだ。`),
       },
       {
         id: 'h2zmm7', guest: 'chuck', needs: ['hint:h6iqxg'],
@@ -2509,7 +2509,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hgn5s0', guest: 'philip', needs: ['hint:h6hglt'],
         question: T(`How do I figure out his room number?`, `清水太郎の部屋番号はどうやって分かる？`),
-        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `どの願いが彼のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `彼の願いが分かれば、その願いのヒントから部屋番号も分かるはずだ。`),
       },
       {
         id: 'hii812', guest: 'philip', needs: ['hint:h6hglt'],
@@ -2524,7 +2524,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hc6s13', guest: 'serena', needs: ['hint:h4z1a5'],
         question: T(`How do I figure out her room number?`, `九十九百花の部屋番号はどうやって分かる？`),
-        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `どの願いが彼女のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `彼女の願いが分かれば、その願いのヒントから部屋番号も分かるはずだ。`),
       },
       {
         id: 'hvi22t', guest: 'serena', needs: ['hint:h4z1a5'],
@@ -2539,7 +2539,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'huq241', guest: 'jessica', needs: ['hint:hkx8fx'],
         question: T(`How do I figure out her room number?`, `池田結菜の部屋番号はどうやって分かる？`),
-        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `どの願いが彼女のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `彼女の願いが分かれば、その願いのヒントから部屋番号も分かるはずだ。`),
       },
       {
         id: 'h1q26s', guest: 'jessica', needs: ['hint:hkx8fx'],
@@ -2554,7 +2554,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hqvvjr', guest: 'jones', needs: ['hint:hka1o5'],
         question: T(`How do I figure out his room number?`, `長谷川悠人の部屋番号はどうやって分かる？`),
-        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `どの願いが彼のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `彼の願いが分かれば、その願いのヒントから部屋番号も分かるはずだ。`),
       },
       {
         id: 'h64p70', guest: 'jones', needs: ['hint:hka1o5'],
@@ -2569,7 +2569,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hcywel', guest: 'victor', needs: ['hint:h9ip5u'],
         question: T(`How do I figure out his room number?`, `富田虚の部屋番号はどうやって分かる？`),
-        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `どの願いが彼のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `彼の願いが分かれば、その願いのヒントから部屋番号も分かるはずだ。`),
       },
       {
         id: 'hgamme', guest: 'victor', needs: ['hint:h9ip5u'],
@@ -2584,7 +2584,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hesmjz', guest: 'polina', needs: ['hint:hfv813'],
         question: T(`How do I figure out her room number?`, `伊呂波初の部屋番号はどうやって分かる？`),
-        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `どの願いが彼女のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `彼女の願いが分かれば、その願いのヒントから部屋番号も分かるはずだ。`),
       },
       {
         id: 'hs9shw', guest: 'polina', needs: ['hint:hfv813'],
@@ -2599,7 +2599,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hp9ceu', guest: 'lucy', needs: ['hint:haa5o8'],
         question: T(`How do I figure out her room number?`, `森田彼方の部屋番号はどうやって分かる？`),
-        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `どの願いが彼女のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `彼女の願いが分かれば、その願いのヒントから部屋番号も分かるはずだ。`),
       },
       {
         id: 'htpfr3', guest: 'lucy', needs: ['hint:haa5o8'],
@@ -2614,7 +2614,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hk29hx', guest: 'ruby', needs: ['hint:hena2p'],
         question: T(`How do I figure out her room number?`, `一二三澪の部屋番号はどうやって分かる？`),
-        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `どの願いが彼女のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `彼女の願いが分かれば、その願いのヒントから部屋番号も分かるはずだ。`),
       },
       {
         id: 'h99ngf', guest: 'ruby', needs: ['hint:hena2p'],
@@ -2629,7 +2629,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'h5ci97', guest: 'matthias', needs: ['hint:hd13jt'],
         question: T(`How do I figure out his room number?`, `上田天馬の部屋番号はどうやって分かる？`),
-        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `どの願いが彼のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `彼の願いが分かれば、その願いのヒントから部屋番号も分かるはずだ。`),
       },
       {
         id: 'hmsrl0', guest: 'matthias', needs: ['hint:hd13jt'],
