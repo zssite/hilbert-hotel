@@ -2474,7 +2474,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'h82ow3', guest: 'caleb',
         question: T(`How should I start?`, `何から始めればいい？`),
-        text: T(`Caleb is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `鈴木翔太は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
+        text: T(`Caleb is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `鈴木翔太は、名前から探すより、願いから辿った方が見つけやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
       },
       {
         id: 'hsl31f', guest: 'caleb', needs: ['hint:h82ow3'],
@@ -2489,7 +2489,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'h6iqxg', guest: 'chuck',
         question: T(`How should I start?`, `何から始めればいい？`),
-        text: T(`Chuck is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `受田司は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
+        text: T(`Chuck is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `受田司は、名前から探すより、願いから辿った方が見つけやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
       },
       {
         id: 'hpfurm', guest: 'chuck', needs: ['hint:h6iqxg'],
@@ -2504,7 +2504,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'h6hglt', guest: 'philip',
         question: T(`How should I start?`, `何から始めればいい？`),
-        text: T(`Philip is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `清水太郎は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
+        text: T(`Philip is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `清水太郎は、名前から探すより、願いから辿った方が見つけやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
       },
       {
         id: 'hgn5s0', guest: 'philip', needs: ['hint:h6hglt'],
@@ -2519,7 +2519,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'h4z1a5', guest: 'serena',
         question: T(`How should I start?`, `何から始めればいい？`),
-        text: T(`Serena is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `九十九百花は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
+        text: T(`Serena is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `九十九百花は、名前から探すより、願いから辿った方が見つけやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
       },
       {
         id: 'hc6s13', guest: 'serena', needs: ['hint:h4z1a5'],
@@ -2534,7 +2534,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hkx8fx', guest: 'jessica',
         question: T(`How should I start?`, `何から始めればいい？`),
-        text: T(`Jessica is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `池田結菜は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
+        text: T(`Jessica is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `池田結菜は、名前から探すより、願いから辿った方が見つけやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
       },
       {
         id: 'huq241', guest: 'jessica', needs: ['hint:hkx8fx'],
@@ -2549,7 +2549,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hka1o5', guest: 'jones',
         question: T(`How should I start?`, `何から始めればいい？`),
-        text: T(`Jones is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `長谷川悠人は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
+        text: T(`Jones is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `長谷川悠人は、名前から探すより、願いから辿った方が見つけやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
       },
       {
         id: 'hqvvjr', guest: 'jones', needs: ['hint:hka1o5'],
@@ -2564,7 +2564,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'h9ip5u', guest: 'victor',
         question: T(`How should I start?`, `何から始めればいい？`),
-        text: T(`Victor is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `富田虚は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
+        text: T(`Victor is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `富田虚は、名前から探すより、願いから辿った方が見つけやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
       },
       {
         id: 'hcywel', guest: 'victor', needs: ['hint:h9ip5u'],
@@ -2579,7 +2579,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hfv813', guest: 'polina',
         question: T(`How should I start?`, `何から始めればいい？`),
-        text: T(`Polina is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `伊呂波初は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
+        text: T(`Polina is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `伊呂波初は、名前から探すより、願いから辿った方が見つけやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
       },
       {
         id: 'hesmjz', guest: 'polina', needs: ['hint:hfv813'],
@@ -2594,7 +2594,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'haa5o8', guest: 'lucy',
         question: T(`How should I start?`, `何から始めればいい？`),
-        text: T(`Lucy is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `森田彼方は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
+        text: T(`Lucy is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `森田彼方は、名前から探すより、願いから辿った方が見つけやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
       },
       {
         id: 'hp9ceu', guest: 'lucy', needs: ['hint:haa5o8'],
@@ -2609,7 +2609,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hena2p', guest: 'ruby',
         question: T(`How should I start?`, `何から始めればいい？`),
-        text: T(`Ruby is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `一二三澪は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
+        text: T(`Ruby is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `一二三澪は、名前から探すより、願いから辿った方が見つけやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
       },
       {
         id: 'hk29hx', guest: 'ruby', needs: ['hint:hena2p'],
@@ -2624,7 +2624,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hd13jt', guest: 'matthias',
         question: T(`How should I start?`, `何から始めればいい？`),
-        text: T(`Matthias is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `上田天馬は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
+        text: T(`Matthias is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `上田天馬は、名前から探すより、願いから辿った方が見つけやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
       },
       {
         id: 'h5ci97', guest: 'matthias', needs: ['hint:hd13jt'],
