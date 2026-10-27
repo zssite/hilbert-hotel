@@ -72,7 +72,7 @@
     { id: 'attract',   ...T('To attract the next girl they meet', '次に出会う女の子を惹きつけること') },
     { id: 'streamer',  ...T('To be a top streamer', '配信の視聴者を増やすこと') },
     { id: 'famous',    ...T('To become a famous person', '有名人になること') },
-    { id: 'forever',   ...T('To enjoy life here forever', 'ここでの暮らしを永遠に楽しむこと') },
+    { id: 'forever',   ...T('To enjoy life here for the rest of their life', 'ここで余生を楽しむこと') },
     { id: 'two',       ...T('To be able to be in two places at once', '同時に二か所にいられるようになること') },
     { id: 'invisible', ...T('To have the ability to turn invisible', '透明になれること') },
     { id: 'young',     ...T('To become young', '若返ること') },
@@ -139,7 +139,7 @@
       id: 'gabriel', name: T('Gabriel Redstone', '木村 健二'), kana: 'きむら　けんじ', gender: 'M', wish: 'daughter', room: 486, checkIn: 11,
       fate: T(
         `Gabriel, the head of a large company, came to the hotel to see the daughter he had lost touch with long ago. He spent the afternoon searching, until a fortune-teller told him he would find who he wished to find in Room 4 at 7 o'clock. He did. She was waiting with a gun, hired to kill him, and neither of them knew the other until it was too late.`,
-        `大企業の社長である木村健二はずっと昔に生き別れた娘に会うためにホテルを訪れた。午後中探し回った末、ある女性に「会いたい人に、19時に4号室で会える」と告げられ、その言葉通り娘に会えた。だが娘は、彼を殺すよう雇われ、銃を手に待っていたのだ。互いの正体に気づいたときには、もう手遅れだった。`),
+        `大企業の社長である木村健二は、遠い昔に生き別れた娘に会うため、このホテルを訪れた。午後いっぱい探し回った末、ある女性から「会いたい人には、19時に4号室で会える」と告げられた。その言葉通り、彼は娘と再会した。だが娘は彼を殺すために雇われた暗殺者で、銃を構えて彼を待ち受けていたのだ。互いが誰なのかに気づいたときには、もう手遅れだった。`),
     },
     {
       id: 'serena', name: T('Serena Becker', '九十九 百花'), kana: 'つくも　ももか', gender: 'F', wish: 'prophet', room: 24, checkIn: 14,
@@ -199,7 +199,7 @@
       id: 'jacob', name: T('Jacob Wellsman', '渡辺 哲也'), kana: 'わたなべ　てつや', gender: 'M', wish: 'attract', room: 849, checkIn: 8,
       fate: T(
         `Jacob wished to attract the next girl he met. That girl was Taylor, who had been a man until that morning. They spent a happy few hours together, until she stepped next door for a minute and came back to find him dead: the Sin of Lust.`,
-        `渡辺哲也は次に出会う女の子を惹きつけたいと願った。その願いどおり、その朝まで男性だった和泉千尋が彼に夢中になり、二人は幸せな数時間を過ごした。だが、彼女が少しだけ隣の自室へ戻っている間に、彼は色欲の罪として殺された。`),
+        `渡辺哲也は次に出会う女の子を惹きつけたいと願った。その願い通り、その朝まで男性だった和泉千尋が彼に夢中になり、二人は幸せな数時間を過ごした。だが、彼女が少しだけ隣の自室へ戻っている間に、彼は色欲の罪として殺された。`),
     },
     {
       id: 'lisa', name: T('Lisa Schmidt', '五十嵐 七海'), kana: 'いがらし　ななみ', gender: 'F', wish: 'streamer', room: 1214, checkIn: 13,
@@ -216,8 +216,8 @@
     {
       id: 'jones', name: T('Jones Spencer', '長谷川 悠人'), kana: 'はせがわ　ゆうと', gender: 'M', wish: 'forever', room: 2049, checkIn: 18,
       fate: T(
-        `Jones wished to enjoy life at the hotel forever, without ever working another day. He walked into Room 2049 to begin his endless holiday, and was shot within the minute: the invisible man had overheard his wish when he checked in. He became the Sin of Sloth. It seems he will stay here forever after all.`,
-        `長谷川悠人は二度と働かずに、このホテルでの暮らしを永遠に楽しみたいと願った。終わらない休暇を始めようと2049号室に入った直後、彼は撃たれた。チェックインのときにその願いを透明人間に聞かれていたのだ。彼は怠惰の罪として殺された。結局、望みどおり永遠にここにいることになりそうだ。`),
+        `Jones wished to enjoy life at the hotel for the rest of his life, without ever working another day. He walked into Room 2049 to begin his endless holiday, and was shot within the minute: the invisible man had overheard his wish when he checked in. He became the Sin of Sloth. In a way, his wish came true: he spent the rest of his life here.`,
+        `長谷川悠人は二度と働かずに、残りの人生をこのホテルで楽しみたいと願った。終わらない休暇を始めようと2049号室に入った直後、彼は撃たれた。チェックインのときにその願いを透明人間に聞かれていたのだ。彼は怠惰の罪として殺された。皮肉にも、彼は願い通り、残りの人生をこのホテルで過ごすことになった。`),
     },
     {
       id: 'marie', name: T('Marie Sinclair', '白石 美月'), kana: 'しらいし　みづき', gender: 'F', wish: 'two', room: 2050, checkIn: 15,
@@ -240,8 +240,8 @@
     {
       id: 'lucy', name: T('Lucy Stone', '森田 彼方'), kana: 'もりた　かなた', gender: 'F', wish: 'deathday', room: 8963, checkIn: 7,
       fate: T(
-        `Lucy wished that the day she dies would never arrive. It never does: she relives the day she checked in, over and over. This is her 12,345th time through, and she knows every body before it falls. Nobody believes her, and she has long since stopped expecting anyone to.`,
-        `森田彼方は自分が死ぬ日が永遠に来ないことを願い、その日は本当に来なくなった。彼女はチェックインした日を何度も繰り返しており、今回で12,345回目になる。誰がいつ死ぬのかも全て知っているが、誰も彼女の言葉を信じず、彼女ももうとっくに期待するのをやめた。`),
+        `Lucy wished that the day she dies would never arrive. It never does: she relives the day she checked in, over and over. This is her 15,532th time through, and she knows every body before it falls. Nobody believes her, and she has long since stopped expecting anyone to.`,
+        `森田彼方は自分が死ぬ日が永遠に来ないことを願い、その日は本当に来なくなった。彼女はチェックインした日を何度も繰り返しており、今回で15,532回目になる。誰がいつ死ぬのかも全て知っているが、誰も彼女の言葉を信じず、彼女ももうとっくに期待するのをやめた。`),
     },
     {
       id: 'robert', name: T('Robert Hansen', 'ロバート・ハンセン'), kana: 'ろばーと　はんせん', gender: 'M', wish: 'chess', room: 8964, checkIn: 13,
@@ -265,7 +265,7 @@
       id: 'levin', name: T('Levin Cook', '竹内 勇'), kana: 'たけうち　いさむ', gender: 'M', wish: 'alone', room: 7777777, checkIn: 13,
       fate: T(
         `Levin wished to be left alone. He rode the elevator up to Floor 8, shut himself in Room 7777777, and has not opened the door since. No housekeeping. No room service. No knocking. Ever.`,
-        `竹内勇は誰にも邪魔されないことを願った。エレベーターで8階へ上がり、7777777号室に閉じこもって以来、一度も扉を開けていない。「掃除はいらない。ルームサービスもいらない。ノックもするな。絶対にだ」という、彼の言葉どおりに。`),
+        `竹内勇は誰にも邪魔されないことを願った。エレベーターで8階へ上がり、7777777号室に閉じこもって以来、一度も扉を開けていない。「掃除はいらない。ルームサービスもいらない。ノックもするな。絶対にだ」という、彼の言葉通りに。`),
     },
     {
       id: 'matthias', name: T('Matthias Meyer', '上田 天馬'), kana: 'うえだ　てんま', gender: 'M', wish: 'god', checkIn: 22,
@@ -281,7 +281,7 @@
       id: 'kelly', name: T('Kelly Reyes', '坂本 葉月'), kana: 'さかもと　はづき', gender: 'F', wish: 'wrong', room: 6, checkIn: 22,
       fate: T(
         `Kelly wished never to say something wrong again. She hasn't: she can no longer say anything at all.`,
-        `坂本葉月は二度と失言したくないと願った。その願いどおり、彼女はあれから一度も失言していない。もう何も話せなくなってしまったからだ。`),
+        `坂本葉月は二度と失言したくないと願った。その願い通り、彼女はあれから一度も失言していない。もう何も話せなくなってしまったからだ。`),
     },
   ];
 
@@ -588,7 +588,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 *その間、#1と#2が言葉を交わしている。*
 
-#1：「失礼。あなたがいろいろなことが*分かる*という方ですね。今日の午後、若い女性から聞きました」
+#1：「失礼。あなたが色々なことが*分かる*という方ですね。今日の午後、若い女性から聞きました」
 
 #2：「噂が広まるのは早いのね。一時間ごとに、まだ起きていないことが頭に浮かぶの。たいていは知らない人のことなんだけど、今回のは……」
 
@@ -607,9 +607,17 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
       match: 'game',
       text: T(
         `You find a man sitting on the sofa. You introduce yourself and ask who he is. He replies:
-"I don't know… I think I've lost all my memories. All I remember is that I'm staying in Room 2."`,
+"I don't know… I think I've lost all my memories. All I remember is that I'm staying in Room 2."
+
+He is idly moving pieces on the chessboard beside him.
+
+"Strange… I don't know why, but my hands seem to know where they go."`,
         `ソファに男が座っている。自己紹介をして名前を尋ねると、彼はこう答えた。
-「分からない……。記憶を全部なくしてしまったみたいなんだ。覚えているのは、2号室に泊まっていることだけだ」`),
+「分からない……。記憶を全部なくしてしまったみたいなんだ。覚えているのは、2号室に泊まっていることだけだ」
+
+彼は傍らのチェス盤で、何気なく駒を動かしている。
+
+「不思議だな……。なぜか分からないけど、駒をどこに置けばいいか、手が覚えているみたいなんだ」`),
       scenes: {
         16: anon(
           `*#1 and #2 are playing chess.*
@@ -663,7 +671,11 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #1: "Ron! 8000."
 
-#4: "I tried to warn you."`,
+#4: "I tried to warn you."
+
+#2: "I haven't seen you around before. Are you new here?"
+
+#4: "I only checked in an hour ago."`,
           `*#1、#2、#3、#4が麻雀をしている。*
 
 #1：「リーチ！」
@@ -684,7 +696,11 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #1：「ロン！ 8000」
 
-#4：「だから言ったのに」`),
+#4：「だから言ったのに」
+
+#2：「見ない顔だな。ここには来たばかりか？」
+
+#4：「一時間前にチェックインしたばかりなんだ」`),
         22: anon(
           `*#1, #2 and #3 sit around a poker table. Most of the chips are in front of #1.*
 
@@ -769,28 +785,28 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
         16: anon(
           `*#2 sits alone in the back row, staring past the screen.*
 
-#1: "Mind if I sit? I can't focus on anything today. Have you heard about the bodies?"
+#1: "Mind if I sit? I can't sit still today. Have you heard about the bodies?"
 
 #2: "The bodies?"
 
-#1: "I saw a corpse in the dining room at lunch. Then, the love of my life was murdered. I am going to find the killer and avenge him."
+#1: "I saw a corpse in the dining room at lunch. Then some coward shot the love of my life while I was out of the room. For one minute! One minute! I'm going to find whoever did it, and I'm going to make them pay."
 
 #2: "I'm sorry to hear that. I'm afraid I don't know anything that could help. The killer might still be on the loose, so stay safe."
 
-#1: "Thanks, you too. Let me know if you find any leads on who the killer is. I'm in Room 848."
+#1: "Safe? I'm not the one who should be scared. If you hear anything about the killer, anything at all, tell me. I'm in Room 848."
 
 #2: "If you need me and I'm not in the common spaces, find me in Room 486."`,
           `*#2が最後列に一人で座り、画面の向こうをぼんやりと見つめている。*
 
-#1：「座ってもいいですか？ 今日はどうにも落ち着かなくて。死体の話、聞きました？」
+#1：「座ってもいいですか？ 今日はじっとしていられなくて。死体の話、聞きました？」
 
 #2：「死体？」
 
-#1：「お昼にダイニングルームで死体を見たんです。それから、私の最愛の人が殺されました。犯人を見つけて、仇を取るつもりです」
+#1：「お昼にダイニングルームで死体を見たんです。そのあと、私がほんの一分部屋を離れた隙に、どこかの卑怯者が私の最愛の人を撃ち殺した。たった一分ですよ！ 犯人は必ず見つけ出して、報いを受けさせてやる」
 
 #2：「それはお気の毒に。残念ながら、お役に立てそうなことは何も知りません。犯人はまだうろついているかもしれないから、気をつけて」
 
-#1：「ありがとう、あなたも。犯人の手がかりが見つかったら教えてください。私は848号室です」
+#1：「気をつける？ 気をつけなきゃいけないのは、犯人の方です。犯人について何か聞いたら、どんなことでもいいから教えてください。私は848号室です」
 
 #2：「何かあれば、共用スペースにいないときは486号室を訪ねてください」`),
         17: anon(
@@ -808,7 +824,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #2: "Do you believe her?"
 
-#1: "In this hotel? I'm not ruling anything out."
+#1: "In this hotel? I'm not ruling anything out. If she can tell you where to find someone, maybe she can tell me where to find the killer."
 
 #2: "If she really sees what's coming… maybe she can tell me where to find who I'm looking for. Thank you, young lady."`,
           `*ほとんど人のいない部屋で映画が流れている。#2は一時間前と同じ最後列の席に座ったままで、相変わらず画面を見ていない。#1は数席離れたところに座っている。*
@@ -825,7 +841,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #2：「あなたは信じますか？」
 
-#1：「このホテルで？ 何があってもおかしくないと思う」
+#1：「このホテルで？ 何があってもおかしくないと思う。人の居場所が分かるなら、犯人の居場所だって分かるかもしれない」
 
 #2：「もし本当に先のことが見えるなら……私の探している人の居場所も教えてもらえるかもしれない。ありがとう、お嬢さん」`),
       },
@@ -867,7 +883,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #2：「そう。せいぜい頑張ってくださいな。では、ごきげんよう」`),
         15: anon(
-          `#1: "Excuse me. Someone I care about was killed an hour ago. I'm trying to find out who did it. Have you seen anything strange today?"
+          `#1: "Excuse me. Someone I care about was shot an hour ago, and I'm going to find out who did it. Have you seen anything strange today?"
 
 #2: "I'm sorry. I checked in just before 3 o'clock. But… something strange did happen when I walked into my room. I suddenly knew something. Something that hasn't happened yet."
 
@@ -875,14 +891,14 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #2: "Envy will die in Room 8964."
 
-#1: "Envy? The note next to his body said 'Lust'…"
+#1: "Envy? The note next to his body said 'Lust'. Lust! As if that's who he was. As if that's a reason to kill someone!"
 
 #2: "I don't know what it means either. Oh, and if you want strange: I saw my neighbor talking to a bird. She's probably crazy."
 
 #1: "I'll take anything I can get. If you learn anything else, come find me. I'm in Room 848."
 
 #2: "Room 24. Knock if you need me."`,
-          `#1：「すみません。一時間前、大切な人が殺されたんです。犯人を探しています。今日、何か変わったことを見ませんでしたか？」
+          `#1：「すみません。一時間前、大切な人が撃たれたんです。犯人は絶対に見つけ出してみせます。今日、何か変わったことを見ませんでしたか？」
 
 #2：「お気の毒に。15時ちょっと前にチェックインしたばかりなの。でも……部屋に入ったとき、不思議なことがあったの。急に、まだ起きていないことが分かったの」
 
@@ -890,7 +906,7 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #2：「嫉妬は8964号室で死ぬ」
 
-#1：「嫉妬？ 彼の遺体のそばのメモには『色欲』と……」
+#1：「嫉妬？ 彼の遺体のそばにあったメモには『色欲』って……。色欲ですって？ まるで彼がそういう人間だったみたいに！ そんなことで人を殺していいっていうの！？」
 
 #2：「私にも意味は分からないわ。ああ、変わったことといえば、隣の部屋の人が鳥と話しているのを見たわ。たぶん頭がおかしいのね」
 
@@ -944,22 +960,22 @@ Waiter: "Dinner for Room 2050. Enjoy your meal."
 
 #2: "I know. I've stopped hoping I'm wrong. I just received the next one. 'Wrath will die in Room 8484.'"
 
-#1: "Another one of the seven deadly sins. Looks like the killer is still on the loose."
+#1: "Another one of the seven deadly sins. Another body, and that coward is still out there somewhere, laughing at all of us."
 
 #2: "Please be careful."
 
-#1: "Thank you. I know what I have to do."
+#1: "Careful? I'm done being careful. I know what I have to do."
 
 *#1 leaves, fists clenched.*`,
           `#1：「ここにいたんですね。8964号室に行ってきました。あなたの言った通りでした。嫉妬は死んでいました」
 
 #2：「知ってる。もう、外れてほしいとは思わなくなったわ。ちょうど次のが来たところよ。『憤怒は8484号室で死ぬ』」
 
-#1：「また七つの大罪の一つ。犯人はまだうろついているみたいですね」
+#1：「また七つの大罪……。また死体が増えたのに、あの卑怯者はまだどこかで私たちを嘲笑ってる」
 
 #2：「どうか気をつけて」
 
-#1：「ありがとう。自分が何をすべきか、分かっています」
+#1：「気をつける？ もうそんな段階じゃありません。自分が何をすべきか、分かっています」
 
 *#1は拳を握りしめて去っていく。*`),
         20: anon(
@@ -1118,6 +1134,8 @@ You find a piece of paper that reads: "Your target will arrive at 7pm."`,
       dialogue: 'aida',
     },
     { match: '@you', text: NOTHING },
+    // Empty: Lorenzo dies the moment he enters and is back at the check-in desk,
+    // so there is never a body to find.
     { match: '@lorenzo', text: NOTHING },
     { match: '@alice', text: NOTHING },
     { match: '@taylor', text: NOTHING },
@@ -1187,7 +1205,7 @@ You find a piece of paper that reads: "Your target will arrive at 7pm."`,
       text: sinNote('man', 'Sloth', '怠惰'),
       scenes: {
         18: anon(
-          `#1: "I can now stay here forever and not work anymore for the rest of my life!"
+          `#1: "I can now stay here for the rest of my life and never work again!"
 
 *#1 enters the room.*
 
@@ -1196,7 +1214,7 @@ You find a piece of paper that reads: "Your target will arrive at 7pm."`,
 *#1 collapses to the floor.*
 
 *A note falls beside the body.*`,
-          `#1：「これでずっとここにいられる。もう一生働かなくていいんだ！」
+          `#1：「これで一生ここにいられる。もう二度と働かなくていいんだ！」
 
 *#1が部屋に入る。*
 
@@ -1288,14 +1306,14 @@ You find a piece of paper that reads: "Your target will arrive at 7pm."`,
 
 *#1は机に向かい、急いで何かを書き始める。*`),
         23: anon(
-          `*#1 is still at the desk, writing.*
+          `*#1 is back at the desk, writing.*
 
 *#1 puts down her pen and reads the page over once.*
 
 #1: "Whoever finds this, I hope it helps."
 
 *#1 leaves the page on the desk and walks out of the room.*`,
-          `*#1はまだ机に向かって書き続けている。*
+          `*#1はまた机に向かって書き続けている。*
 
 *#1はペンを置き、書き上げた紙を一度読み返す。*
 
@@ -1377,7 +1395,7 @@ You find a piece of paper that reads: "Your target will arrive at 7pm."`,
         marie: {
           text: T(
             `She introduces herself as Marie. She warns you that this hotel may be dangerous: she heard a gunshot from the room next to hers around 6pm yesterday.`,
-            `彼女は白石美月と名乗り、このホテルは危ないかもしれないと忠告してくれた。昨日の18時ごろ、隣の部屋から銃声が聞こえたらしい。`),
+            `彼女は白石美月と名乗り、このホテルは危ないかもしれないと忠告してくれた。昨日の18時頃、隣の部屋から銃声が聞こえたらしい。`),
           next: 'menu',
         },
         kelly: {
@@ -1531,7 +1549,7 @@ The boss suggests going to Rooms 4, 5 and 14.`,
     // Shown on the home screen, under the language buttons.
     homeNote: T(
       `The story, scenario and mystery of this game are the author's original work. AI assistance was used only to build the interface and to help with editing and translation, and the author reviewed and revised everything it produced.`,
-      `本作のストーリー、シナリオ、謎解きは、すべて作者によるオリジナルです。AIはUIの制作と文章の推敲・翻訳の補助にのみ使用しており、生成された内容はすべて作者が確認・修正しています。`),
+      `本作のストーリー、シナリオ、謎解きは、全て作者によるオリジナルです。AIはUIの制作と文章の推敲・翻訳の補助にのみ使用しており、生成された内容は全て作者が確認・修正しています。`),
     confirmBatch: 3,
 
     // Once 15 guests are confirmed, remind the player that the receptionist
@@ -1614,7 +1632,8 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
     // that `wish` (hints with neither are always listed, under "General"). It
     // lists the question of every hint whose `needs` the player has met, in
     // this order; the text shows once they ask for it. Once the guest is
-    // confirmed (for a wish, whoever made it), their hints are no longer offered:
+    // confirmed (for a wish, whoever made it), their hints stay listed, and
+    // 'hint:id' needs on that guest's hints count as met:
     //   { id, guest: charId | wish: wishId, needs: ['hint:id' (that hint shown first), 'dining@8'
     //     (a room seen at 8 o'clock yesterday), 'lobby' (seen in the present),
     //     'paper:id', 'flag:key', 'skill:id', 'confirmed:charId',
@@ -1626,299 +1645,1001 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
       {
         id: 'hzz7x0', guest: 'aida',
         question: T(`How do I figure out her wish and room number?`, `中藤理亜の願いと部屋番号はどうやって分かる？`),
-        text: T(`Everything you need is in the dialogue in Room 76.`, ``),
+        text: T(`Everything you need is in the dialogue in Room 76.`, `必要な情報は、76号室での会話に全て揃っている。`),
       },
       {
         id: 'h0sjvb', wish: 'help',
-        question: T(`How do I figure out the owner of this wish?`, ``),
-        text: T(`Do you remember talking to someone who said they wished to help?`, ``),
+        question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
+        text: T(`Do you remember talking to someone who said they wished to help?`, `「誰かの役に立ちたい」と願ったと話していた人がいなかっただろうか？`),
       },
       {
         id: 'h3v2ly', guest: 'kelly',
-        question: T(`How do I figure out her room number?`, ``),
-        text: T(`Reread the dialogue in the Common Room.`, ``),
+        question: T(`How do I figure out her room number?`, `坂本葉月の部屋番号はどうやって分かる？`),
+        text: T(`Reread the dialogue in the Common Room.`, `談話室での会話を読み返してみよう。`),
       },
       {
         id: 'hqwzqi', guest: 'kelly', needs: ['hint:h3v2ly'],
-        question: T(`How do I figure out her wish? (Part 1)`, ``),
-        text: T(`Could it possibly be related to why she can't speak?`, ``),
+        question: T(`How do I figure out her wish? (Part 1)`, `坂本葉月の願いはどうやって分かる？ #1`),
+        text: T(`Could it possibly be related to why she can't speak?`, `彼女が話せないことと、何か関係があるのでは？`),
       },
       {
         id: 'h9szqe', guest: 'kelly', needs: ['hint:hqwzqi'],
-        question: T(`How do I figure out her wish? (Part 2)`, ``),
-        text: T(`She was not mute before coming to the hotel. What could have made her lose her voice?`, ``),
+        question: T(`How do I figure out her wish? (Part 2)`, `坂本葉月の願いはどうやって分かる？ #2`),
+        text: T(`She was not mute before coming to the hotel. What could have made her lose her voice?`, `彼女は、ホテルに来る前から話せなかったわけではない。何が彼女から声を奪ったのだろう？`),
       },
       {
         id: 'h4ygvx', wish: 'wrong', needs: ['common'],
-        question: T(`Who made this wish? (Part 1)`, ``),
-        text: T(`Has anyone you talked to appear in a state that could be related to this wish?`, ``),
+        question: T(`Who made this wish? (Part 1)`, `この願いの持ち主は誰？ #1`),
+        text: T(`Has anyone you talked to appeared to be in a state that could be related to this wish?`, `話をした相手の中に、この願いと関係がありそうな様子の人はいなかっただろうか？`),
       },
       {
         id: 'hsm5gs', wish: 'wrong', needs: ['hint:h4ygvx'],
-        question: T(`Who made this wish? (Part 2)`, ``),
-        text: T(`What is a way for this wish to be granted?`, ``),
+        question: T(`Who made this wish? (Part 2)`, `この願いの持ち主は誰？ #2`),
+        text: T(`What is a way for this wish to be granted?`, `この願いは、どうすれば叶えられるだろう？`),
       },
       {
         id: 'hwli1c', guest: 'sophia', needs: ['4'],
-        question: T(`How do I figure out her wish? (Part 1)`, ``),
-        text: T(`Is there anyone else in the guest list who might be related to her?`, ``),
+        question: T(`How do I figure out her wish? (Part 1)`, `木村エマの願いはどうやって分かる？ #1`),
+        text: T(`Is there anyone else on the Guest List who might be related to her?`, `宿泊客名簿の中に、彼女と関係がありそうな人はいないだろうか？`),
       },
       {
         id: 'hiqrm6', guest: 'sophia', needs: ['hint:hwli1c', 'skill:memory'],
-        question: T(`How do I figure out her wish? (Part 2)`, ``),
-        text: T(`For every room you go to, make sure you read all the scenes in the past as well.`, ``),
+        question: T(`How do I figure out her wish? (Part 2)`, `木村エマの願いはどうやって分かる？ #2`),
+        text: T(`For every room you go to, make sure you read all the scenes in the past as well.`, `部屋を訪れたら、過去の場面も必ず全て確認しよう。`),
       },
       {
         id: 'hpgtl2', guest: 'sophia', needs: ['hint:hiqrm6'],
-        question: T(`How do I figure out her wish? (Part 3)`, ``),
-        text: T(`There is someone in the guest list sharing the same surname. Who could it be?`, ``),
+        question: T(`How do I figure out her wish? (Part 3)`, `木村エマの願いはどうやって分かる？ #3`),
+        text: T(`There is someone on the Guest List with the same surname. Who could it be?`, `宿泊客名簿に、同じ名字の人物がいる。誰だろう？`),
       },
       {
         id: 'hjbj9p', guest: 'sophia', needs: ['hint:hpgtl2', '4@19'],
-        question: T(`How do I figure out her wish? (Part 4)`, ``),
-        text: T(`Did someone say something in one of the scenes you have visited that shows the relationship between her and another guest?`, ``),
+        question: T(`How do I figure out her wish? (Part 4)`, `木村エマの願いはどうやって分かる？ #4`),
+        text: T(`Did someone say something in one of the scenes you have visited that shows the relationship between her and another guest?`, `これまでに見た場面の中で、彼女と別の宿泊客との関係が分かるようなことを言っていた人はいなかっただろうか？`),
       },
       {
         id: 'h5a18i', guest: 'sophia', needs: ['hint:hjbj9p'],
-        question: T(`What scenes should I look at?`, ``),
-        text: T(`Revisit all the Room 4 scenes.`, ``),
+        question: T(`What scenes should I look at?`, `どの場面を見ればいい？`),
+        text: T(`Revisit all the Room 4 scenes.`, `4号室の場面を全て見直そう。`),
       },
       {
         id: 'h6jztu', guest: 'sophia', needs: ['hint:h5a18i'],
-        question: T(`How do I figure out her room number?`, ``),
-        text: T(`It is the place she died.`, ``),
+        question: T(`How do I figure out her room number?`, `木村エマの部屋番号はどうやって分かる？`),
+        text: T(`It is where she died.`, `彼女が亡くなった場所だ。`),
       },
       {
         id: 'h0e1j9', wish: 'target', needs: ['4@19', '4'],
-        question: T(`How do I figure out the owner of this wish? (Part 1)`, ``),
-        text: T(`There was a note that mentioned a "target". Maybe it is related?`, ``),
+        question: T(`How do I figure out the owner of this wish? (Part 1)`, `この願いの持ち主はどうやって分かる？ #1`),
+        text: T(`There was a note that mentioned a "target". Maybe it is related?`, `「ターゲット」について書かれたメモがあった。何か関係があるかもしれない。`),
       },
       {
         id: 'hhbc3r', wish: 'target',
-        question: T(`Where should I look?`, ``),
-        text: T(`You should check out Room 4.`, ``),
+        question: T(`Where should I look?`, `どこを調べればいい？`),
+        text: T(`You should check out Room 4.`, `4号室を調べてみよう。`),
       },
       {
         id: 'h4dqo2', wish: 'target', needs: ['hint:h0e1j9', 'hint:hhbc3r'],
-        question: T(`How do I figure out the owner of this wish? (Part 2)`, ``),
-        text: T(`It is related to the 7pm scene in Room 4.`, ``),
+        question: T(`How do I figure out the owner of this wish? (Part 2)`, `この願いの持ち主はどうやって分かる？ #2`),
+        text: T(`It is related to the 7pm scene in Room 4.`, `4号室の19時の場面に関係がある。`),
       },
       {
         id: 'hiiv4z', wish: 'target', needs: ['hint:h4dqo2'],
-        question: T(`How do I figure out the owner of this wish? (Part 3)`, ``),
-        text: T(`Someone shot their dad in that scene. He turns out to also be in the guest list.`, ``),
+        question: T(`How do I figure out the owner of this wish? (Part 3)`, `この願いの持ち主はどうやって分かる？ #3`),
+        text: T(`Someone shot their dad in that scene. He turns out to be on the Guest List too.`, `その場面で、ある人物が自分の父親を撃ってしまう。その父親も、宿泊客名簿に載っている。`),
       },
       {
         id: 'h032n8', wish: 'target',
-        question: T(`How do I figure out the owner of this wish? (Part 4)`, ``),
-        text: T(`Check the list of names again and see if you can find a father-child pair.`, ``),
+        question: T(`How do I figure out the owner of this wish? (Part 4)`, `この願いの持ち主はどうやって分かる？ #4`),
+        text: T(`Check the list of names again and see if you can find a father-child pair.`, `名簿をもう一度見て、親子らしい二人がいないか探してみよう。`),
       },
       {
         id: 'hibqdl', guest: 'dominique', needs: ['dining@8'],
-        question: T(`How do I figure out his wish? (Part 1)`, `田中博の願いはどうやって分かる？`),
-        text: T(`Have you seen someone named Dominique in one of the scenes?`, ``),
+        question: T(`How do I figure out his wish? (Part 1)`, `田中博の願いはどうやって分かる？ #1`),
+        text: T(`Have you seen someone named Dominique in one of the scenes?`, `どこかの場面で「田中博」と名乗る人物を見かけなかっただろうか？`),
       },
       {
         id: 'hwialo', guest: 'dominique', needs: ['skill:memory'],
-        question: T(`Where should I look?`, ``),
-        text: T(`Check the dining room scene at 8am.`, ``),
+        question: T(`Where should I look?`, `どこを調べればいい？`),
+        text: T(`Check the Dining Room scene at 8am.`, `8時のダイニングルームの場面を見てみよう。`),
       },
       {
         id: 'hge9cp', guest: 'dominique', needs: ['hint:hibqdl'],
-        question: T(`How do I figure out his wish? (Part 2)`, ``),
-        text: T(`The dining room scene at 8am has all the information you need (including the room number).`, ``),
+        question: T(`How do I figure out his wish? (Part 2)`, `田中博の願いはどうやって分かる？ #2`),
+        text: T(`The Dining Room scene at 8am has all the information you need (including the room number).`, `8時のダイニングルームの場面に、部屋番号も含めて必要な情報が全て揃っている。`),
       },
       {
         id: 'hw4hfj', wish: 'food', needs: ['skill:memory'],
-        question: T(`Where should I look? (Part 1)`, ``),
-        text: T(`Is there a scene where the speaker mentioned good food?`, ``),
+        question: T(`Where should I look? (Part 1)`, `どこを調べればいい？ #1`),
+        text: T(`Is there a scene where someone talks about good food?`, `おいしい料理について話している場面はなかっただろうか？`),
       },
       {
         id: 'hru6ej', wish: 'food', needs: ['hint:hw4hfj'],
-        question: T(`Where should I look? (Part 2)`, ``),
-        text: T(`Check the dining room at 8am.`, ``),
+        question: T(`Where should I look? (Part 2)`, `どこを調べればいい？ #2`),
+        text: T(`Check the Dining Room at 8am.`, `8時のダイニングルームを見てみよう。`),
       },
       {
         id: 'hxwt72', wish: 'food', needs: ['hint:hru6ej'],
-        question: T(`How do I figure out the owner of this wish?`, ``),
-        text: T(`All the information you need is in the scene.`, ``),
+        question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
+        text: T(`All the information you need is in the scene.`, `必要な情報は、全てその場面にある。`),
       },
       {
         id: 'himdc5', guest: 'alice', needs: ['paper:secrets'],
-        question: T(`How do I figure out her wish? (Part 1)`, `アリス・ミラーの願いはどうやって分かる？`),
-        text: T(`Alice was mentioned in some scenes. Make sure you have checked those scenes first.`, ``),
+        question: T(`How do I figure out her wish? (Part 1)`, `アリス・ミラーの願いはどうやって分かる？ #1`),
+        text: T(`Alice is mentioned in some scenes. Make sure you have checked those scenes first.`, `アリスの名前は、いくつかの場面に出てくる。まずはそれらの場面を確認しよう。`),
       },
       {
         id: 'hnb6hi', guest: 'alice', needs: ['hint:himdc5'],
-        question: T(`How do I figure out her wish? (Part 2)`, ``),
-        text: T(`Someone had a revelation that "Alice will go to Wonderland". Have you seen any information related to how Alice could go to Wonderland?`, ``),
+        question: T(`How do I figure out her wish? (Part 2)`, `アリス・ミラーの願いはどうやって分かる？ #2`),
+        text: T(`Someone had a revelation that "Alice will go to Wonderland." Have you seen anything that explains how Alice could go to Wonderland?`, `「アリスはワンダーランドへ行く」という預言があった。アリスがどうやってワンダーランドへ行けるのか、手がかりになりそうな情報は見つけただろうか？`),
       },
       {
         id: 'hfp8s1', guest: 'alice', needs: ['hint:hnb6hi'],
-        question: T(`Where should I look?`, ``),
-        text: T(`Check the paper titled "Secrets of the Hotel".`, ``),
+        question: T(`Where should I look?`, `どこを調べればいい？`),
+        text: T(`Check the paper titled "Secrets of the Hotel".`, `「ホテルの秘密」という紙を確認しよう。`),
       },
       {
         id: 'hi9va2', guest: 'alice', needs: ['hint:hfp8s1'],
-        question: T(`What exactly am I looking for?`, ``),
-        text: T(`One of the lines in the paper explains what happened to Alice.`, ``),
+        question: T(`What exactly am I looking for?`, `具体的に何を探せばいい？`),
+        text: T(`One of the lines in the paper explains what happened to Alice.`, `その紙のある一文が、アリスに何が起きたのかを説明している。`),
       },
       {
         id: 'hz0smt', guest: 'alice', needs: ['hint:hi9va2'],
-        question: T(`But how do I figure out her wish?`, ``),
-        text: T(`Look for a wish that can be satisfied by transporting the wish owner to another world.`, ``),
+        question: T(`But how do I figure out her wish?`, `でも、肝心の願いはどうやって分かる？`),
+        text: T(`Look for a wish that can be satisfied by transporting the wish owner to another world.`, `願った本人を別の世界へ連れていくことで叶えられる願いを探そう。`),
       },
       {
         id: 'h9sune', wish: 'peace',
-        question: T(`How should I start?`, ``),
-        text: T(`Think about different ways this wish could be satisfied.`, ``),
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Think about different ways this wish could be satisfied.`, `この願いが叶う方法を、色々考えてみよう。`),
       },
       {
         id: 'h7vbe2', wish: 'peace', needs: ['paper:secrets'],
-        question: T(`I still don't understand this wish.`, ``),
-        text: T(`Try interpreting the wish literally. Does it relate to  the fate of someone you might have heard about?`, ``),
+        question: T(`I still don't understand this wish.`, `この願いの意味が、まだよく分からない。`),
+        text: T(`Try interpreting the wish literally. Does it relate to the fate of someone you might have heard about?`, `願いを文字通りに受け取ってみよう。どこかで聞いた誰かの運命と、関係していないだろうか？`),
       },
       {
         id: 'hqcwee', wish: 'deathday',
-        question: T(`How should I start?`, ``),
-        text: T(`Think about different ways this wish could be satisfied.`, ``),
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Think about different ways this wish could be satisfied.`, `この願いが叶う方法を、色々考えてみよう。`),
       },
       {
         id: 'h8nhal', wish: 'deathday', needs: ['dining@7', 'hint:hqcwee'],
-        question: T(`I still don't understand this wish.`, ``),
-        text: T(`Try interpreting the wish literally. The owner of this wish cannot reach the day they die.`, ``),
+        question: T(`I still don't understand this wish.`, `この願いの意味が、まだよく分からない。`),
+        text: T(`Try interpreting the wish literally. The owner of this wish cannot reach the day they die.`, `願いを文字通りに受け取ってみよう。この願いの持ち主は、自分が死ぬ日に辿り着けない。`),
       },
       {
         id: 'hp2ew5', wish: 'deathday', needs: ['hint:h8nhal'],
-        question: T(`Can you give me a more direct hint?`, ``),
-        text: T(`The person has been stuck in the hotel for a long time...`, ``),
+        question: T(`Can you give me a more direct hint?`, `もっと直接的なヒントがほしい。`),
+        text: T(`The person has been stuck in the hotel for a long time...`, `その人物は、もう長い間このホテルに閉じ込められている……`),
       },
       {
         id: 'hxzz4c', wish: 'attract',
-        question: T(`What scene is this related to?`, ``),
-        text: T(`A good starting point is the dining room scene at 8am.`, ``),
+        question: T(`What scene is this related to?`, `どの場面に関係がある？`),
+        text: T(`A good starting point is the Dining Room scene at 8am.`, `まずは8時のダイニングルームの場面から調べるといい。`),
       },
       {
         id: 'hk41c1', wish: 'streamer', needs: ['movie@15'],
-        question: T(`How do I figure out the owner of this wish? (Part 1)`, `この願いの持ち主はどうやって分かる？`),
-        text: T(`Have you encountered some streamer who have many subscribers in the story?`, ``),
+        question: T(`How do I figure out the owner of this wish? (Part 1)`, `この願いの持ち主はどうやって分かる？ #1`),
+        text: T(`Have you come across a streamer with a lot of subscribers?`, `大勢の視聴者を持つ配信者を、どこかで見かけなかっただろうか？`),
       },
       {
         id: 'hduea5', wish: 'streamer', needs: ['hint:hk41c1'],
-        question: T(`Where should I look?`, ``),
-        text: T(`Check out the Movie Room scene at 3pm.`, ``),
+        question: T(`Where should I look?`, `どこを調べればいい？`),
+        text: T(`Check out the Movie Room scene at 3pm.`, `15時のシアタールームの場面を見てみよう。`),
       },
       {
         id: 'hcah2z', wish: 'two',
-        question: T(`How do I figure out the owner of this wish?`, ``),
-        text: T(`This one is a bit tricky. There is a person who was in two places simultaneously yesterday. You might want to keep this in mind and approach this from some other angle.`, ``),
+        question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
+        text: T(`This one is a bit tricky. There is a person who was in two places simultaneously yesterday. You might want to keep this in mind and approach this from some other angle.`, `これは少し難しい。昨日、同時に二か所にいた人物がいる。このことを頭に入れたうえで、別の方向から考えてみよう。`),
       },
       {
         id: 'hkarew', wish: 'fly',
-        question: T(`How should I start?`, ``),
-        text: T(`Think about different ways this wish could be satisfied.`, ``),
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Think about different ways this wish could be satisfied.`, `この願いが叶う方法を、色々考えてみよう。`),
       },
       {
         id: 'hc082v', wish: 'fly', needs: ['hint:hkarew'],
-        question: T(`I still don't understand their wish.`, ``),
-        text: T(`The wish was satisfied literally. You might have seen the guest with their wish satisfied in several scenes.`, ``),
+        question: T(`I still don't understand their wish.`, `この願いの意味が、まだよく分からない。`),
+        text: T(`The wish was satisfied literally. You might have seen the guest with their wish satisfied in several scenes.`, `願いは文字通りに叶えられた。願いが叶った後の姿を、いくつかの場面で見かけているかもしれない。`),
       },
       {
         id: 'hwbiu2', wish: 'alone', needs: ['skill:memory'],
-        question: T(`Where should I look?`, ``),
-        text: T(`Check the Lobby scene at 1pm yesterday.`, ``),
+        question: T(`Where should I look?`, `どこを調べればいい？`),
+        text: T(`Check the Lobby scene at 1pm yesterday.`, `昨日の13時のロビーの場面を見てみよう。`),
       },
       {
         id: 'h7nav4', wish: 'alone', needs: ['paper:secrets'],
-        question: T(`How do I know their room number?`, ``),
-        text: T(`You should know their floor number from the scene. Is there any note in your possession that allows you to deduce their room number?`, ``),
+        question: T(`How do I know their room number?`, `この人物の部屋番号はどうやって分かる？`),
+        text: T(`You should know their floor number from the scene. Is there any note in your possession that allows you to deduce their room number?`, `その場面から、何階の部屋なのかは分かるはずだ。手元の資料の中に、部屋番号を割り出せるものはないだろうか？`),
       },
       {
         id: 'hp6wjo', wish: 'chess', needs: ['skill:memory'],
-        question: T(`Where should I look?`, ``),
-        text: T(`Check the Game Room scene at 4pm.`, ``),
+        question: T(`Where should I look?`, `どこを調べればいい？`),
+        text: T(`Check the Game Room scene at 4pm.`, `16時のゲームルームの場面を見てみよう。`),
       },
       {
         id: 'hw8i9t', wish: 'chess', needs: ['hint:hp6wjo'],
-        question: T(`Who is the owner of the wish?`, ``),
-        text: T(`The person who became the best chess player in the world yesterday. They are mentioned in the scene.`, ``),
+        question: T(`Who is the owner of the wish?`, `この願いの持ち主は誰？`),
+        text: T(`The person who became the best chess player in the world yesterday. They are mentioned in the scene.`, `昨日、世界一のチェスプレイヤーになった人物だ。その場面で名前が出てくる。`),
       },
       {
         id: 'hv04t3', wish: 'young',
-        question: T(`How should I start?`, ``),
-        text: T(`Think about different ways this wish could be satisfied.`, ``),
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Think about different ways this wish could be satisfied.`, `この願いが叶う方法を、色々考えてみよう。`),
       },
       {
         id: 'hbk94n', wish: 'fly', needs: ['hint:hc082v'],
-        question: T(`I don't understand the previous hint. Can you be more specific?`, ``),
-        text: T(`The guest was flying in the hotel yesterday.`, ``),
+        question: T(`I don't understand the previous hint. Can you be more specific?`, `前のヒントがよく分からない。もう少し具体的に教えて。`),
+        text: T(`The guest was flying in the hotel yesterday.`, `その宿泊客は、昨日ホテルの中を飛び回っていた。`),
       },
       {
         id: 'herpae', wish: 'fly', needs: ['hint:hbk94n'],
-        question: T(`Just tell me who the guest is`, ``),
-        text: T(`It is the bird.`, ``),
+        question: T(`Just tell me who the guest is.`, `もう誰なのか教えて。`),
+        text: T(`It is the bird.`, `あの鳥だ。`),
       },
       {
         id: 'hvs3a7', wish: 'fly',
-        question: T(`I know who the guest is, but how do I figure out their name?`, ``),
-        text: T(`You might want to figure out some other guests first and use the check-in times and process of elimination to narrow down the wish owner.`, ``),
+        question: T(`I know who the guest is, but how do I figure out their name?`, `誰なのかは分かったけど、名前はどうやって分かる？`),
+        text: T(`You might want to figure out some other guests first and use the check-in times and process of elimination to narrow down the wish owner.`, `先に他の宿泊客を何人か特定してから、チェックイン時刻と消去法で候補を絞り込もう。`),
       },
       {
         id: 'hgqf73', wish: 'young', needs: ['hint:hv04t3'],
-        question: T(`I still don't understand their wish.`, ``),
-        text: T(`The wish was satisfied literally. The person might have become younger than they wished for though...`, ``),
+        question: T(`I still don't understand their wish.`, `この願いの意味が、まだよく分からない。`),
+        text: T(`The wish was satisfied literally. The person might have become younger than they wished for, though...`, `願いは文字通りに叶えられた。ただし、本人が望んだ以上に若返ってしまったのかもしれない……`),
       },
       {
         id: 'ha11d8', wish: 'young',
-        question: T(`I know who this person is, but how do I figure out their name and room number? (Part 1)`, ``),
-        text: T(`Start by revisiting the 7am scene in the dining room. It gives some information on when the person arrived at the hotel.`, ``),
+        question: T(`I know who this person is, but how do I figure out their name and room number? (Part 1)`, `誰なのかは分かったけど、名前と部屋番号はどうやって分かる？ #1`),
+        text: T(`Start by revisiting the 7am scene in the Dining Room. It gives some information on when the person arrived at the hotel.`, `まずは7時のダイニングルームの場面を見直そう。その人物がいつホテルに来たのか、手がかりがある。`),
       },
       {
         id: 'h4iz0e', wish: 'young', needs: ['hint:ha11d8'],
-        question: T(`I know who this person is, but how do I figure out their name and room number? (Part 2)`, ``),
-        text: T(`The room number can be found by visiting rooms near the death scene of the chess player.
+        question: T(`I know who this person is, but how do I figure out their name and room number? (Part 2)`, `誰なのかは分かったけど、名前と部屋番号はどうやって分かる？ #2`),
+        text: T(`The room number can be found by visiting the rooms near where the chess player died.
 
-The name can be figured out via the check-in times and process of elimination.`, ``),
+The name can be figured out using the check-in times and process of elimination.`, `部屋番号は、チェスプレイヤーが殺された部屋の周りを調べれば分かる。
+
+名前は、チェックイン時刻と消去法で割り出せる。`),
       },
       {
         id: 'hdrlia', wish: 'richest', needs: ['skill:memory'],
-        question: T(`Where should I look?`, ``),
-        text: T(`Check the Common Room scene at 11am.`, ``),
+        question: T(`Where should I look?`, `どこを調べればいい？`),
+        text: T(`Check the Common Room scene at 11am.`, `11時の談話室の場面を見てみよう。`),
       },
       {
         id: 'ha2ok2', wish: 'richest', needs: ['dining', 'hint:hdrlia'],
-        question: T(`What other hints are there for this person?`, ``),
-        text: T(`They are one of the 7 sins who died. You can find information about this person by tracing the footsteps of another character.`, ``),
+        question: T(`What other hints are there for this person?`, `この人物について、他にヒントはある？`),
+        text: T(`They are one of the seven sins who were killed. You can find information about this person by tracing the footsteps of another character.`, `この人物は、殺された七つの大罪の一人だ。別の登場人物の足取りを辿ると、この人物の情報が見つかる。`),
       },
       {
         id: 'h1s4l8', wish: 'richest', needs: ['hint:ha2ok2'],
-        question: T(`Can you give another place to start looking?`, ``),
-        text: T(`They were also in the Dining Room scene at 12pm.`, ``),
+        question: T(`Can you give another place to start looking?`, `他に手がかりを探せる場所はある？`),
+        text: T(`They were also in the Dining Room scene at 12pm.`, `12時のダイニングルームの場面にもいた。`),
       },
       {
         id: 'h46j4b', wish: 'richest', needs: ['hint:h1s4l8'],
-        question: T(`Where else could I look?`, ``),
-        text: T(`They mentioned in the dining room scene at 12pm that their room is next to the Sin of Gluttony's room. You might want to look at the Sin of Gluttony's room (and rooms around it).`, ``),
+        question: T(`Where else could I look?`, `他にどこを調べればいい？`),
+        text: T(`They mentioned in the Dining Room scene at 12pm that their room is next to the Sin of Gluttony's room. You might want to look at the Sin of Gluttony's room (and the rooms around it).`, `12時のダイニングルームの場面で、自分の部屋は暴食の罪人の隣だと言っている。暴食の罪人の部屋と、その周りを調べてみよう。`),
       },
       {
         id: 'hl1tqh', wish: 'richest',
-        question: T(`I know what room they are in. How can I figure out their name?`, ``),
-        text: T(`You can figure it out via process of elimination using their check-in time.`, ``),
+        question: T(`I know what room they are in. How can I figure out their name?`, `部屋は分かった。名前はどうやって分かる？`),
+        text: T(`You can figure it out via process of elimination using their check-in time.`, `チェックイン時刻を使えば、消去法で割り出せる。`),
       },
       {
         id: 'hvuz5x', wish: 'famous',
-        question: T(`How should I start?`, ``),
-        text: T(`This one is a bit tricky. Think about different ways this wish could be satisfied.`, ``),
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`This one is a bit tricky. Think about different ways this wish could be satisfied.`, `これは少し難しい。この願いが叶う方法を、色々考えてみよう。`),
       },
       {
         id: 'hkhix5', wish: 'famous', needs: ['hint:hvuz5x'],
-        question: T(`I still don't understand their wish.`, ``),
-        text: T(`The wish was satisfied literally. They **turned into** a famous person.`, ``),
+        question: T(`I still don't understand their wish.`, `この願いの意味が、まだよく分からない。`),
+        text: T(`The wish was satisfied literally. They **turned into** a famous person.`, `願いは文字通りに叶えられた。この人物は、有名人**そのものになった**のだ。`),
       },
       {
         id: 'ht4ppl', wish: 'famous', needs: ['hint:hkhix5'],
-        question: T(`Any hints on how to deduce who they are?`, ``),
-        text: T(`They acted strange after turning into a famous person.`, ``),
+        question: T(`Any hints on how to deduce who they are?`, `誰なのかを推理するヒントはある？`),
+        text: T(`They acted strangely after turning into a famous person.`, `有名人になった後、この人物の様子はどこかおかしかった。`),
+      },
+      {
+        id: 'hqhpyd', wish: 'famous', needs: ['hint:ht4ppl'],
+        question: T(`Where is that scene?`, `それはどの場面？`),
+        text: T(`Check the Dining Room scene at 5pm.`, `17時のダイニングルームの場面を見てみよう。`),
+      },
+      {
+        id: 'hnneak', wish: 'famous', needs: ['paper:secrets'],
+        question: T(`I can't figure out the person's room!`, `この人物の部屋が分からない！`),
+        text: T(`Make sure you have checked all the rooms mentioned in the Secrets of the Hotel paper.`, `「ホテルの秘密」に書かれた部屋を、全て確認したか見直そう。`),
+      },
+      {
+        id: 'h9q3kt', wish: 'prophet', needs: ['skill:memory'],
+        question: T(`Where should I start?`, `何から始めればいい？`),
+        text: T(`Someone shared their revelations in several scenes yesterday.`, `昨日、ある人物がいくつもの場面で自分の預言を語っている。`),
+      },
+      {
+        id: 'hw11q3', wish: 'prophet', needs: ['hint:h9q3kt'],
+        question: T(`How can I figure out their room number?`, `この人物の部屋番号はどうやって分かる？`),
+        text: T(`They mention their room number in the Common Room scene at 3pm.`, `15時の談話室の場面で、自分の部屋番号を言っている。`),
+      },
+      {
+        id: 'himxs1', wish: 'prophet', needs: ['hint:hw11q3'],
+        question: T(`How can I figure out their name?`, `この人物の名前はどうやって分かる？`),
+        text: T(`You can figure out their approximate check-in time from the scene. Then, use process of elimination to figure out their name.`, `その場面から、おおよそのチェックイン時刻が分かる。あとは消去法で名前を割り出そう。`),
+      },
+      {
+        id: 'hqylm5', wish: 'revive',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`The wish was granted. The wife is in the hotel.`, `この願いは叶えられた。妻は今、このホテルにいる。`),
+      },
+      {
+        id: 'hu0iqx', wish: 'revive',
+        question: T(`How do I figure out the owner of this wish? (Part 1)`, `この願いの持ち主はどうやって分かる？ #1`),
+        text: T(`There is a person in the hotel not on the Guest List. Where could they have come from?`, `宿泊客名簿に載っていない人物が、ホテルにいる。その人はどこから来たのだろう？`),
+      },
+      {
+        id: 'hufahn', wish: 'revive', needs: ['hint:hu0iqx', 'skill:memory'],
+        question: T(`How do I figure out the owner of this wish? (Part 2)`, `この願いの持ち主はどうやって分かる？ #2`),
+        text: T(`Someone in the Common Room at 11am explains why they came to the hotel.`, `11時の談話室で、ある人物がホテルに来た理由を話している。`),
+      },
+      {
+        id: 'hrt8mr', wish: 'revive', needs: ['hint:hu0iqx'],
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`Whoever brought her back checked into the room she woke up in.`, `彼女を生き返らせた人物は、彼女が目を覚ました部屋にチェックインしていた。`),
+      },
+      {
+        id: 'htmd77', wish: 'troubles',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Think about different ways this wish could be satisfied.`, `この願いが叶う方法を、色々考えてみよう。`),
+      },
+      {
+        id: 'hdob4i', wish: 'troubles', needs: ['game', 'hint:hoc2t1'],
+        question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
+        text: T(`It is one of the amnesiacs.`, `記憶をなくした人物の一人だ。`),
+      },
+      {
+        id: 'h8iptm', wish: 'troubles', needs: ['hint:hdob4i'],
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`They told you their room number.`, `本人が部屋番号を教えてくれた。`),
+      },
+      {
+        id: 'h73w4c', wish: 'job',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Someone got a job yesterday. We have probably seen this person.`, `昨日、ある人物が仕事に就いた。その人物には、恐らくもう会っている。`),
+      },
+      {
+        id: 'hksdvi', wish: 'job', needs: ['lobby', 'hint:hh85qt'],
+        question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
+        text: T(`When did they start their job? Pay attention to the gender of the person with the job. Use the check-in times and process of elimination to get their name.`, `その人物は、いつから働き始めたのだろう？ 働いている人物の性別にも注目しよう。名前は、チェックイン時刻と消去法で割り出せる。`),
+      },
+      {
+        id: 'hoe6po', wish: 'job', needs: ['hint:hksdvi'],
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`Look closely near where they are currently working.`, `今働いている場所の近くを、よく調べてみよう。`),
+      },
+      {
+        id: 'hpl3kx', wish: 'minds', needs: ['skill:memory'],
+        question: T(`Where should I look?`, `どこを調べればいい？`),
+        text: T(`Check the Game Room late in the evening.`, `夜遅くのゲームルームを見てみよう。`),
+      },
+      {
+        id: 'hdqs9l', wish: 'minds', needs: ['hint:hpl3kx'],
+        question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
+        text: T(`Someone at the mahjong table knows what the others are holding. Someone at the poker table knows their opponent's hand.`, `麻雀卓に、他の人の手牌を見抜いている人物がいる。ポーカーの卓にも、相手の手札を見抜いている人物がいる。`),
+      },
+      {
+        id: 'h5ljyi', wish: 'minds', needs: ['hint:hdqs9l'],
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`The big winner at poker asks for their winnings to be sent somewhere.`, `ポーカーで大勝ちした人物が、勝ち分をどこかへ届けるよう頼んでいる。`),
+      },
+      {
+        id: 'hsg242', wish: 'daughter', needs: ['skill:memory'],
+        question: T(`Where should I look?`, `どこを調べればいい？`),
+        text: T(`Check the Movie Room scenes in the past.`, `昨日のシアタールームの場面を見てみよう。`),
+      },
+      {
+        id: 'hk31f6', wish: 'daughter', needs: ['hint:hsg242', 'movie@17'],
+        question: T(`How do I figure out the owner of this wish? (Part 1)`, `この願いの持ち主はどうやって分かる？ #1`),
+        text: T(`Where did they go after the Movie Room? Check the Dining Room at 6pm.`, `シアタールームの後、その人物はどこへ行っただろう？ 18時のダイニングルームを見てみよう。`),
+      },
+      {
+        id: 'hhiff5', wish: 'daughter', needs: ['hint:hk31f6', 'dining@18'],
+        question: T(`How do I figure out the owner of this wish? (Part 2)`, `この願いの持ち主はどうやって分かる？ #2`),
+        text: T(`They are told where and when to find the person they are looking for. Check that place at that time.`, `その人物は、探している相手にいつ、どこで会えるかを告げられる。その時刻に、その場所を見てみよう。`),
+      },
+      {
+        id: 'ho4cll', wish: 'daughter', needs: ['hint:hsg242'],
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`They said their room number in the Movie Room at 4pm.`, `16時のシアタールームで、自分の部屋番号を言っている。`),
+      },
+      {
+        id: 'hzjmbj', wish: 'animals', needs: ['skill:memory'],
+        question: T(`Where should I look?`, `どこを調べればいい？`),
+        text: T(`Have you seen anyone with an animal in yesterday's scenes?`, `昨日の場面で、動物を連れている人を見かけなかっただろうか？`),
+      },
+      {
+        id: 'hwwhw3', wish: 'animals', needs: ['hint:hzjmbj'],
+        question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
+        text: T(`Check the Lobby scene at 8pm. The receptionist names her.`, `20時のロビーの場面を見てみよう。フロント係が彼女の名前を口にしている。`),
+      },
+      {
+        id: 'hb2bfc', wish: 'animals', needs: ['hint:hwwhw3'],
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`Someone in the Common Room at 3pm saw her neighbor talking to a bird.`, `15時の談話室にいた人物が、隣の部屋の人が鳥と話しているのを見ている。`),
+      },
+      {
+        id: 'hzpnmg', wish: 'fun',
+        question: T(`How do I figure out the owner of this wish? (Part 1)`, `この願いの持ち主はどうやって分かる？ #1`),
+        text: T(`Who could possibly have this wish? If you don't have any ideas right now, feel free to come back to this later.`, `こんな願いを持っていそうなのは誰だろう？ 今は思い付かなくても、後で戻ってくれば大丈夫。`),
+      },
+      {
+        id: 'h7zvoh', wish: 'fun', needs: ['hint:hzpnmg'],
+        question: T(`How do I figure out the owner of this wish? (Part 2)`, `この願いの持ち主はどうやって分かる？ #2`),
+        text: T(`Are you having fun?`, `今、このゲームを楽しんでる？`),
+      },
+      {
+        id: 'h1fhg2', wish: 'infinite',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Every wish here is made at check-in. How would the hotel grant someone more wishes?`, `このホテルでは、願いはチェックインのときに伝える。もっと多くの願いを叶えてもらうには、どうすればいいだろう？`),
+      },
+      {
+        id: 'h27q9z', wish: 'infinite', needs: ['hint:h1fhg2'],
+        question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
+        text: T(`This person checked in more than once. They even checked in today.`, `この人物は、何度もチェックインしている。今日もチェックインしていた。`),
+      },
+      {
+        id: 'h3mkgs', wish: 'infinite', needs: ['paper:secrets'],
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`Which room has seen death after death?`, `死が何度も繰り返されている部屋はどこだろう？`),
+      },
+      {
+        id: 'hmier8', wish: 'gender',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`The Guest List shows each guest's gender when they check in. Does anyone in the scenes not match?`, `宿泊客名簿には、チェックインしたときの性別が書かれている。場面の中で、名簿と合わない人物はいないだろうか？`),
+      },
+      {
+        id: 'hduz1o', wish: 'gender', needs: ['hint:hmier8', 'skill:memory'],
+        question: T(`How do I figure out the owner of this wish? (Part 1)`, `この願いの持ち主はどうやって分かる？ #1`),
+        text: T(`Check the Dining Room scene at 8am. Listen to what one of the diners says about men.`, `8時のダイニングルームの場面を見てみよう。食事をしている一人が、男性について何と言っているかに注目しよう。`),
+      },
+      {
+        id: 'h78aog', wish: 'gender', needs: ['hint:hduz1o'],
+        question: T(`How do I figure out the owner of this wish? (Part 2)`, `この願いの持ち主はどうやって分かる？ #2`),
+        text: T(`Use the check-in time to figure out who they are.`, `チェックイン時刻を使って、誰なのかを割り出そう。`),
+      },
+      {
+        id: 'hqqbgx', wish: 'gender', needs: ['hint:hduz1o'],
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`That person tells someone their room number in the Common Room at 3pm.`, `その人物は、15時の談話室で自分の部屋番号を伝えている。`),
+      },
+      {
+        id: 'hakcta', wish: 'forever', needs: ['skill:memory'],
+        question: T(`Where should I look?`, `どこを調べればいい？`),
+        text: T(`Look for someone who talks about never having to work again.`, `もう二度と働かなくていいと話している人物を探そう。`),
+      },
+      {
+        id: 'h042im', wish: 'forever', needs: ['hint:hakcta', 'common@17'],
+        question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
+        text: T(`Someone predicted where Sloth would die. Visit that room at the right hour.`, `怠惰の罪人がどこで死ぬかを預言した人がいる。その部屋を、ちょうどいい時刻に見てみよう。`),
+      },
+      {
+        id: 'hlbmns', wish: 'forever', needs: ['hint:h042im'],
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`It is where they died.`, `その人物が死んだ場所だ。`),
+      },
+      {
+        id: 'hhtep6', wish: 'invisible', needs: ['skill:memory'],
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Have you noticed anything strange about the shootings?`, `銃撃事件について、何か妙なことに気づかなかっただろうか？`),
+      },
+      {
+        id: 'hyl6om', wish: 'invisible', needs: ['hint:hhtep6'],
+        question: T(`How do I figure out the owner of this wish? (Part 1)`, `この願いの持ち主はどうやって分かる？ #1`),
+        text: T(`In every shooting, you hear the gun but never see the shooter.`, `どの銃撃でも、銃声は聞こえるのに、撃った人の姿は見えない。`),
+      },
+      {
+        id: 'hyt5yk', wish: 'invisible', needs: ['hint:hyl6om'],
+        question: T(`How do I figure out the owner of this wish? (Part 2)`, `この願いの持ち主はどうやって分かる？ #2`),
+        text: T(`Who is behind the killings of the sins? Where are they right now? You might need to come back to this after you have identified most of the other characters.`, `罪人たちを殺して回っているのは誰だろう？ その人物は今どこにいる？ 他の宿泊客をほとんど特定してから、また戻ってくるといいかもしれない。`),
+      },
+      {
+        id: 'hb90w1', wish: 'invisible', needs: ['hint:hyt5yk', '8484@20'],
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`Check the place where Wrath died last night. Who opened the door before anyone arrived?`, `昨夜、憤怒の罪人が死んだ場所を見てみよう。誰かが来る前に扉を開けたのは、誰だろう？`),
+      },
+      {
+        id: 'h8u6n3', wish: 'own',
+        question: T(`How do I figure out the owner of this wish? (Part 1)`, `この願いの持ち主はどうやって分かる？ #1`),
+        text: T(`Ask the receptionist about the hotel's owner.`, `フロント係に、ホテルのオーナーについて聞いてみよう。`),
+      },
+      {
+        id: 'hctmto', wish: 'own', needs: ['hint:h8u6n3'],
+        question: T(`How do I figure out the owner of this wish? (Part 2)`, `この願いの持ち主はどうやって分かる？ #2`),
+        text: T(`Look at the Check-in List and the Guest List. Whose name sounds familiar?`, `チェックイン一覧と宿泊客名簿を見てみよう。聞き覚えのある名前はないだろうか？`),
+      },
+      {
+        id: 'hf8z3c', wish: 'own', needs: ['hint:hctmto', 'paper:secrets'],
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`The receptionist told you which floor the boss lives on. The Secrets of the Hotel paper tells you which room is on that floor.`, `フロント係は、上司が何階に住んでいるかを教えてくれた。「ホテルの秘密」を見れば、その階にある部屋が分かる。`),
+      },
+      {
+        id: 'h423yf', wish: 'secrets', needs: ['!paper:secrets'],
+        question: T(`Where should I look?`, `どこを調べればいい？`),
+        text: T(`You do not have enough information to solve this right now.`, `今はまだ、これを解くための情報が足りない。`),
+      },
+      {
+        id: 'ht97io', wish: 'secrets', needs: ['paper:secrets'],
+        question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
+        text: T(`Who could have written down all these secrets? Where did you find the paper?`, `こんな秘密を全て書き留められたのは誰だろう？ その紙はどこで見つけた？`),
+      },
+      {
+        id: 'hl6yyn', wish: 'secrets', needs: ['hint:ht97io', 'skill:memory'],
+        question: T(`How do I figure out who wrote it?`, `書いたのが誰か、どうやって分かる？`),
+        text: T(`Check Room 3333360 with the Memory Device.`, `記憶装置で3333360号室を調べてみよう。`),
+      },
+      {
+        id: 'hjz5x3', wish: 'god',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Think about where God might be. How could the hotel bring someone closer?`, `神様はどこにいるのだろう？ ホテルは、どうやって人を神様に近づけるだろう？`),
+      },
+      {
+        id: 'h7girf', wish: 'god', needs: ['hint:hjz5x3'],
+        question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
+        text: T(`Someone in this hotel is still getting closer to God at this very moment. Where are they?`, `このホテルには、今この瞬間も神様に近づき続けている人物がいる。その人物はどこにいる？`),
+      },
+      {
+        id: 'h0vmi2', wish: 'god', needs: ['hint:h7girf', 'paper:secrets'],
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`Where is their room? What properties must their room number have?`, `その人物の部屋はどこにあるのだろう？ その部屋番号は、どんな条件を満たしていなければならないだろう？`),
+      },
+      {
+        id: 'h6ohsc', wish: 'revive', needs: ['hint:hufahn'],
+        question: T(`How do I figure out the owner of this wish? (Part 3)`, `この願いの持ち主はどうやって分かる？ #3`),
+        text: T(`Use their check-in time and process of elimination.`, `チェックイン時刻と消去法を使おう。`),
+      },
+      {
+        id: 'hoc2t1', wish: 'troubles', needs: ['hint:htmd77'],
+        question: T(`I still don't understand their wish.`, `この願いの意味が、まだよく分からない。`),
+        text: T(`What is one way to forget all the troubles in life? Did any character show signs that might be related to this?`, `人生のあらゆる悩みを忘れるには、どんな方法があるだろう？ それに関係していそうな様子の人物はいなかっただろうか？`),
+      },
+      {
+        id: 'hhnyyb', wish: 'troubles', needs: ['hint:hdob4i'],
+        question: T(`I still can't figure out the name of the owner of the wish.`, `この願いの持ち主の名前が、まだ分からない。`),
+        text: T(`They are the person in the Game Room today. Their muscle memory might hint who they are.`, `今日ゲームルームにいる人物だ。体が覚えていることが、正体のヒントになるかもしれない。`),
+      },
+      {
+        id: 'hh85qt', wish: 'job', needs: ['hint:h73w4c'],
+        question: T(`Can you be a bit more specific?`, `もう少し具体的に教えて。`),
+        text: T(`The person is currently working at the hotel.`, `その人物は、今このホテルで働いている。`),
+      },
+      {
+        id: 'h8ddwi', wish: 'god', needs: ['hint:h7girf'],
+        question: T(`How do I know their name?`, `この人物の名前はどうやって分かる？`),
+        text: T(`When could they have checked in? One of the scenes shows that someone else was at their current location. Use the check-in times and process of elimination to work out their name.`, `いつチェックインできたのだろう？ ある場面から、その人物が今いる場所に、以前は別の誰かがいたことが分かる。チェックイン時刻と消去法で名前を割り出そう。`),
+      },
+      {
+        id: 'hqz6t7', wish: 'god', needs: ['hint:h7girf'],
+        question: T(`I still cannot figure out where the owner of this wish is. Can you be more direct?`, `持ち主がどこにいるのか、まだ分からない。もっとはっきり教えて。`),
+        text: T(`They are physically moving upwards.`, `その人物は、比喩ではなく実際に、上へと昇り続けている。`),
+      },
+      {
+        id: 'h7dt2l', wish: 'minds', needs: ['hint:h5ljyi'],
+        question: T(`How do I figure out their name?`, `この人物の名前はどうやって分かる？`),
+        text: T(`When did they check in? Use this information and the Check-in List.`, `いつチェックインしたのだろう？ その情報とチェックイン一覧を照らし合わせよう。`),
+      },
+      {
+        id: 'hm5d8w', guest: 'nigel', needs: ['game@16'],
+        question: T(`How do I figure out his wish and room number?`, `羽生直樹の願いと部屋番号はどうやって分かる？`),
+        text: T(`His name is mentioned in the Game Room at 4pm. Have you seen anyone who could be Nigel? Once you figure out who he is, the rest will fall into place.`, `16時のゲームルームで、彼の名前が出てくる。羽生直樹かもしれない人物に、心当たりはないだろうか？ 彼が誰なのか分かれば、あとは自然と解けるはずだ。`),
+      },
+      {
+        id: 'htahqz', guest: 'mark', needs: ['skill:memory'],
+        question: T(`How do I figure out his room number?`, `青木大輔の部屋番号はどうやって分かる？`),
+        text: T(`The boss suggested a few rooms to visit. Check what is inside each of them.`, `上司は、いくつかの部屋を調べるよう勧めていた。それぞれの部屋に何があるか、確認しよう。`),
+      },
+      {
+        id: 'h0vy8r', guest: 'mark', needs: ['5'],
+        question: T(`How do I figure out his wish?`, `青木大輔の願いはどうやって分かる？`),
+        text: T(`His suitcase is in his room, but he isn't. Where could he have gone? This one is best left for the end. Once most of the other guests are placed, see which wishes are left.`, `部屋にはスーツケースが残っているのに、本人はいない。どこへ行ったのだろう？ これは最後に回すのがいい。他の宿泊客をほとんど特定したら、残った願いを見てみよう。`),
+      },
+      {
+        id: 'houh68', guest: 'gabriel', needs: ['4'],
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Is there anyone else on the Guest List who might be related to him?`, `宿泊客名簿に、彼と関係がありそうな人はいないだろうか？`),
+      },
+      {
+        id: 'haygtj', guest: 'gabriel', needs: ['hint:houh68', 'skill:memory'],
+        question: T(`How do I figure out his wish? (Part 1)`, `木村健二の願いはどうやって分かる？ #1`),
+        text: T(`Check the Room 4 scene at 7pm.`, `19時の4号室の場面を見てみよう。`),
+      },
+      {
+        id: 'hnfr2n', guest: 'gabriel', needs: ['hint:haygtj', '4@19'],
+        question: T(`How do I figure out his wish? (Part 2)`, `木村健二の願いはどうやって分かる？ #2`),
+        text: T(`What did the man come to the hotel for? Follow him back through the Dining Room and the Movie Room.`, `その男性は、何のためにホテルに来たのだろう？ ダイニングルームやシアタールームの場面まで遡って、彼の足取りを辿ろう。`),
+      },
+      {
+        id: 'hb79ag', guest: 'gabriel', needs: ['hint:hnfr2n'],
+        question: T(`How do I figure out his room number?`, `木村健二の部屋番号はどうやって分かる？`),
+        text: T(`He tells someone his room number in the Movie Room at 4pm.`, `16時のシアタールームで、彼は自分の部屋番号を伝えている。`),
+      },
+      {
+        id: 'hw52l2', guest: 'emily', needs: ['skill:memory'],
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Her name comes up in one of yesterday's Lobby scenes.`, `昨日のロビーの場面で、彼女の名前が出てくる。`),
+      },
+      {
+        id: 'hl3ud4', guest: 'emily', needs: ['hint:hw52l2'],
+        question: T(`How do I figure out her wish?`, `小鳥遊莉花の願いはどうやって分かる？`),
+        text: T(`Check the Lobby at 8pm. Who is she talking to?`, `20時のロビーを見てみよう。彼女は誰と話している？`),
+      },
+      {
+        id: 'h6bi6d', guest: 'emily', needs: ['hint:hl3ud4', 'common@15'],
+        question: T(`How do I figure out her room number? (Part 1)`, `小鳥遊莉花の部屋番号はどうやって分かる？ #1`),
+        text: T(`Someone in the Common Room at 3pm complains about a neighbor. Could that be her?`, `15時の談話室で、隣の部屋の人について愚痴をこぼしている人物がいる。それは彼女のことでは？`),
+      },
+      {
+        id: 'hvzw5b', guest: 'emily', needs: ['hint:h6bi6d'],
+        question: T(`How do I figure out her room number? (Part 2)`, `小鳥遊莉花の部屋番号はどうやって分かる？ #2`),
+        text: T(`Visit the rooms on either side of that person's room. Is there any sign of a bird?`, `その人物の部屋の両隣を訪ねてみよう。鳥がいた形跡はないだろうか？`),
+      },
+      {
+        id: 'h036vr', guest: 'helen', needs: ['skill:memory'],
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`She is the only guest who checked in at 9am. Is there a scene at that hour where someone has just arrived?`, `9時台にチェックインしたのは彼女だけだ。その時刻に、誰かが到着したばかりの場面はないだろうか？`),
+      },
+      {
+        id: 'h4e5ht', guest: 'helen', needs: ['hint:h036vr', 'skill:memory'],
+        question: T(`How do I figure out her wish? (Part 1)`, `冬坂春菜の願いはどうやって分かる？ #1`),
+        text: T(`Check Room 40 at 9am. Who greets their new neighbor?`, `9時の40号室を見てみよう。新しいお隣さんに声をかけているのは誰だろう？`),
+      },
+      {
+        id: 'hfmgie', guest: 'helen', needs: ['hint:h4e5ht', '40@9'],
+        question: T(`How do I figure out her wish? (Part 2)`, `冬坂春菜の願いはどうやって分かる？ #2`),
+        text: T(`Does the neighbor sound like someone from another scene? Check the Common Room at 11am.`, `そのお隣さんの話し方は、別の場面の誰かに似ていないだろうか？ 11時の談話室を見てみよう。`),
+      },
+      {
+        id: 'hyzysz', guest: 'helen', needs: ['hint:h4e5ht', '40@9'],
+        question: T(`How do I figure out her room number?`, `冬坂春菜の部屋番号はどうやって分かる？`),
+        text: T(`She is Dominique's neighbor. Check the rooms on both sides of Room 40, and think about where she ran to after lunch.`, `彼女は田中博の隣人だ。40号室の両隣を調べて、昼食の後に彼女がどこへ駆け込んだのかを考えよう。`),
+      },
+      {
+        id: 'hfgcx7', guest: 'you',
+        question: T(`How do I figure out my room number? (Part 1)`, `自分の部屋番号はどうやって分かる？ #1`),
+        text: T(`Reread the prologue. Where is your room compared to Room 76?`, `プロローグを読み返そう。自分の部屋は、76号室から見てどこにある？`),
+      },
+      {
+        id: 'hjmsuv', guest: 'you', needs: ['hint:hfgcx7'],
+        question: T(`How do I figure out my room number? (Part 2)`, `自分の部屋番号はどうやって分かる？ #2`),
+        text: T(`Try the warp device on the rooms just after 76.`, `76号室のすぐ先の部屋へ、ワープ装置で移動してみよう。`),
+      },
+      {
+        id: 'h3gw31', guest: 'you',
+        question: T(`How do I figure out my wish?`, `自分の願いはどうやって分かる？`),
+        text: T(`Look at the list of remaining wishes and think about which one would make sense.`, `残っている願いの一覧を見て、どれなら筋が通るか考えてみよう。`),
+      },
+      {
+        id: 'h8r966', guest: 'lorenzo',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Look at the Check-in List carefully. Is there anything strange about his name?`, `チェックイン一覧をよく見てみよう。彼の名前に、何か変わったところはないだろうか？`),
+      },
+      {
+        id: 'hd9kwu', guest: 'lorenzo', needs: ['hint:h8r966'],
+        question: T(`How do I figure out his wish? (Part 1)`, `ロレンツォ・コンティの願いはどうやって分かる？ #1`),
+        text: T(`Why would someone need to check in over and over?`, `何度もチェックインしなければならない理由とは、何だろう？`),
+      },
+      {
+        id: 'h2vvmy', guest: 'lorenzo', needs: ['hint:hd9kwu', 'lobby'],
+        question: T(`How do I figure out his wish? (Part 2)`, `ロレンツォ・コンティの願いはどうやって分かる？ #2`),
+        text: T(`Visit the Lobby a few times. Someone keeps checking in, even today.`, `ロビーに何度か行ってみよう。今日も、誰かがチェックインを繰り返している。`),
+      },
+      {
+        id: 'hti8k6', guest: 'lorenzo', needs: ['hint:hd9kwu', 'paper:secrets'],
+        question: T(`How do I figure out his room number?`, `ロレンツォ・コンティの部屋番号はどうやって分かる？`),
+        text: T(`One of the lines in the Secrets of the Hotel paper fits someone who keeps dying and coming back.`, `「ホテルの秘密」のある一文が、死んでは戻ってくる人物に当てはまる。`),
+      },
+      {
+        id: 'hvc0sq', guest: 'taylor', needs: ['skill:memory'],
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Taylor's name comes up in the Dining Room scene at 8am.`, `8時のダイニングルームの場面で、和泉千尋の名前が出てくる。`),
+      },
+      {
+        id: 'hroj39', guest: 'taylor', needs: ['hint:hvc0sq'],
+        question: T(`How do I figure out their wish?`, `和泉千尋の願いはどうやって分かる？`),
+        text: T(`Compare what Taylor says with the Guest List.`, `千尋の発言を、宿泊客名簿と比べてみよう。`),
+      },
+      {
+        id: 'hawjlz', guest: 'taylor', needs: ['hint:hvc0sq'],
+        question: T(`How do I figure out their room number?`, `和泉千尋の部屋番号はどうやって分かる？`),
+        text: T(`Taylor tells people their room number more than once. Check the Common Room at 3pm.`, `千尋は、何度か自分の部屋番号を伝えている。15時の談話室を見てみよう。`),
+      },
+      {
+        id: 'htzatu', guest: 'jacob', needs: ['skill:memory'],
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`He is the only guest who checked in at 8am. Is there a scene at that hour where someone has just checked in?`, `8時台にチェックインしたのは彼だけだ。その時刻に、チェックインを済ませたばかりの人物が出てくる場面はないだろうか？`),
+      },
+      {
+        id: 'hpawh9', guest: 'jacob', needs: ['hint:htzatu'],
+        question: T(`How do I figure out his wish?`, `渡辺哲也の願いはどうやって分かる？`),
+        text: T(`Check the Dining Room at 8am. What happens when he meets the woman at the table?`, `8時のダイニングルームを見てみよう。テーブルにいた女性と出会ったとき、何が起きる？`),
+      },
+      {
+        id: 'h07d4p', guest: 'jacob', needs: ['hint:hpawh9', 'dining@8'],
+        question: T(`How do I figure out his room number? (Part 1)`, `渡辺哲也の部屋番号はどうやって分かる？ #1`),
+        text: T(`He tells her where his room is in the Dining Room at 12pm.`, `12時のダイニングルームで、彼は彼女に自分の部屋の場所を教えている。`),
+      },
+      {
+        id: 'hssr2h', guest: 'jacob', needs: ['hint:h07d4p'],
+        question: T(`How do I figure out his room number? (Part 2)`, `渡辺哲也の部屋番号はどうやって分かる？ #2`),
+        text: T(`His room is next to Taylor's. Check the rooms on both sides.`, `彼の部屋は千尋の隣だ。両隣の部屋を調べてみよう。`),
+      },
+      {
+        id: 'h38mxa', guest: 'lisa', needs: ['skill:memory'],
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Lisa comes up in several of yesterday's scenes. Start with the Movie Room.`, `七海は、昨日のいくつかの場面に登場する。まずはシアタールームから見てみよう。`),
+      },
+      {
+        id: 'hrshyr', guest: 'lisa', needs: ['hint:h38mxa'],
+        question: T(`How do I figure out her wish?`, `五十嵐七海の願いはどうやって分かる？`),
+        text: T(`Check the Movie Room at 3pm. What is on the screen?`, `15時のシアタールームを見てみよう。画面には何が映っている？`),
+      },
+      {
+        id: 'hbtor1', guest: 'lisa', needs: ['hint:hrshyr', 'movie'],
+        question: T(`I am pretty certain about my answer. Why is it incorrect?`, `答えには自信があるのに、どうして間違いなの？`),
+        text: T(`Compare the Lisa you met today with the Dining Room scene at 5pm. Is there something weird going on?`, `今日会った七海と、17時のダイニングルームの場面を比べてみよう。何かおかしなことが起きていないだろうか？`),
+      },
+      {
+        id: 'h8h05l', guest: 'lisa', needs: ['paper:secrets'],
+        question: T(`How do I figure out her room number?`, `五十嵐七海の部屋番号はどうやって分かる？`),
+        text: T(`Check the Secrets of the Hotel paper. Someone disappeared in one of the rooms.`, `「ホテルの秘密」を確認しよう。ある部屋で、誰かが姿を消している。`),
+      },
+      {
+        id: 'h0v1lh', guest: 'marie', needs: ['common'],
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Reread what she told you in the Common Room.`, `談話室で彼女が話していたことを、読み返してみよう。`),
+      },
+      {
+        id: 'hbdikm', guest: 'marie', needs: ['hint:h0v1lh', 'skill:memory'],
+        question: T(`How do I figure out her room number? (Part 1)`, `白石美月の部屋番号はどうやって分かる？ #1`),
+        text: T(`Where was someone shot around 6pm yesterday? She is next door.`, `昨日の18時頃、誰かが撃たれたのはどこだろう？ 彼女の部屋はその隣だ。`),
+      },
+      {
+        id: 'h5vcbj', guest: 'marie', needs: ['hint:hbdikm', '2049'],
+        question: T(`How do I figure out her room number? (Part 2)`, `白石美月の部屋番号はどうやって分かる？ #2`),
+        text: T(`There are two rooms next to it. Which one does someone still seem to be staying in?`, `その部屋の隣は二つある。今も誰かが泊まっていそうなのは、どちらだろう？`),
+      },
+      {
+        id: 'hml5pn', guest: 'marie', needs: ['hint:h5vcbj'],
+        question: T(`How do I figure out her wish? (Part 1)`, `白石美月の願いはどうやって分かる？ #1`),
+        text: T(`Who was in Room 2050 at 6pm yesterday? Check the Dining Room.`, `昨日の18時、2050号室の宿泊客はどこにいただろう？ ダイニングルームを見てみよう。`),
+      },
+      {
+        id: 'h5w8ge', guest: 'marie', needs: ['hint:hml5pn', 'dining@18'],
+        question: T(`How do I figure out her wish? (Part 2)`, `白石美月の願いはどうやって分かる？ #2`),
+        text: T(`She heard the shot from her room, but Room 2050's guest never left the dining table. How can both be true?`, `彼女は自分の部屋で銃声を聞いた。ところが2050号室の宿泊客は、ダイニングルームの席を一度も離れていない。どうすれば両方が成り立つだろう？`),
+      },
+      {
+        id: 'hunfxl', guest: 'robert', needs: ['skill:memory'],
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`His name comes up in one of the Game Room scenes.`, `ゲームルームのある場面で、彼の名前が出てくる。`),
+      },
+      {
+        id: 'hrunwm', guest: 'robert', needs: ['hint:hunfxl'],
+        question: T(`How do I figure out his wish?`, `ロバート・ハンセンの願いはどうやって分かる？`),
+        text: T(`Check the Game Room at 4pm.`, `16時のゲームルームを見てみよう。`),
+      },
+      {
+        id: 'h18yj6', guest: 'robert', needs: ['hint:hrunwm', 'game@16'],
+        question: T(`How do I figure out his room number? (Part 1)`, `ロバート・ハンセンの部屋番号はどうやって分かる？ #1`),
+        text: T(`Which of the seven sins fits how he acted? Someone predicted where that sin would die.`, `彼の振る舞いに当てはまる大罪はどれだろう？ その罪人がどこで死ぬか、預言した人がいる。`),
+      },
+      {
+        id: 'hfe85w', guest: 'robert', needs: ['hint:h18yj6'],
+        question: T(`How do I figure out his room number? (Part 2)`, `ロバート・ハンセンの部屋番号はどうやって分かる？ #2`),
+        text: T(`Check the Common Room at 3pm, then visit that room at 5pm.`, `15時の談話室を見てから、その部屋を17時に訪ねてみよう。`),
+      },
+      {
+        id: 'hokct3', guest: 'cody',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Look at his surname. Does it remind you of anything?`, `彼の名字をよく見てみよう。何か思い当たることはないだろうか？`),
+      },
+      {
+        id: 'hku8cn', guest: 'cody', needs: ['hint:hokct3'],
+        question: T(`How do I figure out his wish?`, `コーディ・ヒルベルトの願いはどうやって分かる？`),
+        text: T(`Ask the receptionist about the boss. Then look at when Cody checked in.`, `フロント係に、上司のことを聞いてみよう。それから、コーディがいつチェックインしたかを見てみよう。`),
+      },
+      {
+        id: 'h2c678', guest: 'cody', needs: ['hint:hku8cn'],
+        question: T(`How do I figure out his room number? (Part 1)`, `コーディ・ヒルベルトの部屋番号はどうやって分かる？ #1`),
+        text: T(`Where does the boss live?`, `上司はどこに住んでいるだろう？`),
+      },
+      {
+        id: 'huatrj', guest: 'cody', needs: ['hint:h2c678', 'paper:secrets'],
+        question: T(`How do I figure out his room number? (Part 2)`, `コーディ・ヒルベルトの部屋番号はどうやって分かる？ #2`),
+        text: T(`The Secrets of the Hotel paper tells you which room is on that floor.`, `「ホテルの秘密」を見れば、その階にある部屋が分かる。`),
+      },
+      {
+        id: 'hsul4k', guest: 'levin', needs: ['skill:memory'],
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`He checked in at 1pm. Check the Lobby at that hour.`, `彼は13時台にチェックインした。その時刻のロビーを見てみよう。`),
+      },
+      {
+        id: 'hc6bx1', guest: 'levin', needs: ['hint:hsul4k', 'lobby@13'],
+        question: T(`How do I figure out his wish?`, `竹内勇の願いはどうやって分かる？`),
+        text: T(`What does the man in the Lobby ask for? Use the check-in times and process of elimination.`, `ロビーにいる男性は、何を頼んでいる？ チェックイン時刻と消去法を使おう。`),
+      },
+      {
+        id: 'h6l63h', guest: 'levin', needs: ['hint:hc6bx1', 'paper:secrets'],
+        question: T(`How do I figure out his room number?`, `竹内勇の部屋番号はどうやって分かる？`),
+        text: T(`Which floor did his elevator go to? The Secrets of the Hotel paper tells you which room is on that floor.`, `彼のエレベーターは何階に行った？ 「ホテルの秘密」を見れば、その階にある部屋が分かる。`),
+      },
+      {
+        id: 'h82ow3', guest: 'caleb',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Caleb is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `鈴木翔太は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
+      },
+      {
+        id: 'hsl31f', guest: 'caleb', needs: ['hint:h82ow3'],
+        question: T(`How do I figure out his room number?`, `鈴木翔太の部屋番号はどうやって分かる？`),
+        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `どの願いが彼のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+      },
+      {
+        id: 'hrqj1o', guest: 'caleb', needs: ['hint:h82ow3'],
+        question: T(`I've found someone who might be him. How do I make sure?`, `鈴木翔太かもしれない人物を見つけた。確かめるにはどうすればいい？`),
+        text: T(`Caleb checked in at 11am. Use the check-in times and process of elimination.`, `鈴木翔太がチェックインしたのは11時台だ。チェックイン時刻と消去法を使おう。`),
+      },
+      {
+        id: 'h6iqxg', guest: 'chuck',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Chuck is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `受田司は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
+      },
+      {
+        id: 'hpfurm', guest: 'chuck', needs: ['hint:h6iqxg'],
+        question: T(`How do I figure out his room number?`, `受田司の部屋番号はどうやって分かる？`),
+        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `どの願いが彼のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+      },
+      {
+        id: 'h2zmm7', guest: 'chuck', needs: ['hint:h6iqxg'],
+        question: T(`I've found someone who might be him. How do I make sure?`, `受田司かもしれない人物を見つけた。確かめるにはどうすればいい？`),
+        text: T(`Chuck checked in at 9pm. Use the check-in times and process of elimination.`, `受田司がチェックインしたのは21時台だ。チェックイン時刻と消去法を使おう。`),
+      },
+      {
+        id: 'h6hglt', guest: 'philip',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Philip is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `清水太郎は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
+      },
+      {
+        id: 'hgn5s0', guest: 'philip', needs: ['hint:h6hglt'],
+        question: T(`How do I figure out his room number?`, `清水太郎の部屋番号はどうやって分かる？`),
+        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `どの願いが彼のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+      },
+      {
+        id: 'hii812', guest: 'philip', needs: ['hint:h6hglt'],
+        question: T(`I've found someone who might be him. How do I make sure?`, `清水太郎かもしれない人物を見つけた。確かめるにはどうすればいい？`),
+        text: T(`Philip checked in at 8pm. Use the check-in times and process of elimination.`, `清水太郎がチェックインしたのは20時台だ。チェックイン時刻と消去法を使おう。`),
+      },
+      {
+        id: 'h4z1a5', guest: 'serena',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Serena is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `九十九百花は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
+      },
+      {
+        id: 'hc6s13', guest: 'serena', needs: ['hint:h4z1a5'],
+        question: T(`How do I figure out her room number?`, `九十九百花の部屋番号はどうやって分かる？`),
+        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `どの願いが彼女のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+      },
+      {
+        id: 'hvi22t', guest: 'serena', needs: ['hint:h4z1a5'],
+        question: T(`I've found someone who might be her. How do I make sure?`, `九十九百花かもしれない人物を見つけた。確かめるにはどうすればいい？`),
+        text: T(`Serena checked in at 2pm. Use the check-in times and process of elimination.`, `九十九百花がチェックインしたのは14時台だ。チェックイン時刻と消去法を使おう。`),
+      },
+      {
+        id: 'hkx8fx', guest: 'jessica',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Jessica is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `池田結菜は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
+      },
+      {
+        id: 'huq241', guest: 'jessica', needs: ['hint:hkx8fx'],
+        question: T(`How do I figure out her room number?`, `池田結菜の部屋番号はどうやって分かる？`),
+        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `どの願いが彼女のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+      },
+      {
+        id: 'h1q26s', guest: 'jessica', needs: ['hint:hkx8fx'],
+        question: T(`I've found someone who might be her. How do I make sure?`, `池田結菜かもしれない人物を見つけた。確かめるにはどうすればいい？`),
+        text: T(`Jessica checked in at 3pm. Use the check-in times and process of elimination.`, `池田結菜がチェックインしたのは15時台だ。チェックイン時刻と消去法を使おう。`),
+      },
+      {
+        id: 'hka1o5', guest: 'jones',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Jones is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `長谷川悠人は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
+      },
+      {
+        id: 'hqvvjr', guest: 'jones', needs: ['hint:hka1o5'],
+        question: T(`How do I figure out his room number?`, `長谷川悠人の部屋番号はどうやって分かる？`),
+        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `どの願いが彼のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+      },
+      {
+        id: 'h64p70', guest: 'jones', needs: ['hint:hka1o5'],
+        question: T(`I've found someone who might be him. How do I make sure?`, `長谷川悠人かもしれない人物を見つけた。確かめるにはどうすればいい？`),
+        text: T(`Jones checked in at 6pm. Use the check-in times and process of elimination.`, `長谷川悠人がチェックインしたのは18時台だ。チェックイン時刻と消去法を使おう。`),
+      },
+      {
+        id: 'h9ip5u', guest: 'victor',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Victor is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `富田虚は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
+      },
+      {
+        id: 'hcywel', guest: 'victor', needs: ['hint:h9ip5u'],
+        question: T(`How do I figure out his room number?`, `富田虚の部屋番号はどうやって分かる？`),
+        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `どの願いが彼のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+      },
+      {
+        id: 'hgamme', guest: 'victor', needs: ['hint:h9ip5u'],
+        question: T(`I've found someone who might be him. How do I make sure?`, `富田虚かもしれない人物を見つけた。確かめるにはどうすればいい？`),
+        text: T(`Victor checked in at 7am. Use the check-in times and process of elimination.`, `富田虚がチェックインしたのは7時台だ。チェックイン時刻と消去法を使おう。`),
+      },
+      {
+        id: 'hfv813', guest: 'polina',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Polina is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `伊呂波初は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
+      },
+      {
+        id: 'hesmjz', guest: 'polina', needs: ['hint:hfv813'],
+        question: T(`How do I figure out her room number?`, `伊呂波初の部屋番号はどうやって分かる？`),
+        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `どの願いが彼女のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+      },
+      {
+        id: 'hs9shw', guest: 'polina', needs: ['hint:hfv813'],
+        question: T(`I've found someone who might be her. How do I make sure?`, `伊呂波初かもしれない人物を見つけた。確かめるにはどうすればいい？`),
+        text: T(`Polina checked in at 4pm. Use the check-in times and process of elimination.`, `伊呂波初がチェックインしたのは16時台だ。チェックイン時刻と消去法を使おう。`),
+      },
+      {
+        id: 'haa5o8', guest: 'lucy',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Lucy is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `森田彼方は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
+      },
+      {
+        id: 'hp9ceu', guest: 'lucy', needs: ['hint:haa5o8'],
+        question: T(`How do I figure out her room number?`, `森田彼方の部屋番号はどうやって分かる？`),
+        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `どの願いが彼女のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+      },
+      {
+        id: 'htpfr3', guest: 'lucy', needs: ['hint:haa5o8'],
+        question: T(`I've found someone who might be her. How do I make sure?`, `森田彼方かもしれない人物を見つけた。確かめるにはどうすればいい？`),
+        text: T(`Lucy checked in at 7am. Use the check-in times and process of elimination.`, `森田彼方がチェックインしたのは7時台だ。チェックイン時刻と消去法を使おう。`),
+      },
+      {
+        id: 'hena2p', guest: 'ruby',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Ruby is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be her.`, `一二三澪は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼女かもしれない人物が見つかったら、また戻ってこよう。`),
+      },
+      {
+        id: 'hk29hx', guest: 'ruby', needs: ['hint:hena2p'],
+        question: T(`How do I figure out her room number?`, `一二三澪の部屋番号はどうやって分かる？`),
+        text: T(`Once you know which wish is hers, the hints for that wish will help you find the room.`, `どの願いが彼女のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+      },
+      {
+        id: 'h99ngf', guest: 'ruby', needs: ['hint:hena2p'],
+        question: T(`I've found someone who might be her. How do I make sure?`, `一二三澪かもしれない人物を見つけた。確かめるにはどうすればいい？`),
+        text: T(`Ruby checked in at 8pm. Use the check-in times and process of elimination.`, `一二三澪がチェックインしたのは20時台だ。チェックイン時刻と消去法を使おう。`),
+      },
+      {
+        id: 'hd13jt', guest: 'matthias',
+        question: T(`How should I start?`, `何から始めればいい？`),
+        text: T(`Matthias is easier to work out from the wish side. Try asking about the wishes instead, and come back once you have found someone who could be him.`, `上田天馬は、願いの側から考えた方が特定しやすい。先に願いのヒントを見てみよう。彼かもしれない人物が見つかったら、また戻ってこよう。`),
+      },
+      {
+        id: 'h5ci97', guest: 'matthias', needs: ['hint:hd13jt'],
+        question: T(`How do I figure out his room number?`, `上田天馬の部屋番号はどうやって分かる？`),
+        text: T(`Once you know which wish is his, the hints for that wish will help you find the room.`, `どの願いが彼のものか分かれば、その願いのヒントが部屋探しにも役立つはずだ。`),
+      },
+      {
+        id: 'hmsrl0', guest: 'matthias', needs: ['hint:hd13jt'],
+        question: T(`I've found someone who might be him. How do I make sure?`, `上田天馬かもしれない人物を見つけた。確かめるにはどうすればいい？`),
+        text: T(`Matthias checked in at 10pm. Use the check-in times and process of elimination.`, `上田天馬がチェックインしたのは22時台だ。チェックイン時刻と消去法を使おう。`),
+      },
+      {
+        id: 'hi84y4', guest: 'nigel', needs: ['hint:hm5d8w'],
+        question: T(`I need some more hints.`, `もっとヒントがほしい。`),
+        text: T(`Nigel is one of the people you talked to today.`, `羽生直樹は、今日あなたが話をした人物の一人だ。`),
       },
     ],
     // @hints-end

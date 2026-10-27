@@ -1553,8 +1553,8 @@
   // must have been shown first) and whose `when` holds. Its text stays hidden
   // behind Show hint until the player asks for it, and stays shown
   // afterwards. Once the guest a hint is about (the guest, or whoever made
-  // the wish) is confirmed, it is no longer offered, and counts as seen for
-  // the hints that need it.
+  // the wish) is confirmed, it counts as seen for the hints that need it, so
+  // the rest of that guest's hints open up for a look back.
   let hintQuery = null; // { via: 'name' | 'wish', value } once the player asks
   let hintVia = 'name';  // the way of asking picked in the form
 
@@ -1601,7 +1601,7 @@
     const s = ctx();
     return game.hints.map((h, i) => Object.assign({ key: hintKey(h, i) }, h)).filter(pick)
       .filter(h => state.hintsSeen[h.key]
-        || (!hintDone(h) && [].concat(h.needs || []).every(hintNeed) && (!h.when || h.when(s))));
+        || ([].concat(h.needs || []).every(hintNeed) && (!h.when || h.when(s))));
   }
 
   // Questions, each with a Show hint button, or once shown, with its text
@@ -1732,8 +1732,8 @@
       if (label) {
         out.appendChild(el('h3', 'paper-title', escapeHtml(label)));
         if (!pick) say(ui.hintUnknown);
-        else if (guest && state.confirmed[guest.id]) say(ui.hintConfirmed);
         else {
+          if (guest && state.confirmed[guest.id]) say(ui.hintConfirmed);
           const list = hintsShown(pick);
           if (list.length) out.appendChild(hintItems(list));
           else say(ui.hintNone);
