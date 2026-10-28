@@ -676,7 +676,11 @@ He is idly moving pieces on the chessboard beside him.
 
 #2: "I haven't seen you around before. Are you new here?"
 
-#4: "I only checked in an hour ago."`,
+#4: "I only checked in an hour ago."
+
+#3: "This set is cursed. I'm asking the front desk for a new one."
+
+#2: "Good luck. He couldn't even tell me where the restrooms were."`,
           `*#1、#2、#3、#4が麻雀をしている。*
 
 #1：「リーチ！」
@@ -701,7 +705,11 @@ He is idly moving pieces on the chessboard beside him.
 
 #2：「見ない顔だな。ここには来たばかりか？」
 
-#4：「一時間前にチェックインしたばかりなんだ」`),
+#4：「一時間前にチェックインしたばかりなんだ」
+
+#3：「この牌、絶対呪われてる。フロントで替えてもらってくる」
+
+#2：「やめときなって。彼はトイレの場所も知らなかったんだから」`),
         22: anon(
           `*#1, #2 and #3 sit around a poker table. Most of the chips are in front of #1.*
 
@@ -2106,10 +2114,10 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hksdvi', wish: 'job', needs: ['lobby', 'hint:hh85qt'],
         question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
-        text: T(`When did they start their job? Pay attention to the gender of the person with the job. Use the check-in times and process of elimination to get their name.`, `その人物は、いつから働き始めたのだろう？ その人物の性別にも注目しよう。名前は、チェックイン時刻と消去法で割り出せる。`),
+        text: T(`When did they start their job? The front desk comes up in more than one scene from yesterday evening. Pay attention to who was working there and their gender. Then use the check-in times and process of elimination to get their name.`, `その人物は、いつから働き始めたのだろう？ 昨日の夜には、フロントが話題に出る場面がいくつかある。そこで誰が働いていたのか、その人の性別にも注目しよう。あとはチェックイン時刻と消去法で名前を割り出せる。`),
       },
       {
-        id: 'hoe6po', wish: 'job', needs: ['hint:hksdvi'],
+        id: 'hoe6po', wish: 'job', needs: ['lobby', 'hint:hh85qt'],
         question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
         text: T(`Look closely near where they are currently working.`, `今働いている場所の近くを、よく調べてみよう。`),
       },
@@ -2309,9 +2317,17 @@ The name can be figured out using the check-in times and process of elimination.
         text: T(`The person is currently working at the hotel.`, `その人物は、今このホテルで働いている。`),
       },
       {
-        id: 'h8ddwi', wish: 'god', needs: ['hint:h7girf'],
+        // Until Chuck is confirmed; hm2qk7 below takes its place after that.
+        id: 'h8ddwi', wish: 'god', needs: ['hint:h7girf', '!confirmed:chuck'],
         question: T(`How do I know their name?`, `この人物の名前はどうやって分かる？`),
-        text: T(`When could they have checked in? One of the scenes shows that someone else was at their current location. Use the check-in times and process of elimination to work out their name.`, `いつチェックインできたのだろう？ ある場面を見ると、その人物が今いる場所に、以前は別の誰かがいたことが分かる。チェックイン時刻と消去法で名前を割り出そう。`),
+        text: T(`When could they have checked in? One of the scenes shows that someone else was at their current location. That narrows it down, but not all the way. You need to figure out another person's wish first.`, `いつチェックインできたのだろう？ ある場面を見ると、その人物が今いる場所に、以前は別の誰かがいたことが分かる。ただ、それだけでは絞り切れない。先に別の人物の願いを突き止める必要がある。`),
+      },
+      {
+        // h8ddwi without the hedge, once Chuck (the other candidate) is
+        // confirmed and elimination finishes the job. A player who already read h8ddwi keeps it instead.
+        id: 'hm2qk7', wish: 'god', needs: ['hint:h7girf', 'confirmed:chuck', '!hint:h8ddwi'],
+        question: T(`How do I know their name?`, `この人物の名前はどうやって分かる？`),
+        text: T(`When could they have checked in? One of the scenes shows that someone else was at their current location. Use the check-in times and process of elimination.`, `いつチェックインできたのだろう？ ある場面を見ると、その人物が今いる場所に、以前は別の誰かがいたことが分かる。チェックイン時刻と消去法を使おう。`),
       },
       {
         id: 'hqz6t7', wish: 'god', needs: ['hint:h7girf'],
@@ -2877,14 +2893,9 @@ Your phone buzzes. It's a message from an unknown number:
             `扉の横にカードキーをかざすパネルがある。自分のカードキーをかざすと、エレベーターは1階へ上がっていった。`);
         // Matthias has been riding the left car up since 10 PM (and still is).
         // By now its floor number has outgrown the indicator: a hint that his
-        // room is huge enough to write as 0.
-        const past = s.at !== null && s.at !== undefined;
-        if (past && s.at < 22) return ride;
-        const left = past
-          ? T(`The left elevator is in use. The indicator above it is lit, its number climbing steadily.`,
-            `左のエレベーターは使用されている。その上の表示灯がともり、数字が着々と増えていく。`)
-          : T(`The left elevator is in use. The indicator above it is lit, its number already too long for the display.`,
-            `左のエレベーターは使用されている。その上の表示灯はともっているが、数字はもう表示しきれないほど長くなっている。`);
+        // room is huge enough to write as 0. (Elevators only run in the present.)
+        const left = T(`The left elevator is in use. The indicator above it is lit, its number already too long for the display.`,
+          `左のエレベーターは使用されている。その上の表示灯はともっているが、数字はもう表示しきれないほど長くなっている。`);
         return T(`${left.en}\n\n${ride.en}`, `${left.ja}\n\n${ride.ja}`);
       },
       landing: f => (f === 0 ? 'lobby' : f === 1 ? 1 : '7'.repeat(f - 1)),  // where the doors open
