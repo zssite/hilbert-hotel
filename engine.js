@@ -32,6 +32,7 @@
       startGame: 'Start Game',
       chooseLanguage: 'Choose language',
       langLocked: 'The language is fixed for this game. Start a new game to change it.',
+      textSize: 'Text size',
       yourName: 'your name',
       resume: 'Continue',
       newGame: 'New game',
@@ -157,6 +158,7 @@
       startGame: 'ゲームを始める',
       chooseLanguage: '言語を選ぶ',
       langLocked: 'このゲームの言語は固定されています。変更するには最初から始めてください。',
+      textSize: 'フォントサイズ',
       yourName: 'あなたの名前',
       resume: '続きから',
       newGame: '最初から',
@@ -2362,6 +2364,67 @@
     return b;
   }
 
+  // The size of the room text and dialogue, in percent, set as --text-scale;
+  // kept in this browser as a preference rather than in the save. Set with a
+  // slider on the home screen, or in the Aa button's popup in the top bar.
+  const TEXT_SIZE_MIN = 80, TEXT_SIZE_MAX = 160;
+  const TEXT_SIZE_KEY = 'hilbert-hotel:text-size';
+  let textSize = (() => {
+    try {
+      let z = Number(JSON.parse(localStorage.getItem(TEXT_SIZE_KEY)));
+      if (z > 0 && z < 2) z = Math.round(z * 100);  // an older scale, e.g. 1.15
+      return z >= TEXT_SIZE_MIN && z <= TEXT_SIZE_MAX ? z : 100;
+    } catch (e) { return 100; }
+  })();
+
+  function setTextSize(z) {
+    textSize = z;
+    document.documentElement.style.setProperty('--text-scale', String(z / 100));
+    try { localStorage.setItem(TEXT_SIZE_KEY, JSON.stringify(z)); } catch (e) { /* storage unavailable */ }
+  }
+
+  // A labelled slider with the size shown beside it.
+  function textSizeSlider() {
+    const wrap = el('label', 'size-slider');
+    wrap.appendChild(el('span', 'lang-label', escapeHtml(ui.textSize)));
+    const slider = el('input');
+    slider.type = 'range';
+    slider.min = TEXT_SIZE_MIN; slider.max = TEXT_SIZE_MAX; slider.step = 5;
+    slider.value = textSize;
+    const shown = el('span', 'size-value', textSize + '%');
+    slider.addEventListener('input', () => {
+      setTextSize(Number(slider.value));
+      shown.textContent = textSize + '%';
+    });
+    const row = el('span', 'size-row');
+    row.appendChild(slider);
+    row.appendChild(shown);
+    wrap.appendChild(row);
+    return wrap;
+  }
+
+  // The Aa button's popup, under the button; closed by a click elsewhere or Esc.
+  function toggleTextSizePopup() {
+    const old = $('#size-popup');
+    if (old) { old.remove(); return; }
+    const pop = el('div', 'size-popup');
+    pop.id = 'size-popup';
+    pop.appendChild(textSizeSlider());
+    document.body.appendChild(pop);
+    const r = $('#text-size').getBoundingClientRect();
+    pop.style.top = (r.bottom + 6) + 'px';
+    pop.style.right = Math.max(8, window.innerWidth - r.right) + 'px';
+    pop.querySelector('input').focus();
+    const close = e => {
+      if (e.type === 'keydown' ? e.key !== 'Escape' : pop.contains(e.target) || e.target === $('#text-size')) return;
+      pop.remove();
+      document.removeEventListener('pointerdown', close);
+      document.removeEventListener('keydown', close);
+    };
+    document.addEventListener('pointerdown', close);
+    document.addEventListener('keydown', close);
+  }
+
   // The language is chosen here, before starting, and is fixed for that game.
   function renderHome() {
     showScreen('home');
@@ -2385,6 +2448,7 @@
     });
     body.appendChild(row);
     if (state.started) body.appendChild(el('p', 'muted lang-locked', escapeHtml(ui.langLocked)));
+    body.appendChild(textSizeSlider());
     // A short note under the language buttons (credits, disclaimers, …).
     if (game.homeNote) body.appendChild(el('div', 'home-note', renderMarkup(L(game.homeNote), ctx())));
 
@@ -2658,6 +2722,8 @@
     $('#note-add').textContent = ui.noteAdd;
     $('#note-page-delete').textContent = ui.deletePage;
     $('#clip').textContent = ui.clip;
+    $('#text-size').title = ui.textSize;
+    $('#text-size').setAttribute('aria-label', ui.textSize);
     $('#reset').title = ui.reset;
     $('#reset').setAttribute('aria-label', ui.reset);
     $('#nb-close').title = ui.hide;
@@ -2700,6 +2766,8 @@
     $('#nb-close').addEventListener('click', () => showNotebook(false));
     window.addEventListener('resize', renderNotebookShown);
     $('#reset').addEventListener('click', () => { if (confirm(ui.resetConfirm)) reset(); });
+    $('#text-size').addEventListener('click', toggleTextSizePopup);
+    setTextSize(textSize);
     $('#debug-memory').addEventListener('click', () => { learn('memory'); renderNotebook(); save(); });
     $('#fates-button').addEventListener('click', showFates);
     $('#prologue-button').addEventListener('click', showPrologueLog);

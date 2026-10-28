@@ -13,6 +13,7 @@
   --display: "Limelight", "Shippori Mincho", Georgia, serif;
   --serif: "Spectral", "Shippori Mincho", "Yu Mincho", "Hiragino Mincho ProN", Georgia, serif;
   --mono: "Courier Prime", "Shippori Mincho", ui-monospace, Consolas, monospace;
+  --text-scale: 1;     /* the player's Text size setting */
 }
 :root[lang="ja"] { --serif: "Shippori Mincho", "Yu Mincho", "Hiragino Mincho ProN", serif; }
 
@@ -98,6 +99,7 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .room-meta span:empty { display: none; }
 .room-body { flex: 1; overflow-y: auto; max-width: 52em; padding-right: 0.5rem; }
 .room-body p { margin: 0 0 0.9em; }
+.room-text, .speech { font-size: calc(1em * var(--text-scale)); }
 
 .animate .room-text p,
 .animate .scene-title,
@@ -112,11 +114,11 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .dialogue { margin-top: 1.4rem; border-left: 2px solid var(--accent); padding-left: 1rem; }
 .line { margin-bottom: 0.9rem; }
 .line p { margin: 0 0 0.4em; }
-.speaker { font-family: var(--mono); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+.speaker { font-family: var(--mono); font-weight: 700; font-size: calc(0.8rem * var(--text-scale)); text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
 .line.player { color: var(--ink-dim); font-style: italic; }
 .line.end { color: var(--ink-faint); font-size: 0.7rem; }
 .choices { display: flex; flex-direction: column; align-items: flex-start; gap: 0.4rem; margin: 0.4rem 0 1rem; }
-.choice { font-family: var(--serif); font-size: 1rem; text-align: left; border-color: transparent; padding: 0.15em 0.4em; }
+.choice { font-family: var(--serif); font-size: calc(1rem * var(--text-scale)); text-align: left; border-color: transparent; padding: 0.15em 0.4em; }
 .choice::before { content: "› "; color: var(--accent); }
 .choice:hover, .choice:focus-visible { border-color: var(--ink-faint); color: var(--ink); }
 
@@ -362,6 +364,17 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .lang { font-family: var(--serif); font-size: 1rem; min-width: 8em; padding: 0.4em 1em; }
 .lang.current { border-color: var(--accent); color: var(--accent); font-weight: 600; }
 .lang-locked { font-size: 0.85rem; margin: 0.8rem 0 0; }
+.size-slider { display: block; margin-top: 1.2rem; }
+.size-slider .lang-label { display: block; }
+.size-row { display: flex; align-items: center; justify-content: center; gap: 0.6rem; }
+.size-row input { width: 12rem; max-width: 60vw; accent-color: var(--accent); }
+.size-value { font-family: var(--mono); font-size: 0.85rem; min-width: 3em; color: var(--ink-dim); text-align: left; }
+.size-popup {
+  position: fixed; z-index: 30;
+  background: var(--paper); border: 1px solid var(--accent);
+  padding: 0.6rem 0.9rem 0.8rem; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+.size-popup .size-slider { margin-top: 0; }
 .home-note { font-size: 0.78rem; color: var(--ink-dim); margin: 1.4rem auto 0; max-width: 28rem; line-height: 1.5; }
 .home-note p { margin: 0 0 0.4em; }
 /* The fates screen: a toolbar, then a grid of guest cards. */
