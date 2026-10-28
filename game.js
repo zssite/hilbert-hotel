@@ -371,7 +371,9 @@
 
 *#1は一人で中央のエレベーターに乗る。扉の上の階数表示が上がっていく。1……2……3……そして8で止まる。*`),
         20: anon(
-          `*The girl at the check-in counter rests her chin on her hand, looking bored. #1 stands at the counter, filling in a check-in form.*
+          `*The clock shows 8:59.*
+
+*The girl at the check-in counter rests her chin on her hand, looking bored. #1 stands at the counter, filling in a check-in form.*
 
 *A woman steps out of the left elevator. A bird is perched on her shoulder. The bird chirps.*
 
@@ -382,7 +384,9 @@
 #1: "Who was that?"
 
 Receptionist: "Emily, I think. She checked in this afternoon."`,
-          `*フロントの若い女性は頬杖をつき、退屈そうにしている。#1はカウンターでチェックイン用紙に記入している。*
+          `*時計は20時59分を示している。*
+
+*フロントの若い女性は頬杖をつき、退屈そうにしている。#1はカウンターでチェックイン用紙に記入している。*
 
 *左のエレベーターから女性が降りてくる。肩には小鳥が一羽とまっている。小鳥がさえずる。*
 
