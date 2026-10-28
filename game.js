@@ -21,8 +21,9 @@
 (function () {
   const T = (en, ja) => ({ en, ja });
 
-  // A cell that is still a sketch. Shown as-is (in English) in both languages.
-  const draft = sketch => T(`✎ *Draft:* ${sketch}`, `✎ *下書き:* ${sketch}`);
+  // A cell that is still a sketch. Shown as-is (in English) in both languages,
+  // unless a Japanese sketch is given too.
+  const draft = (sketch, ja = sketch) => T(`✎ *Draft:* ${sketch}`, `✎ *下書き:* ${ja}`);
 
   const NOTHING = T('There is nothing interesting in this room.', 'この部屋には特に気になるものはない。');
   const LOCKED = T('The room is locked.', '部屋には鍵がかかっている。');
@@ -1057,9 +1058,11 @@ You find a piece of paper that reads: "Your target will arrive at 7pm."`,
     },
     {
       match: '@mark',
-      text: T(
-        `You open the door and find a suitcase with the name tag "Mark Zhang".`,
-        `ドアを開けると、「青木大輔」というネームタグのついたスーツケースが置いてあった。`),
+      text: T(`You open the door and find a suitcase with the name tag "Mark Zhang".
+
+Small feathers are scattered across the bed, and a few more drift along the floor.`, `ドアを開けると、「青木大輔」というネームタグのついたスーツケースが置いてあった。
+
+ベッドの上には小さな羽が散らばっていて、床にも何枚か舞い落ちている。`),
     },
     { match: '@philip', text: NOTHING },
     { match: '@gabriel', text: NOTHING },
@@ -1974,7 +1977,7 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
       {
         id: 'hvs3a7', wish: 'fly',
         question: T(`I know who the guest is, but how do I figure out their name?`, `誰なのかは分かったけど、名前はどうやって分かる？`),
-        text: T(`You might want to figure out some other guests first and use the check-in times and process of elimination to narrow down the wish owner.`, `先に他の宿泊客を何人か特定してから、チェックイン時刻と消去法で候補を絞り込もう。`),
+        text: T(`The bird left some traces behind in its room. Find that room.`, `鳥は自分の部屋にある痕跡を残していった。その部屋を探そう。`),
       },
       {
         id: 'hgqf73', wish: 'young', needs: ['hint:hv04t3'],
@@ -2333,7 +2336,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'h0vy8r', guest: 'mark', needs: ['5'],
         question: T(`How do I figure out his wish?`, `青木大輔の願いはどうやって分かる？`),
-        text: T(`His suitcase is in his room, but he isn't. Where could he have gone? This one is best left for the end. Once most of the other guests are placed, see which wishes are left.`, `部屋にはスーツケースが残っているのに、本人はいない。どこへ行ったのだろう？ これは最後に回した方がいい。他の宿泊客をほとんど特定したら、残った願いを見てみよう。`),
+        text: T(`His suitcase is in his room, but he isn't. Take a closer look at what else is in there. Have you seen anything in the hotel that could have left that behind?`, `部屋にはスーツケースが残っているのに、本人はいない。部屋の中をもう少しよく見てみよう。あれを残していきそうなものを、ホテルのどこかで見かけなかっただろうか？`),
       },
       {
         id: 'houh68', guest: 'gabriel', needs: ['4'],
@@ -2782,7 +2785,7 @@ The name can be figured out using the check-in times and process of elimination.
       },
       {
         id: 'hd9che', wish: 'chess', needs: ['hint:hw8i9t'],
-        question: T(`ow do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
         text: T(`Which of the seven sins fits how they behaved in the Game Room? Someone in the Common Room at 3pm predicted where that sin would die. Visit that room at 5pm.`, `ゲームルームでの振る舞いは、七つの大罪のどれに当てはまるだろう？ 15時の談話室で、その罪人がどこで死ぬかを予言した人がいる。その部屋を17時に訪ねよう。`),
       },
       {
@@ -2793,7 +2796,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hdbfly', wish: 'fly', needs: ['hint:herpae'],
         question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
-        text: T(`The bird left its things behind in its room. The receptionist suggested a few rooms to visit. Check what is inside each of them.`, `鳥は自分の荷物を部屋に残していった。フロント係が訪ねるべき部屋をいくつか教えてくれたはずだ。それぞれの部屋に何があるか確かめよう。`),
+        text: T(`The bird left its things behind in its room. The receptionist suggested a few rooms to visit. Look for a room with feathers in it but no guest.`, `鳥は自分の荷物を部屋に残していった。フロント係が訪ねるべき部屋をいくつか教えてくれたはずだ。羽が落ちていてのに本人のいない部屋を探そう。`),
       },
       {
         id: 'hdcinv', wish: 'invisible', needs: ['hint:hb90w1'],
