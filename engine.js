@@ -1039,11 +1039,13 @@
         .filter(({ c, key }) => (!c.when || c.when(s)) && !(c.once && state.taken[key]));
       // Choices open up in order: only the first one not yet picked is shown
       // (with every one already picked), so the conversation reads as written.
-      // Turn this off with `inOrder: false` on the dialogue or the node.
+      // Turn this off with `inOrder: false` on the dialogue or the node; on a
+      // choice, it is always shown and never holds back the ones after it.
       const inOrder = node.inOrder !== undefined ? !!node.inOrder : d.inOrder !== false;
       if (inOrder) {
-        const unread = choices.findIndex(({ key }) => !state.taken[key]);
-        choices = choices.filter(({ key }, i) => i <= unread || state.taken[key]);
+        const free = ({ c }) => c.inOrder === false;
+        const unread = choices.findIndex(ch => !free(ch) && !state.taken[ch.key]);
+        choices = choices.filter((ch, i) => free(ch) || unread < 0 || i <= unread || state.taken[ch.key]);
       }
 
       const advance = (label, next, effect, key, isChoice) => {

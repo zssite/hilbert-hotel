@@ -1445,16 +1445,19 @@ Small feathers are scattered across the bed, and a few more drift along the floo
               when: s => s.flag('reportedCorpse'),
             },
             { text: T('Who is your boss?', 'あなたの上司は誰ですか？'), next: 'boss' },
+            // Shown whether or not the choices above have been picked.
             {
               text: T('I have identified 15 guests.', 'お客様を15人特定しました。'),
               next: 'fifteen',
               when: s => s.confirmedCount() >= 15 && !s.flag('told15'),
+              inOrder: false,
             },
             // Takes its place afterwards, so the lead to Room 3333360 can be heard again.
             {
               text: T('Which room did your boss mention?', '上司がおっしゃっていたのは何号室でしたっけ？'),
               next: 'lead15',
               when: s => s.flag('told15'),
+              inOrder: false,
             },
           ],
         },
