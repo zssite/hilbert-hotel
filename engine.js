@@ -80,8 +80,6 @@
       namePlaceholder: 'name',
       bigRoom: 'For a room above 999,999,999, you may write 0.',
       rowRef: n => `row ${n}`,
-      wishesFree: 'Not written yet',
-      wishesUsed: 'Written in another row',
       leftover: 'Not written yet',
       leftoverNone: 'Every name and wish is written down.',
       leftoverNames: 'Names',
@@ -203,8 +201,6 @@
       namePlaceholder: '名前',
       bigRoom: '999,999,999より大きい部屋番号は 0 と書いてもよい。',
       rowRef: n => `${n}行目`,
-      wishesFree: 'まだ書いていない',
-      wishesUsed: '他の行に記入済み',
       leftover: '未記入',
       leftoverNone: 'すべての名前と願いを書き込んだ。',
       leftoverNames: '名前',
@@ -1993,33 +1989,13 @@
       save();
       checkDeductions();
       // The rows themselves aren't rebuilt (that would close a dropdown the
-      // player is opening); each dropdown refills itself when opened.
+      // player is opening).
       fillLeftover(leftover);
       renderInventory();
     };
-
-    // Each wish belongs to one guest, so wishes of confirmed guests are left
-    // out of the other rows' dropdowns. Wishes written on other rows are
-    // listed after the rest, with the rows they're on.
-    const fillWishes = (sel, i, pos) => {
-      const g = state.entries[i] || {};
-      const taken = confirmedWishes();
-      const use = registerUse().wishes;
-      sel.innerHTML = '';
-      sel.appendChild(new Option(ui.unknown, ''));
-      const free = el('optgroup'), used = el('optgroup');
-      free.label = ui.wishesFree;
-      used.label = ui.wishesUsed;
-      wishOrder.forEach(w => {
-        // A row keeps its own choice, even if that wish has since been confirmed elsewhere.
-        if (taken.has(w.id) && w.id !== g.wish) return;
-        const rows = (use[w.id] || []).filter(r => r !== pos + 1);
-        const label = rows.length ? `${L(w)} — ${rows.map(ui.rowRef).join(', ')}` : L(w);
-        (rows.length ? used : free).appendChild(new Option(label, w.id));
-      });
-      [free, used].forEach(group => { if (group.children.length) sel.appendChild(group); });
-      sel.value = g.wish || '';
-    };
+    // Wishes of confirmed guests are left out of the other rows' dropdowns:
+    // each wish belongs to one guest, so they can't be anyone else's.
+    const taken = confirmedWishes();
 
     registerOrder().forEach((i, pos) => {
       const g = state.entries[i] || {};
@@ -2047,11 +2023,11 @@
       row.appendChild(name);
 
       const sel = field('select', 'reg-wish', i, 'wish', ui.wish);
-      fillWishes(sel, i, pos);
+      sel.appendChild(new Option(ui.unknown, ''));
+      // A row keeps its own choice, even if that wish has since been confirmed elsewhere.
+      wishOrder.forEach(w => { if (!taken.has(w.id) || w.id === g.wish) sel.appendChild(new Option(L(w), w.id)); });
+      sel.value = g.wish || '';
       sel.disabled = locked;
-      // Refill before the list opens (mouse) or the keyboard steps through it.
-      sel.addEventListener('mousedown', () => fillWishes(sel, i, pos));
-      sel.addEventListener('focus', () => fillWishes(sel, i, pos));
       sel.addEventListener('change', () => update(i, { wish: sel.value || undefined }));
       row.appendChild(sel);
 
@@ -2783,6 +2759,11 @@
       memory = Object.assign({ from: 7, to: 23, empty: () => ui.pastEmpty }, game.memory);
       memory.except = [].concat(memory.except || []).map(normPlace);
       game.wishes.forEach(w => { wishById[w.id] = w; });
+      // Hints whose English question starts with [DRAFT] are still being
+      // written (scenes.html marks them the same way), so players never see
+      // them. Debug mode keeps them, to try them out.
+      const isDraft = h => /^\s*\[DRAFT\]/i.test(h && h.question ? (h.question.en ?? (typeof h.question === 'string' ? h.question : '')) : '');
+      if (Array.isArray(game.hints) && !debugMode()) game.hints = game.hints.filter(h => !isDraft(h));
       validate();
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
       else boot();

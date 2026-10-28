@@ -1662,6 +1662,81 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
     // @hints-begin
     hints: [
       {
+        id: 'hg1st0',
+        question: T(`[DRAFT] I have no idea what to do. Where do I start?`, `[DRAFT] 何をすればいいのか全く分からない。どこから始めればいい？`),
+        text: T(`Read the Instructions in your Inventory first. Then start with the woman you bumped into, in Room 76, the room next to yours: everything you need for her is in that room. After that, walk to the rooms mentioned in conversations and talk to everyone you meet.`, `まずは持ち物にある指示書を読もう。それから、ぶつかりそうになった女性がいる76号室、つまり自分の部屋の隣から始めよう。彼女について必要な情報は、全てその部屋にある。その後は、会話に出てきた部屋を訪ね、出会った人と片っ端から話してみよう。`),
+      },
+      {
+        id: 'hg2mov', needs: ['!lobby'],
+        question: T(`[DRAFT] How do I get anywhere other than Floor 1?`, `[DRAFT] 1階以外の場所にはどうやって行く？`),
+        text: T(`Walk to Room 1, next to the elevators, and use the elevator there. It takes you down to the Lobby, where you can reach the other rooms on Floor 0.`, `エレベーターの隣にある1号室まで歩いて、そこのエレベーターに乗ろう。ロビーまで降りれば、0階の他の部屋にも行けるようになる。`),
+      },
+      {
+        id: 'hg3reg',
+        question: T(`[DRAFT] I'm sure some of my rows are right. Why aren't they confirmed?`, `[DRAFT] 正しいはずの行があるのに、なぜ確定しない？`),
+        text: T(`The Register only confirms rows three at a time: nothing happens until three rows are fully correct. A row counts only when the name, the wish and the room number are all right. If you have one or two rows you're sure of, keep going: they will be confirmed together with the next ones.`, `宿帳は三行ずつしか確定しない。完全に正しい行が三つそろうまで、何も起こらない。名前、願い、部屋番号の全てが正しくて初めて正しい行と数えられる。確信のある行が一つか二つしかないなら、そのまま先へ進もう。次に正しい行がそろったとき、まとめて確定される。`),
+      },
+      {
+        id: 'hg4mem', needs: ['!skill:memory'],
+        question: T(`[DRAFT] How do I see what happened yesterday?`, `[DRAFT] 昨日何があったのかを見るにはどうすればいい？`),
+        text: T(`You need the Memory Device. Something terrible has happened on Floor 0. Have you seen every room there?`, `記憶装置が必要だ。0階で何か恐ろしいことが起きている。0階の部屋は全て見ただろうか？`),
+      },
+      {
+        id: 'hg5mem', needs: ['hint:hg4mem', 'dining', '!skill:memory'],
+        question: T(`[DRAFT] I found the body in the Dining Room. What now?`, `[DRAFT] ダイニングルームで遺体を見つけた。次はどうする？`),
+        text: T(`Report it to the receptionist in the Lobby.`, `ロビーのフロント係に報告しよう。`),
+      },
+      {
+        id: 'hg6use', needs: ['skill:memory'],
+        question: T(`[DRAFT] How do I use the Memory Device?`, `[DRAFT] 記憶装置はどうやって使う？`),
+        text: T(`In any room, pick an hour from the row of buttons to see what happened there at that hour yesterday. Grayed-out hours have nothing to see. The hour stays set as you walk, so you can follow one moment from room to room. "Back to the present" returns to today.`, `どの部屋でも、時刻のボタンを選ぶと、昨日のその時間にそこで何があったかが見られる。灰色の時刻には何もない。選んだ時刻は移動しても変わらないので、ある時間に起きたことを部屋から部屋へ追いかけられる。「現在に戻る」を押せば今日に戻る。`),
+      },
+      {
+        id: 'hg6lea', needs: ['skill:memory'],
+        question: T(`[DRAFT] I have the Memory Device. Where should I look first?`, `[DRAFT] 記憶装置を手に入れた。まずどこを調べればいい？`),
+        text: T(`Ask the receptionist in the Lobby where to start looking.`, `ロビーのフロント係に、どこから調べればいいか聞いてみよう。`),
+      },
+      {
+        id: 'hg7roo',
+        question: T(`[DRAFT] There are infinitely many rooms. Which ones are worth visiting?`, `[DRAFT] 部屋は無限にある。どの部屋を訪ねればいい？`),
+        text: T(`Any room number that comes up in a conversation, a scene, a note or a paper. The rooms on either side of a guest's room are worth a look too: neighbors hear things.`, `会話や場面、メモ、書類に出てきた部屋番号は全て訪ねる価値がある。宿泊客の部屋の両隣も見ておこう。隣人はいろいろなことを耳にしているものだ。`),
+      },
+      {
+        id: 'hg8chk', needs: ['skill:memory'],
+        question: T(`[DRAFT] The people in the scenes have no names. How do I tell who they are?`, `[DRAFT] 場面に出てくる人には名前がない。誰なのかをどうやって見分ける？`),
+        text: T(`Look at the hour of the scene. In the Lobby, people are checking in, and the Check-in List tells you who checked in during each hour, so whoever you see there must be one of those names. Elsewhere, the Guest List shows each guest's gender, and many people mention their room or their neighbors.`, `場面の時刻に注目しよう。ロビーでは人がチェックインしており、チェックイン一覧には各時間帯にチェックインした人が載っている。つまり、そこで見かけた人は、その時間帯の名前のどれかだ。それ以外の場所では、宿泊客名簿に載っている性別や、本人が口にする部屋番号や隣人の話が手がかりになる。`),
+      },
+      {
+        id: 'hg9grd', needs: ['hint:hg8chk'],
+        question: T(`[DRAFT] How do I keep track of who could have made which wish?`, `[DRAFT] 誰がどの願いをした可能性があるのか、どうやって整理すればいい？`),
+        text: T(`Open the Elimination grid at the top of the Register. Give each wish the hour you saw it made in the Lobby, and everyone who didn't check in at that hour is crossed out of its row.`, `宿帳の上にある「消去法の表」を開こう。ロビーで願いが告げられた時刻を各願いにつけると、その時刻にチェックインしていない人は、その行で自動的に✗になる。`),
+      },
+      {
+        id: 'hgaflr',
+        question: T(`[DRAFT] I can't walk to some rooms, like Room 7. How do I get there?`, `[DRAFT] 7号室など、歩いて行けない部屋がある。どうやって行けばいい？`),
+        text: T(`Those rooms aren't on Floor 1, and the elevator only takes a guest up to the floor of their own room. You don't need to go there: what you need to know about those rooms can be learned elsewhere.`, `それらの部屋は1階にはない。エレベーターは、宿泊客を自分の部屋のある階にしか連れて行かない。そこへ行く必要はない。その部屋について知るべきことは、別の場所で分かる。`),
+      },
+      {
+        id: 'hgbsec', needs: ['!paper:secrets'],
+        question: T(`[DRAFT] I've followed every lead I have. What's next?`, `[DRAFT] 手がかりは全て追いかけた。次は何をすればいい？`),
+        text: T(`Once you have confirmed 15 guests, tell the receptionist in the Lobby. Her boss left a lead for you.`, `宿泊客を15人確定させたら、ロビーのフロント係に伝えよう。上司からの手がかりを教えてくれる。`),
+      },
+      {
+        id: 'hgcdie', needs: ['paper:secrets'],
+        question: T(`[DRAFT] What does "Your room number decides whether you live to see the end of the day" mean? (Part 1)`, `[DRAFT] 「部屋番号によって、その日の終わりまで生きられるかが決まる」とはどういう意味？ #1`),
+        text: T(`Write down the room numbers of everyone you know died yesterday or today. What do they have in common?`, `昨日か今日に亡くなったと分かっている人の部屋番号を書き出してみよう。何か共通点はないだろうか？`),
+      },
+      {
+        id: 'hgddie', needs: ['hint:hgcdie'],
+        question: T(`[DRAFT] What does "Your room number decides whether you live to see the end of the day" mean? (Part 2)`, `[DRAFT] 「部屋番号によって、その日の終わりまで生きられるかが決まる」とはどういう意味？ #2`),
+        text: T(`Every guest whose room number contains the digit 4 dies on the day they check in. If you know someone died but not where, the rooms with a 4 near where they were last seen are good places to look.`, `部屋番号に4が含まれる宿泊客は、チェックインしたその日に死ぬ。誰かが死んだと分かっていて場所が分からないなら、最後に目撃された場所の近くにある、4を含む部屋を探してみよう。`),
+      },
+      {
+        id: 'hgeend', needs: ['paper:secrets'],
+        question: T(`[DRAFT] I've placed most guests, but I'm stuck on the last few.`, `[DRAFT] ほとんどの宿泊客は分かったが、最後の数人で行き詰まっている。`),
+        text: T(`Some guests are meant to be found by elimination. Open "Not written yet" at the top of the Register, or the Elimination grid, to see which names and wishes are left, and match them up using the check-in times.`, `何人かの宿泊客は、消去法で見つけるようにできている。宿帳の上にある「未記入」や「消去法の表」を開いて、残っている名前と願いを確かめ、チェックイン時刻を使って組み合わせよう。`),
+      },
+      {
         id: 'hzz7x0', guest: 'aida',
         question: T(`How do I figure out her wish and room number?`, `中藤理亜の願いと部屋番号はどうやって分かる？`),
         text: T(`Everything you need is in the dialogue in Room 76.`, `必要な情報は、76号室での会話に全て揃っている。`),
@@ -1747,7 +1822,7 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
         text: T(`Someone shot their dad in that scene. He turns out to be on the Guest List too.`, `その場面で、ある人物が自分の父親を撃ってしまう。その父親も、宿泊客名簿に載っている。`),
       },
       {
-        id: 'h032n8', wish: 'target',
+        id: 'h032n8', wish: 'target', needs: ['hint:hiiv4z'],
         question: T(`How do I figure out the owner of this wish? (Part 4)`, `この願いの持ち主はどうやって分かる？ #4`),
         text: T(`Check the list of names again and see if you can find a father-child pair.`, `名簿をもう一度見て、親子らしい二人がいないか探してみよう。`),
       },
@@ -2664,6 +2739,71 @@ The name can be figured out using the check-in times and process of elimination.
         id: 'hwfrll', wish: 'attract', needs: ['hint:hxzz4c'],
         question: T(`How do I find out their name?`, `この人物の名前はどうやって分かる？`),
         text: T(`The person is in the Dining Room at 8am, so there are only a few candidates.`, `その人物は8時にダイニングルームにいる。そのため、候補になる人物は限られる。`),
+      },
+      {
+        id: 'hd1ali', guest: 'alice', needs: ['paper:secrets'],
+        question: T(`[DRAFT] How do I figure out her room number?`, `[DRAFT] アリス・ミラーの部屋番号はどうやって分かる？`),
+        text: T(`One line of the Secrets of the Hotel paper names a room that can send someone to another world.`, `ホテルの秘密の一行に、人を別の世界へ送る力を持つ部屋が書かれている。`),
+      },
+      {
+        id: 'hd2dea', wish: 'deathday', needs: ['hint:hp2ew5', 'skill:memory'],
+        question: T(`[DRAFT] How do I figure out the owner of this wish?`, `[DRAFT] この願いの持ち主はどうやって分かる？`),
+        text: T(`Check the Dining Room at 7am. One of the diners has lived through this day before, again and again.`, `7時のダイニングルームを調べよう。客の一人は、この一日を何度も何度も繰り返している。`),
+      },
+      {
+        id: 'hd3dea', wish: 'deathday', needs: ['hint:hd2dea', 'dining@7'],
+        question: T(`[DRAFT] How do I figure out the room number of the owner of this wish?`, `[DRAFT] この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`At 7am they describe both of their neighbors: a woman whose baby cries all night, and a chess player. Find those two rooms. Theirs is the one in between.`, `7時の場面で、その人物は両隣の住人について話している。一晩中赤ん坊が泣いている女性と、チェスプレイヤーだ。その二つの部屋を見つければ、間にある部屋がその人物の部屋だ。`),
+      },
+      {
+        id: 'hd4dea', wish: 'deathday', needs: ['hint:hd3dea'],
+        question: T(`[DRAFT] How do I find out their name?`, `[DRAFT] この人物の名前はどうやって分かる？`),
+        text: T(`They have been reliving this day since they arrived in the morning. Use the Check-in List and process of elimination.`, `その人物は、朝に到着してからずっとこの一日を繰り返している。チェックイン一覧と消去法を使おう。`),
+      },
+      {
+        id: 'hd5you', wish: 'young', needs: ['hint:hgqf73'],
+        question: T(`[DRAFT] I haven't met anyone like that. Where are they?`, `[DRAFT] そんな人物には会っていない。どこにいる？`),
+        text: T(`You won't see them, but you might hear them. Someone in the Dining Room at 7am complains about a neighbor.`, `姿は見えないが、声なら聞こえるかもしれない。7時のダイニングルームで、隣人について文句を言っている人がいる。`),
+      },
+      {
+        id: 'hd6att', wish: 'attract', needs: ['hint:hwfrll'],
+        question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`They tell the woman they met where their room is in the Dining Room at 12pm.`, `12時のダイニングルームで、出会った女性に自分の部屋の場所を話している。`),
+      },
+      {
+        id: 'hd7two', wish: 'two', needs: ['hint:hcah2z', 'skill:memory'],
+        question: T(`[DRAFT] How do I figure out the owner of this wish? (Part 2)`, `[DRAFT] この願いの持ち主はどうやって分かる？ #2`),
+        text: T(`Someone was shot in Room 2049 around 6pm yesterday. Who heard the shot from their room next door, and where else were they at that moment?`, `昨日の18時ごろ、2049号室で誰かが撃たれた。隣の部屋で銃声を聞いたのは誰か。そして、その人物はその時刻に他のどこにいたか。`),
+      },
+      {
+        id: 'hd8two', wish: 'two', needs: ['hint:hd7two'],
+        question: T(`[DRAFT] How do I figure out the room number of the owner of this wish?`, `[DRAFT] この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`It is next door to Room 2049. Of the two rooms beside it, which one does someone still seem to be staying in?`, `2049号室の隣だ。両隣の二部屋のうち、まだ誰かが泊まっていそうなのはどちらだろう？`),
+      },
+      {
+        id: 'hd9che', wish: 'chess', needs: ['hint:hw8i9t'],
+        question: T(`[DRAFT] How do I figure out the room number of the owner of this wish?`, `[DRAFT] この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`Which of the seven sins fits how they behaved in the Game Room? Someone in the Common Room at 3pm predicted where that sin would die. Visit that room at 5pm.`, `ゲームルームでの振る舞いは、七つの大罪のどれに当てはまるだろう？ 15時の談話室で、その罪人がどこで死ぬかを予言した人がいる。その部屋を17時に訪ねよう。`),
+      },
+      {
+        id: 'hdastr', wish: 'streamer', needs: ['hint:hduea5', 'paper:secrets'],
+        question: T(`[DRAFT] How do I figure out the room number of the owner of this wish?`, `[DRAFT] この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`The streamer vanished in the middle of a stream. One line of the Secrets of the Hotel paper says where someone suddenly disappeared.`, `配信者は配信の途中で消えた。ホテルの秘密の一行に、誰かが突然消えた場所が書かれている。`),
+      },
+      {
+        id: 'hdbfly', wish: 'fly', needs: ['hint:herpae'],
+        question: T(`[DRAFT] How do I figure out the room number of the owner of this wish?`, `[DRAFT] この願いの持ち主の部屋番号はどうやって分かる？`),
+        text: T(`The bird left its things behind in its room. The receptionist suggested a few rooms to visit. Check what is inside each of them.`, `鳥は自分の荷物を部屋に残していった。フロント係が訪ねるべき部屋をいくつか教えてくれたはずだ。それぞれの部屋に何があるか確かめよう。`),
+      },
+      {
+        id: 'hdcinv', wish: 'invisible', needs: ['hint:hb90w1'],
+        question: T(`[DRAFT] How do I find out their name?`, `[DRAFT] この人物の名前はどうやって分かる？`),
+        text: T(`This one is best left until most other guests are placed. Then use the Check-in List and process of elimination.`, `これは、他の宿泊客をほとんど特定してから考えるのがいい。その後、チェックイン一覧と消去法を使おう。`),
+      },
+      {
+        id: 'hdfame', wish: 'famous', needs: ['hint:hqhpyd'],
+        question: T(`[DRAFT] How do I find out their name?`, `[DRAFT] この人物の名前はどうやって分かる？`),
+        text: T(`Not by the name they use now: that is the famous person's. Use the Check-in List and process of elimination.`, `今名乗っている名前ではない。それは有名人の名前だ。チェックイン一覧と消去法を使おう。`),
       },
     ],
     // @hints-end
