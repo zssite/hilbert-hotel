@@ -433,7 +433,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 
 *#1 leaves. A moment later, #3 walks in.*
 
-#3: "Morning! Just checked in. Mind if I sit here?"
+#3: "Morning! Just checked in a bit after 8. Mind if I sit here?"
 
 #2: "…"
 
@@ -450,7 +450,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 
 *#1が出ていく。少しして、#3が入ってくる。*
 
-#3：「おはよ〜！ さっきチェックインしたばっかなんだけど、ここ座っていい？」
+#3：「おはよ〜！ 8時過ぎにチェックインしたばっかなんだけど、ここ座っていい？」
 
 #2：「……」
 
