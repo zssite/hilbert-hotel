@@ -77,10 +77,12 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 }
 .room {
   display: flex; flex-direction: column;
-  padding: 2rem clamp(1rem, 5vw, 4rem) 1rem;
+  padding: 1.25rem clamp(1rem, 5vw, 4rem) 1rem;
   min-height: 0;
 }
-.room-head { border-bottom: 1px solid var(--ink-faint); padding-bottom: 0.7rem; margin-bottom: 1.1rem; }
+/* The plaque and the floor, name and time share one line, to leave the
+   room text as much height as possible. */
+.room-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 1.2rem; border-bottom: 1px solid var(--ink-faint); padding-bottom: 0.5rem; margin-bottom: 0.8rem; }
 /* the room number as a brass door plaque */
 .room-number {
   display: inline-block; max-width: 100%;
@@ -95,7 +97,7 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
   overflow-wrap: anywhere;
 }
 .room-number:empty { display: none; }
-.room-meta { font-family: var(--mono); font-size: 0.85rem; color: var(--ink-dim); display: flex; gap: 1.2rem; margin-top: 0.45rem; }
+.room-meta { font-family: var(--mono); font-size: 0.85rem; color: var(--ink-dim); display: flex; flex-wrap: wrap; gap: 0.2rem 1.2rem; }
 .room-meta span:empty { display: none; }
 .room-body { flex: 1; overflow-y: auto; max-width: 52em; padding-right: 0.5rem; }
 .room-body p { margin: 0 0 0.9em; }
@@ -128,28 +130,33 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .lift-ride p { margin: 0 0 0.6em; }
 
 /* ---- go-to form ---- */
-.go { border-top: 1px solid var(--ink-faint); padding-top: 0.8rem; margin-top: 0.8rem; font-family: var(--mono); }
+/* Compact: the hours on one row, then "Go to", the places and the room
+   input on one row, then the recent rooms. */
+.go { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; border-top: 1px solid var(--ink-faint); padding-top: 0.6rem; margin-top: 0.6rem; font-family: var(--mono); }
 .go label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-dim); }
-.go-row { display: flex; gap: 0.5rem; margin-top: 0.3rem; }
-.places { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.3rem; }
+#go-label { flex: none; }
+.go-row { display: flex; gap: 0.5rem; flex: 1 1 14em; min-width: 0; }
+.places { display: flex; flex-wrap: wrap; gap: 0.4rem; flex: 0 1 auto; min-width: 0; }
 .places:empty { display: none; }
 .place { font-family: var(--serif); font-size: 0.95rem; }
 .place.current { border-color: var(--accent); color: var(--accent); }
 #go-input {
   flex: 1; min-width: 0;
   background: rgba(0, 0, 0, 0.25); border: 1px solid var(--ink-faint); border-radius: 2px;
-  padding: 0.4em 0.6em; font-family: var(--mono); font-size: 1.1rem;
+  padding: 0.3em 0.6em; font-family: var(--mono); font-size: 1.1rem;
 }
 #go-input:focus { outline: none; border-color: var(--accent); }
-.go-error { color: var(--accent); font-size: 0.85rem; min-height: 1.2em; margin-top: 0.3rem; }
-.recent { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; font-size: 0.8rem; }
+.go-error { flex: 1 1 100%; color: var(--accent); font-size: 0.85rem; }
+.go-error:empty { display: none; }
+.recent { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; font-size: 0.8rem; }
+.recent:empty { display: none; }
 .recent-label { color: var(--ink-dim); margin-right: 0.3rem; }
 .recent-room { padding: 0.05em 0.5em; font-size: 0.8rem; max-width: 14ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .recent-room.current { border-color: var(--accent); color: var(--accent); }
 .recent-room.past { max-width: 24ch; border-style: dashed; }
 
 /* ---- the Memory Device: one button per hour, and the scenes it shows ---- */
-.memory { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.6rem; padding-bottom: 0.7rem; margin-bottom: 0.6rem; border-bottom: 1px dashed var(--ink-faint); }
+.memory { flex: 1 1 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.6rem; padding-bottom: 0.5rem; border-bottom: 1px dashed var(--ink-faint); }
 .memory-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--past); }
 .hours { display: flex; flex-wrap: wrap; gap: 0.25rem; }
 .hour { padding: 0.05em 0.45em; font-size: 0.8rem; }
@@ -528,7 +535,11 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
   }
   .nb-open .notebook { transform: none; }
   .topbar { padding: 0.5rem 1rem; }
+}
 
+/* ---- phones and tablets: a narrow window on a touch-only device ----
+   A narrow window on a computer (mouse, trackpad) keeps the layout above. */
+@media (max-width: 820px) and (hover: none) and (pointer: coarse) {
   /* Upright phones are short on height, so everything around the room text
      shrinks to leave the dialogue as much of the screen as possible. */
   body { height: 100dvh; }
