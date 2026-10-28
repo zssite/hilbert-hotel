@@ -1593,7 +1593,8 @@
   // guests are grouped by those hours (the Check-in List's, in the sample),
   // and each wish can be tagged with one of them: guests without that hour
   // are then crossed out of its row. Tagged wishes are listed first, by hour,
-  // so each hour's wishes line up with its guests.
+  // so each hour's wishes line up with its guests. `grid.tag: c => text`
+  // adds a note after each guest's name (their gender, in the sample).
   // ---------------------------------------------------------------------------
   let gridConfirmed = false; // show the confirmed guests and their wishes too
   const GRID_NEXT = { '': 'x', x: '?', '?': 'v', v: '' };
@@ -1851,9 +1852,13 @@
       });
       thead.appendChild(hours);
     } else head.appendChild(corner);
+    const tagged = c => {
+      const tag = game.grid && typeof game.grid.tag === 'function' ? L(game.grid.tag(c)) : '';
+      return charName(c) + (tag ? (state.lang === 'ja' ? `（${tag}）` : ` (${tag})`) : '');
+    };
     guests.forEach((c, ci) => {
       const th = el('th', 'grid-guest' + (state.confirmed[c.id] ? ' done' : '') + (starts.has(c.id) ? ' grp-start' : ''),
-        `<span>${escapeHtml(charName(c))}</span>`);
+        `<span>${escapeHtml(tagged(c))}</span>`);
       th.dataset.c = ci;
       head.appendChild(th);
     });

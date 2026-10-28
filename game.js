@@ -1572,11 +1572,13 @@ The boss suggests going to Rooms 4, 5 and 14.`,
     confirmBatch: 3,
 
     // The elimination grid groups the guests by their hours on the Check-in
-    // List, and lets the player tag each wish with one of those hours.
+    // List, and lets the player tag each wish with one of those hours. Each
+    // guest's name carries their gender as the Guest List gives it.
     grid: {
       when: s => s.hasPaper('checkin'),
       hours: c => c.checkIn,
       label: h => T(hourLabel.en(h), hourLabel.ja(h)),
+      tag: c => GENDER[c.gender] || '',
     },
 
     // Once 15 guests are confirmed, remind the player that the receptionist
