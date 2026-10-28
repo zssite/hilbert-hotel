@@ -528,4 +528,43 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
   }
   .nb-open .notebook { transform: none; }
   .topbar { padding: 0.5rem 1rem; }
+
+  /* Upright phones are short on height, so everything around the room text
+     shrinks to leave the dialogue as much of the screen as possible. */
+  body { height: 100dvh; }
+  .topbar { flex-wrap: nowrap; gap: 0.6rem; padding: 0.35rem 0.75rem; }
+  .topbar h1 { flex: 1 1 0; min-width: 0; font-size: 1rem; letter-spacing: 0.06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .topbar-actions { flex: none; gap: 0.35rem; }
+  .topbar-actions button { padding: 0.25em 0.6em; }
+  .room { padding: 0.7rem 1rem 0.4rem; }
+  .room-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.2rem 0.8rem; padding-bottom: 0.45rem; margin-bottom: 0.7rem; }
+  .room-number { font-size: 1.3rem; }
+  .room-meta { flex-wrap: wrap; gap: 0.2rem 0.8rem; margin-top: 0; }
+  .room-body { padding-right: 0; }
+
+  /* The form under the room: one row each for the hours, the places and the
+     recent rooms, swiped sideways instead of wrapping onto more lines. */
+  .go { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.6rem; padding-top: 0.5rem; margin-top: 0.4rem; }
+  .memory { flex: 1 1 100%; flex-wrap: nowrap; padding-bottom: 0.45rem; margin-bottom: 0; min-width: 0; }
+  .memory-label { display: none; }
+  #present-button { flex: none; }
+  #go-label { flex: none; }
+  .places, .go-row { flex: 1 1 0; min-width: 0; margin-top: 0; }
+  .go-row { flex-wrap: nowrap; }
+  #go-input { flex: 1 1 0; }
+  .go-error { flex: 1 1 100%; min-height: 0; margin-top: 0; }
+  .go-error:empty { display: none; }
+  .recent { flex: 1 1 100%; min-width: 0; }
+  .recent:empty { display: none; }
+  .hours, .places, .recent {
+    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+    /* fade the right edge so it's clear there is more to swipe to */
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 1.5rem), transparent);
+    mask-image: linear-gradient(90deg, #000 calc(100% - 1.5rem), transparent);
+  }
+  .hours { flex: 1 1 0; min-width: 0; }
+  .hours::-webkit-scrollbar, .places::-webkit-scrollbar, .recent::-webkit-scrollbar { display: none; }
+  .hours > *, .places > *, .recent > * { flex: none; }
+  .hour { padding: 0.2em 0.6em; font-size: 0.85rem; }
+  .recent-room { padding: 0.15em 0.6em; }
 }

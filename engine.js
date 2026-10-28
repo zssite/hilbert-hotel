@@ -925,6 +925,9 @@
       hours.appendChild(b);
     }
     $('#present-button').hidden = state.at === null;
+    // On a phone the hours are one row to swipe along: keep the chosen one in view.
+    const cur = hours.querySelector('.current');
+    if (cur) hours.scrollLeft = cur.offsetLeft - hours.offsetLeft - (hours.clientWidth - cur.offsetWidth) / 2;
   }
 
   // ---------------------------------------------------------------------------

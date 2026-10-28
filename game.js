@@ -414,12 +414,12 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
       onEnter: s => s.set('diningCorpse'),
       scenes: {
         7: anon(
-          `#1: "Hi, I just checked in. You don't look so good. Are you okay?"
+          `#1: "Hi, I just checked in. You don't look so good, ma'am. Are you okay?"
 
 #2: "NO! I've lost count of how many times I've had this conversation. I've been stuck in this hell for years. Bodies are going to start piling up soon. This afternoon a woman checks in next door and leaves her baby crying all night, and my other neighbor is some chess player who ends up a f**king corpse. GET ME OUT OF HERE!"
 
 #1: "I'll... come back later."`,
-          `#1：「どうも、さっきチェックインしたところなんです。顔色が悪いようですけど、大丈夫ですか？」
+          `#1：「どうも、さっきチェックインしたところなんです。お姉さん、顔色が悪いようですけど、大丈夫ですか？」
 
 #2：「大丈夫なわけないでしょ！ この会話、もう何回したか分かんないのよ！ 何年も……何年も、この地獄から抜け出せないの！ もうすぐ死体がどんどん増えていくわ。今日の午後には隣の部屋に女がチェックインして、一晩中赤ん坊を泣かせっぱなし！ もう片方の隣はどこかのチェスプレイヤーで、そいつもどうせ死体になる！ ……クソッ！ ここから出して！」
 
@@ -1216,7 +1216,9 @@ Small feathers are scattered across the bed, and a few more drift along the floo
       text: sinNote('man', 'Sloth', '怠惰'),
       scenes: {
         18: anon(
-          `#1: "I can now stay here for the rest of my life and never work again!"
+          `*#1 arrives at the door, suitcase in hand.*
+
+#1: "All checked in! Now I can stay here for the rest of my life and never work again!"
 
 *#1 enters the room.*
 
@@ -1225,7 +1227,9 @@ Small feathers are scattered across the bed, and a few more drift along the floo
 *#1 collapses to the floor.*
 
 *A note falls beside the body.*`,
-          `#1：「これで一生ここにいられる。もう二度と働かなくていいんだ！」
+          `*#1がスーツケースを手に、部屋の前にやってくる。*
+
+#1：「よし、チェックイン完了！ これで一生ここにいられる。もう二度と働かなくていいんだ！」
 
 *#1が部屋に入る。*
 
@@ -1985,7 +1989,7 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
       {
         id: 'hvs3a7', wish: 'fly',
         question: T(`I know who the guest is, but how do I figure out their name?`, `誰なのかは分かったけど、名前はどうやって分かる？`),
-        text: T(`The bird left some traces behind in its room. Find that room.`, `鳥は自分の部屋にある痕跡を残していった。その部屋を探そう。`),
+        text: T(`The bird left some traces behind in its room. Find that room.`, `鳥は自分の部屋に痕跡を残していった。その部屋を探そう。`),
       },
       {
         id: 'hgqf73', wish: 'young', needs: ['hint:hv04t3'],
@@ -2337,7 +2341,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'h7dt2l', wish: 'minds', needs: ['hint:h5ljyi'],
         question: T(`How do I figure out their name?`, `この人物の名前はどうやって分かる？`),
-        text: T(`When did they check in? Use this information and the Check-in List.`, `いつチェックインしたのだろう？ その情報とチェックイン一覧を照らし合わせよう。`),
+        text: T(`When did they check in? Two guests checked in during that hour. Place the other one first, and this one is whoever is left.`, `いつチェックインしたのだろう？ その時間帯にチェックインしたのは二人だけだ。先にもう一人を特定すれば、残った方がこの人物だ。`),
       },
       {
         id: 'hm5d8w', guest: 'nigel', needs: ['game@16'],
@@ -2627,7 +2631,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hii812', guest: 'philip', needs: ['hint:h6hglt'],
         question: T(`I've found someone who might be him. How do I make sure?`, `清水太郎かもしれない人物を見つけた。確かめるにはどうすればいい？`),
-        text: T(`Philip checked in at 8pm. Use the check-in times and process of elimination.`, `清水太郎がチェックインしたのは20時台だ。チェックイン時刻と消去法を使おう。`),
+        text: T(`Philip checked in at 8pm, and so did one other guest. Place the other one first, and Philip is whoever is left.`, `清水太郎がチェックインしたのは20時台だ。同じ時間帯にチェックインした宿泊客がもう一人いる。先にもう一人を特定すれば、残った方が清水太郎だ。`),
       },
       {
         id: 'h4z1a5', guest: 'serena',
@@ -2762,7 +2766,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hd1ali', guest: 'alice', needs: ['paper:secrets'],
         question: T(`How do I figure out her room number?`, `アリス・ミラーの部屋番号はどうやって分かる？`),
-        text: T(`One line of the Secrets of the Hotel paper names a room that can send someone to another world.`, `ホテルの秘密の一行に、人を別の世界へ送る力を持つ部屋が書かれている。`),
+        text: T(`One line of the Secrets of the Hotel paper names a room that can send someone to another world.`, `「ホテルの秘密」の一行に、人を別の世界へ送る力を持つ部屋が書かれている。`),
       },
       {
         id: 'hd2dea', wish: 'deathday', needs: ['hint:hp2ew5', 'skill:memory'],
@@ -2802,17 +2806,17 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hd9che', wish: 'chess', needs: ['hint:hw8i9t'],
         question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
-        text: T(`Which of the seven sins fits how they behaved in the Game Room? Someone in the Common Room at 3pm predicted where that sin would die. Visit that room at 5pm.`, `ゲームルームでの振る舞いは、七つの大罪のどれに当てはまるだろう？ 15時の談話室で、その罪人がどこで死ぬかを予言した人がいる。その部屋を17時に訪ねよう。`),
+        text: T(`Which of the seven sins fits how they behaved in the Game Room? Someone in the Common Room at 3pm predicted where that sin would die. Visit that room at 5pm.`, `ゲームルームでの振る舞いは、七つの大罪のどれに当てはまるだろう？ 15時の談話室で、その罪人がどこで死ぬかを預言した人がいる。その部屋を17時に訪ねよう。`),
       },
       {
         id: 'hdastr', wish: 'streamer', needs: ['hint:hduea5', 'paper:secrets'],
         question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
-        text: T(`The streamer vanished in the middle of a stream. One line of the Secrets of the Hotel paper says where someone suddenly disappeared.`, `配信者は配信の途中で消えた。ホテルの秘密の一行に、誰かが突然消えた場所が書かれている。`),
+        text: T(`The streamer vanished in the middle of a stream. One line of the Secrets of the Hotel paper says where someone suddenly disappeared.`, `配信者は配信の途中で消えた。「ホテルの秘密」の一行に、誰かが突然消えた場所が書かれている。`),
       },
       {
         id: 'hdbfly', wish: 'fly', needs: ['hint:herpae'],
         question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
-        text: T(`The bird left its things behind in its room. The receptionist suggested a few rooms to visit. Look for a room with feathers in it but no guest.`, `鳥は自分の荷物を部屋に残していった。フロント係が訪ねるべき部屋をいくつか教えてくれたはずだ。羽が落ちていてのに本人のいない部屋を探そう。`),
+        text: T(`The bird left its things behind in its room. The receptionist suggested a few rooms to visit. Look for a room with feathers in it but no guest.`, `鳥は自分の荷物を部屋に残していった。フロント係が訪ねるべき部屋をいくつか教えてくれたはずだ。羽が落ちているのに本人のいない部屋を探そう。`),
       },
       {
         id: 'hdcinv', wish: 'invisible', needs: ['hint:hb90w1'],
