@@ -2230,12 +2230,12 @@ The name can be figured out using the check-in times and process of elimination.
         text: T(`That person tells someone their room number in the Common Room at 3pm.`, `その人物は、15時の談話室で自分の部屋番号を伝えている。`),
       },
       {
-        id: 'hakcta', wish: 'forever', needs: ['skill:memory'],
-        question: T(`Where should I look?`, `どこを調べればいい？`),
-        text: T(`Look for someone who talks about never having to work again.`, `もう二度と働かなくていいと話している人物を探そう。`),
+        id: 'hs1oth', wish: 'forever', needs: ['skill:memory'],
+        question: T(`Where can I find this person?`, `この人物はどこで見つかる？`),
+        text: T(`Someone who never has to work again can spend every day doing nothing at all. Which of the seven deadly sins does that sound like? Listen for anyone who mentions that sin, and where it will be.`, `もう二度と働かなくていい人は、毎日何もせずに過ごせる。それは七つの大罪のどれに似ているだろう？ その罪の名前と、それがどこにあるのかを口にしている人物を探そう。`),
       },
       {
-        id: 'h042im', wish: 'forever', needs: ['hint:hakcta', 'common@17'],
+        id: 'h042im', wish: 'forever', needs: ['hint:hs1oth', 'common@17'],
         question: T(`How do I figure out the owner of this wish?`, `この願いの持ち主はどうやって分かる？`),
         text: T(`Someone predicted where Sloth would die. Visit that room at the right hour.`, `怠惰の罪人がどこで死ぬかを預言した人がいる。その部屋を、ちょうどいい時刻に見てみよう。`),
       },
