@@ -1574,8 +1574,11 @@ The boss suggests going to Rooms 4, 5 and 14.`,
 
     // Shown on the home screen, under the language buttons.
     homeNote: T(
-      `The story, scenario and mystery of this game are the author's original work. AI assistance was used only to build the interface and to help with editing and translation, and the author reviewed and revised everything it produced.`,
-      `本作のストーリー、シナリオ、謎解きは、全て作者によるオリジナルです。AIはUIの制作と文章の推敲・翻訳の補助にのみ使用しており、生成された内容は全て作者が確認・修正しています。`),
+      `The story, scenario and mystery of this game are the author's original work. AI assistance was used only to build the interface and to help with editing and translation, and the author reviewed and revised everything it produced.
+
+Many thanks to everyone who playtested the game!`,
+      `本作のストーリー、シナリオ、謎解きは、全て作者によるオリジナルです。AIはUIの制作と文章の推敲・翻訳の補助にのみ使用しており、生成された内容は全て作者が確認・修正しています。
+テストプレイしてくださった皆さん、本当にありがとうございました！`),
     confirmBatch: 3,
 
     // The elimination grid groups the guests by their hours on the Check-in
