@@ -2134,9 +2134,12 @@
   function hintsBehind(key) {
     return game.hints.filter((h, i) => [].concat(h.needs || []).includes('hint:' + key) && hintStuck(h, i)).length;
   }
-  // Not shown yet, and held back by more than other hints.
+  // Not shown yet, and held back by more than other hints. A hint whose '!'
+  // need already fails is gone for good (rooms, papers, skills, confirmations
+  // and hints seen never go back), so it isn't counted; flags can be unset.
   function hintStuck(h, i) {
     if (state.hintsSeen[hintKey(h, i)]) return false;
+    if ([].concat(h.needs || []).some(n => n[0] === '!' && !/^!flag:/.test(n) && !hintNeed(n))) return false;
     const needs = [].concat(h.needs || []).filter(n => !/^hint:/.test(n));
     return !needs.every(hintNeed) || !!(h.when && !h.when(ctx()));
   }
