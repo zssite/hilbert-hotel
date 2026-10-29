@@ -2513,6 +2513,11 @@ The name can be figured out using the check-in times and process of elimination.
         text: T(`Compare the Lisa you met today with the Dining Room scene at 5pm. Is there something weird going on?`, `今日会った七海と、17時のダイニングルームの場面を比べてみよう。何かおかしなことが起きていないだろうか？`),
       },
       {
+        id: 'hlre4l', guest: 'lisa', needs: ['hint:hbtor1', 'paper:secrets'],
+        question: T(`Then who is the Lisa I met today?`, `じゃあ、今日会った七海は誰なの？`),
+        text: T(`Not the real one. Look at the Secrets of the Hotel paper: someone vanished the moment another guest's wish came true. Which wish could turn someone into Lisa?`, `本物の七海ではない。「ホテルの秘密」を見てみよう。別の客の願いが叶ったその瞬間に、姿を消した人がいる。誰かを七海に変えてしまえる願いは、どれだろう？`),
+      },
+      {
         id: 'h8h05l', guest: 'lisa', needs: ['paper:secrets'],
         question: T(`How do I figure out her room number?`, `五十嵐七海の部屋番号はどうやって分かる？`),
         text: T(`Check the Secrets of the Hotel paper. Someone disappeared in one of the rooms.`, `「ホテルの秘密」を確認しよう。ある部屋で、誰かが姿を消している。`),
@@ -2976,7 +2981,7 @@ Should anything you read catch your eye, select the text to copy it into your no
 
 - Room 666 has the power to transport someone to another world.
 
-- Someone suddenly disappeared in Room 1214 earlier today.
+- Someone suddenly disappeared in Room 1214 earlier today, at the very moment another guest's wish came true.
 
 - Your room number decides whether you live to see the end of the day.
 `,
@@ -2988,7 +2993,7 @@ Should anything you read catch your eye, select the text to copy it into your no
 
 - 666号室には、人を異世界に転移させる力がある。
 
-- 今日、1214号室で誰かが忽然と姿を消した。
+- 今日、別の客の願いが叶った瞬間に、1214号室で誰かが忽然と姿を消した。
 
 - 部屋番号によって、その日の終わりまで生きられるかどうかが決まる。
 `),
