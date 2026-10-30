@@ -1477,10 +1477,10 @@ Sorry, I just started this job recently. There are no shifts here and I'm the on
         },
         corpse: {
           text: T(
-            `Not another one… My boss says you're doing some detective work here. Take this Memory Device: it lets you replay scenes from yesterday. Come back once you've correctly identified 15 guests.
+            `Not another one… My boss says you're doing some detective work here. Take this Memory Device: it lets you replay scenes from yesterday, though it won't necessarily show you everything that happened. Come back once you've correctly identified 15 guests.
 
 The boss suggests going to Rooms 4, 5 and 14.`,
-            `またですか……。昨日も人が死んだと聞きました。あなたが探偵のようなことをなさっていると、上司から伺っております。こちらの記憶装置をお使いください。昨日の出来事を再生できます。お客様を15人正しく特定できたら、またいらしてください。
+            `またですか……。昨日も人が死んだと聞きました。あなたが探偵のようなことをなさっていると、上司から伺っております。こちらの記憶装置をお使いください。昨日の出来事を再生できます。ただ、全部が映るとは限らないんです。お客様を15人正しく特定できたら、またいらしてください。
 
 上司からは、4号室、5号室、14号室を調べてみるよう言付かっております。`),
           do: s => {
@@ -3023,8 +3023,8 @@ Should anything you read catch your eye, select the text to copy it into your no
         name: T('Memory Device', '記憶装置'),
         item: true,
         text: T(
-          `In any room, choose an hour of yesterday (07–23) from the row above the room number field to see what happened there during that hour. Hours with nothing to see are dimmed. **Back to the present** returns you to the room as it is now.`,
-          `どの部屋でも、部屋番号の欄の上に並ぶ昨日の時刻（7〜23時）を選ぶと、その一時間にそこで起きたことが見られる。見るものがない時刻は薄く表示される。**現在に戻る** を押すと、今の部屋に戻る。`),
+          `In any room, choose an hour of yesterday (07–23) from the row above the room number field to see what happened there during that hour. It won't necessarily show you everything that happened. Hours with nothing to see are dimmed. **Back to the present** returns you to the room as it is now.`,
+          `どの部屋でも、部屋番号の欄の上に並ぶ昨日の時刻（7〜23時）を選ぶと、その一時間にそこで起きたことが見られる。ただし、すべてが映るとは限らない。見るものがない時刻は薄く表示される。**現在に戻る** を押すと、今の部屋に戻る。`),
       },
     },
 

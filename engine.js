@@ -26,6 +26,7 @@
       unknown: '—',
       wishMany: t => `Several wishes contain “${t}”. Type more of it, or pick one from the list.`,
       wishNone: t => `No wish contains “${t}”.`,
+      wishClear: 'Remove this wish',
       confirmed: 'Confirmed',
       roomTitle: n => `Room ${n}`,
       floorTitle: f => `Floor ${f}`,
@@ -175,6 +176,7 @@
       unknown: '—',
       wishMany: t => `「${t}」を含む願いが複数あります。もう少し入力するか、一覧から選んでください。`,
       wishNone: t => `「${t}」を含む願いはありません。`,
+      wishClear: 'この願いを消す',
       confirmed: '確定',
       roomTitle: n => `${n}号室`,
       floorTitle: f => `${f}階`,
@@ -951,6 +953,8 @@
     const pieces = piecesFor(room, s);
     const view = $('#room-body');
     view.innerHTML = '';
+    // A new room (or hour) starts at the top; redrawing in place keeps the scroll.
+    if (animate) view.scrollTop = 0;
     view.classList.toggle('animate', !!animate);
     staggerIndex = 0;
 
@@ -2171,9 +2175,10 @@
       row.appendChild(name);
 
       // The wish is typed, with the wishes suggested as a list, so any word of
-      // one finds it. The field empties on focus so the whole list shows (the
-      // wish stays as the placeholder), and anything left that matches exactly
-      // one wish is taken as that wish; "—" in the list clears the row's wish.
+      // one finds it. Focusing selects the wish, so typing replaces it; what's
+      // left on Enter or leaving the box is taken as a whole wish, or a word of
+      // exactly one wish. An empty box, or the × beside it, removes the wish.
+      const cell = el('span', 'reg-wish-cell');
       const wish = field('input', 'reg-wish', i, 'wish', ui.wish);
       wish.spellcheck = false;
       wish.autocomplete = 'off';
@@ -2181,49 +2186,56 @@
       const choices = wishOrder.filter(w => !taken.has(w.id) || w.id === g.wish);
       const list = el('datalist');
       list.id = 'reg-wishes-' + i;
-      [ui.unknown, ...choices.map(w => L(w))].forEach(t => list.appendChild(new Option(t)));
+      choices.forEach(w => list.appendChild(new Option(L(w))));
       wish.setAttribute('list', list.id);
+      const clear = el('button', 'reg-wish-clear', '×');
+      clear.type = 'button';
+      clear.title = ui.wishClear;
+      clear.setAttribute('aria-label', `${ui.register} ${pos + 1} — ${ui.wishClear}`);
       const wishText = id => (id && wishById[id] ? L(wishById[id]) : '');
       const norm = t => t.normalize('NFKC').toLowerCase().trim();
       const current = () => (state.entries[i] || {}).wish;
       const commit = id => {
         wish.value = wishText(id);
-        wish.placeholder = ui.unknown;
+        clear.hidden = locked || !id;
         if ((id || undefined) !== current()) update(i, { wish: id || undefined });
       };
-      // What the player typed: a whole wish, "—", or a word of exactly one wish.
+      // What the player typed: nothing, a whole wish, or a word of exactly one wish.
       const resolve = () => {
         const typed = norm(wish.value);
-        if (!typed) return commit(current());
-        if (typed === norm(ui.unknown)) return commit(undefined);
+        if (!typed) return commit(undefined);
         const exact = choices.find(w => norm(L(w)) === typed);
         if (exact) return commit(exact.id);
         const found = choices.filter(w => norm(L(w)).includes(typed));
         if (found.length === 1) return commit(found[0].id);
-        wish.title = found.length ? ui.wishMany(wish.value.trim()) : ui.wishNone(wish.value.trim());
-        toast(wish.title);
+        toast(found.length ? ui.wishMany(wish.value.trim()) : ui.wishNone(wish.value.trim()));
         commit(current());
       };
       wish.value = wishText(g.wish);
       wish.placeholder = ui.unknown;
       wish.disabled = locked;
-      wish.addEventListener('focus', () => {
-        wish.title = '';
-        wish.placeholder = wish.value || ui.unknown;
-        wish.value = '';
-      });
+      clear.hidden = locked || !g.wish;
+      // The click that focuses the box would otherwise undo the selection.
+      let selecting = false;
+      wish.addEventListener('focus', () => { wish.select(); selecting = true; });
+      wish.addEventListener('mouseup', e => { if (selecting) e.preventDefault(); selecting = false; });
       // Picking from the list fills in a whole wish: take it straight away.
       wish.addEventListener('input', () => {
         const typed = norm(wish.value);
-        if (typed === norm(ui.unknown) || choices.some(w => norm(L(w)) === typed)) resolve();
+        if (choices.some(w => norm(L(w)) === typed)) resolve();
       });
       wish.addEventListener('blur', resolve);
       wish.addEventListener('keydown', e => {
         if (e.key === 'Enter') { e.preventDefault(); wish.blur(); }
-        if (e.key === 'Escape') { wish.value = ''; wish.blur(); }
+        if (e.key === 'Escape') { wish.value = wishText(current()); wish.blur(); }
       });
-      row.appendChild(wish);
-      row.appendChild(list);
+      // Emptied and focused, so the whole list is ready for another wish.
+      clear.addEventListener('mousedown', e => e.preventDefault());
+      clear.addEventListener('click', () => { commit(undefined); wish.focus(); });
+      cell.appendChild(wish);
+      cell.appendChild(clear);
+      cell.appendChild(list);
+      row.appendChild(cell);
 
       const inp = field('input', 'reg-room', i, 'room', ui.room);
       inp.inputMode = 'numeric';

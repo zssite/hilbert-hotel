@@ -234,6 +234,9 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .reg-row.locked { color: var(--ok); }
 .reg-row.locked select, .reg-row.locked input { border-color: transparent; color: var(--ok); opacity: 1; -webkit-text-fill-color: var(--ok); }
 .reg-row select option { background: var(--paper); color: var(--ink); }
+.reg-wish-cell { display: flex; align-items: center; min-width: 0; }
+.reg-wish-clear { flex: none; border: none; padding: 0 0.3em; color: var(--ink-dim); font-size: 1rem; line-height: 1; }
+.reg-wish-clear:hover, .reg-wish-clear:focus-visible { color: var(--accent); }
 .reg-hint { font-size: 0.8rem; color: var(--ink-dim); font-style: italic; margin: 0.2rem 0 0.4rem; }
 .reg-left { font-size: 0.85rem; margin: 0 0 0.5rem; border: 1px dashed var(--ink-faint); padding: 0.3rem 0.5rem; }
 .reg-left summary { cursor: pointer; font-family: var(--mono); font-size: 0.8rem; color: var(--ink-dim); }
@@ -276,8 +279,9 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 #note-page-delete:hover:not(:disabled) { border-color: var(--ink-faint); color: var(--accent); }
 .notes .note { border-bottom: 1px solid var(--ink-faint); padding: 0.55rem 0; font-size: 0.95rem; }
 .notes .note p { margin: 0; }
+/* Add note under the box on the left, in the accent color so it's easy to spot */
 .note-form { display: flex; flex-direction: column; gap: 0.4rem; padding: 0.3rem 0 0.8rem; border-bottom: 2px solid var(--ink-dim); }
-.note-form button { align-self: flex-end; }
+.note-form button { align-self: flex-start; font-weight: 700; }
 .note-form textarea, .note-edit {
   width: 100%; resize: vertical;
   background: #fffdf6; border: 1px solid var(--ink-faint); border-radius: 2px;
