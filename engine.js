@@ -83,8 +83,7 @@
       wishesList: 'Wishes',
       namePlaceholder: 'name',
       bigRoom: 'For a room above 999,999,999, you may write 0.',
-      rowRef: n => `row ${n}`,
-      leftover: 'Not written yet',
+      leftover: 'Unassigned names & wishes',
       leftoverNone: 'Every name and wish is written down.',
       leftoverNames: 'Names',
       leftoverWishes: 'Wishes',
@@ -229,7 +228,6 @@
       wishesList: '願いの一覧',
       namePlaceholder: '名前',
       bigRoom: '999,999,999より大きい部屋番号は 0 と書いてもよい。',
-      rowRef: n => `${n}行目`,
       leftover: '未記入',
       leftoverNone: 'すべての名前と願いを書き込んだ。',
       leftoverNames: '名前',
@@ -742,7 +740,7 @@
       confirmedCount: () => Object.keys(state.confirmed).length,
       // A line of a paper listing guests or wishes, marked by the register.
       markGuest: (id, text) => markLine(L(text), !!state.confirmed[id], registerUse().guests[id]),
-      markWish: (id, text) => markWishLine(L(text), confirmedWishes().has(id), registerUse().wishes[id]),
+      markWish: (id, text) => markLine(L(text), confirmedWishes().has(id), registerUse().wishes[id]),
       guess: id => {
         const e = state.entries.find(e => e && (e.cid === id || charsForName(e.name).includes(charById[id])));
         return e ? { name: e.name, wish: e.wish, room: e.room } : {};
@@ -1336,15 +1334,8 @@
   }
 
   // A line of the Guest List or the List of Wishes: struck through once
-  // confirmed, otherwise followed by the rows it's written on.
+  // confirmed, grayed out once written on any row.
   function markLine(text, confirmed, rows) {
-    if (confirmed) return `~~${text}~~`;
-    return rows && rows.length ? `${text} — ${rows.map(ui.rowRef).join(', ')}` : text;
-  }
-
-  // A line of the List of Wishes: struck through once confirmed, grayed out
-  // once written on any row.
-  function markWishLine(text, confirmed, rows) {
     if (confirmed) return `~~${text}~~`;
     return rows && rows.length ? `%%${text}%%` : text;
   }

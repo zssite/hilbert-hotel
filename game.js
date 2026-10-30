@@ -1535,8 +1535,8 @@ The boss suggests going to Rooms 4, 5 and 14.`,
   // gives nothing away (in Japanese, by the reading in `kana`), with their
   // gender. In Japanese, a name in kanji also shows its reading.
   const hasKanji = s => /[一-鿿々]/.test(s);
-  // `s.markGuest` strikes out confirmed guests and tags the register rows a
-  // name is written on (the scenes viewer passes no `s`).
+  // `s.markGuest` strikes out confirmed guests and grays out names written in
+  // the register (the scenes viewer passes no `s`).
   const guestList = (lang, s) => characters.filter(c => !c.player)
     .map(c => ({
       id: c.id,
@@ -1761,7 +1761,7 @@ You jolt awake to the sound of your phone alarm. Looking around, you find a few 
       {
         id: 'hgeend', needs: ['paper:secrets'],
         question: T(`I've placed most guests, but I'm stuck on the last few.`, `ほとんどの宿泊客は分かったが、最後の数人で行き詰まっている。`),
-        text: T(`Some guests are meant to be found by elimination. Open "Not written yet" at the top of the Register, or the Elimination grid, to see which names and wishes are left, and match them up using the check-in times.`, `何人かの宿泊客は、消去法で見つけるようにできている。宿帳の上にある「未記入」や「消去法の表」を開いて、残っている名前と願いを確かめ、チェックイン時刻を使って組み合わせよう。`),
+        text: T(`Some guests are meant to be found by elimination. Open "Unassigned names & wishes" at the top of the Register, or the Elimination grid, to see which names and wishes are left, and match them up using the check-in times.`, `何人かの宿泊客は、消去法で見つけるようにできている。宿帳の上にある「未記入」や「消去法の表」を開いて、残っている名前と願いを確かめ、チェックイン時刻を使って組み合わせよう。`),
       },
       {
         id: 'hzz7x0', guest: 'aida',
