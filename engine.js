@@ -927,9 +927,11 @@
     const room = normPlace(input);
     const err = $('#go-error');
     // Room 0, negative numbers and anything else that isn't a positive integer.
-    if (room === null || room === '0') { err.textContent = ui.invalid; return; }
+    // A rejected room number is cleared from the box so the player can retype.
+    if (room === null || room === '0') { err.textContent = ui.invalid; $('#go-input').value = ''; return; }
     if (!ride && state.room && floorOf(room) !== floorOf(state.room)) {
       err.textContent = ui.otherFloor(roomLabel(room));
+      $('#go-input').value = '';
       return;
     }
     let at = null;
@@ -3093,6 +3095,7 @@
       const r = normRoom(typed);
       if (r !== null && /^\d+$/.test(r) && BigInt(r) > HUGE) {
         $('#go-error').textContent = ui.tooHigh;
+        $('#go-input').value = '';
         return;
       }
       // Walking keeps the hour the Memory Device is set to.
