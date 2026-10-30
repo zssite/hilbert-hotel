@@ -241,7 +241,7 @@
     {
       id: 'lucy', name: T('Lucy Stone', '森田 彼方'), kana: 'もりた　かなた', gender: 'F', wish: 'deathday', room: 8963, checkIn: 7,
       fate: T(
-        `Lucy wished that the day she dies would never arrive. It never does: she relives the day she checked in, over and over. This is her 15,532th time through, and she knows every body before it falls. Nobody believes her, and she has long since stopped expecting anyone to.`,
+        `Lucy wished that the day she dies would never arrive. It never does: she relives the day she checked in, over and over. This is her 15,532nd time through, and she knows every body before it falls. Nobody believes her, and she has long since stopped expecting anyone to.`,
         `森田彼方は自分が死ぬ日が永遠に来ないことを願い、その日は本当に来なくなった。彼女はチェックインした日を何度も繰り返しており、今回で15,532回目になる。誰がいつ死ぬのかも全て知っているが、誰も彼女の言葉を信じず、彼女ももうとっくに期待するのをやめた。`),
     },
     {
