@@ -237,6 +237,8 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .reg-row select:focus, .reg-row input:focus { outline: none; border-bottom: 1px solid var(--accent); background: rgba(142, 49, 35, 0.06); }
 .reg-row.locked { color: var(--ok); }
 .reg-row.locked select, .reg-row.locked input { border-color: transparent; color: var(--ok); opacity: 1; -webkit-text-fill-color: var(--ok); }
+/* Some browsers swallow hovers on a disabled box: let the cell's title show instead. */
+.reg-row.locked .reg-wish { pointer-events: none; }
 .reg-row select option { background: var(--paper); color: var(--ink); }
 .reg-wish-cell { display: flex; align-items: center; min-width: 0; }
 .reg-wish-clear { flex: none; border: none; padding: 0 0.3em; color: var(--ink-dim); font-size: 1rem; line-height: 1; }

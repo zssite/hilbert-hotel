@@ -2231,6 +2231,8 @@
       wish.placeholder = ui.unknown;
       wish.disabled = locked;
       clear.hidden = locked || !g.wish;
+      // A confirmed wish can't be scrolled through, so hovering shows it whole.
+      if (locked) cell.title = wish.value;
       // The click that focuses the box would otherwise undo the selection.
       let selecting = false;
       wish.addEventListener('focus', () => { wish.select(); selecting = true; });
