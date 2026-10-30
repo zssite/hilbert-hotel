@@ -24,6 +24,8 @@
       wish: 'Wish',
       room: 'Room',
       unknown: '—',
+      wishMany: t => `Several wishes contain “${t}”. Type more of it, or pick one from the list.`,
+      wishNone: t => `No wish contains “${t}”.`,
       confirmed: 'Confirmed',
       roomTitle: n => `Room ${n}`,
       floorTitle: f => `Floor ${f}`,
@@ -135,6 +137,24 @@
       fateHide: 'Hide fate',
       back: 'Back',
       reset: 'Start over',
+      saveMenu: 'Save',
+      saveSlot: n => `Slot ${n}`,
+      slotEmpty: 'Empty',
+      slotInfo: (name, k, when) => `${name || '—'} · ${k} confirmed · ${when}`,
+      saveHere: 'Save',
+      loadHere: 'Load',
+      overwriteConfirm: n => `Save over Slot ${n}?`,
+      loadConfirm: 'Load this save? The game you are playing now will be replaced.',
+      saved: n => `Saved to Slot ${n}.`,
+      saveFailed: 'Could not save: this browser is not letting the game store data.',
+      loaded: 'Save loaded.',
+      exportSave: 'Export to file',
+      importSave: 'Import from file',
+      exported: 'Saved to a file.',
+      importBad: 'That file is not a save from this game.',
+      autosave: 'Autosave',
+      autosaveOn: 'The game saves itself after every move.',
+      autosaveOff: 'Autosave is off: progress is only kept when you save. Reopening the page continues from your last save or load.',
       hide: 'Hide',
       clickToContinue: 'Click to continue',
     },
@@ -150,6 +170,8 @@
       wish: '願い',
       room: '部屋',
       unknown: '—',
+      wishMany: t => `「${t}」を含む願いが複数あります。もう少し入力するか、一覧から選んでください。`,
+      wishNone: t => `「${t}」を含む願いはありません。`,
       confirmed: '確定',
       roomTitle: n => `${n}号室`,
       floorTitle: f => `${f}階`,
@@ -257,6 +279,24 @@
       fateHide: '結末を隠す',
       back: '戻る',
       reset: '最初からやり直す',
+      saveMenu: 'セーブ',
+      saveSlot: n => `スロット${n}`,
+      slotEmpty: '空き',
+      slotInfo: (name, k, when) => `${name || '—'}・${k}人確定・${when}`,
+      saveHere: 'セーブ',
+      loadHere: 'ロード',
+      overwriteConfirm: n => `スロット${n}に上書きしますか？`,
+      loadConfirm: 'このデータをロードしますか？ 今プレイ中のゲームは置き換えられます。',
+      saved: n => `スロット${n}にセーブしました。`,
+      saveFailed: 'セーブできませんでした。このブラウザではデータを保存できません。',
+      loaded: 'ロードしました。',
+      exportSave: 'ファイルに書き出す',
+      importSave: 'ファイルから読み込む',
+      exported: 'ファイルに書き出しました。',
+      importBad: 'このゲームのセーブデータではありません。',
+      autosave: 'オートセーブ',
+      autosaveOn: '一手ごとに自動でセーブされます。',
+      autosaveOff: 'オートセーブはオフです。セーブしたときだけ進行状況が保存されます。ページを開き直すと、最後にセーブまたはロードしたところから再開します。',
       hide: '閉じる',
       clickToContinue: 'クリックして続ける',
     },
@@ -422,7 +462,7 @@
   }
 
   // Minimal markup: blank line = new paragraph, newline = <br>,
-  // **bold**, *italic*, ~~struck~~.
+  // **bold**, *italic*, ~~struck~~, %%grayed out%%.
   function renderMarkup(str, s) {
     return template(str, s)
       .split(/\n\s*\n/)
@@ -432,6 +472,7 @@
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
         .replace(/~~(.+?)~~/g, '<s>$1</s>')
+        .replace(/%%(.+?)%%/g, '<span class="dim">$1</span>')
         .replace(/\n/g, '<br>') + '</p>')
       .join('');
   }
@@ -534,8 +575,90 @@
 
   function saveKey() { return 'hilbert-hotel:' + (game.id || 'game'); }
 
-  function save() {
+  // Autosave is on unless the player turns it off in the Save menu; kept in
+  // this browser as a preference rather than in the save. With it off, the
+  // game is only written when the player saves or loads, and reopening the
+  // page continues from there.
+  const AUTOSAVE_KEY = 'hilbert-hotel:autosave';
+  let autosave = (() => {
+    try { return localStorage.getItem(AUTOSAVE_KEY) !== 'false'; } catch (e) { return true; }
+  })();
+  let unsaved = false;  // changes not written yet (autosave off)
+
+  // Writes the game where reopening the page will find it.
+  function writeSave() {
+    unsaved = false;
     try { localStorage.setItem(saveKey(), JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
+  }
+
+  function save() {
+    if (autosave) writeSave();
+    else unsaved = true;
+  }
+
+  function setAutosave(on) {
+    autosave = on;
+    try { localStorage.setItem(AUTOSAVE_KEY, String(on)); } catch (e) { /* storage unavailable */ }
+    if (on) writeSave();
+  }
+
+  // Save slots: { savedAt, state } under the save key plus ':slot1', ':slot2', …
+  const SLOTS = 3;
+  function slotKey(n) { return saveKey() + ':slot' + n; }
+
+  function readSlot(n) {
+    try {
+      const data = JSON.parse(localStorage.getItem(slotKey(n)));
+      return data && data.state && typeof data.state === 'object' ? data : null;
+    } catch (e) { return null; }
+  }
+
+  function saveToSlot(n) {
+    try { localStorage.setItem(slotKey(n), JSON.stringify({ savedAt: Date.now(), state })); }
+    catch (e) { toast(ui.saveFailed); return; }
+    writeSave();
+    toast(ui.saved(n));
+  }
+
+  // The save as a .json file: { game, savedAt, state }.
+  function exportSave() {
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const stamp = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}`;
+    const data = JSON.stringify({ game: game.id || 'game', savedAt: now.getTime(), state });
+    const a = el('a');
+    a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
+    a.download = `hilbert-hotel-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    writeSave();
+    toast(ui.exported);
+  }
+
+  function importSave(file) {
+    file.text().then(text => {
+      let data = null;
+      try { data = JSON.parse(text); } catch (e) { /* not JSON */ }
+      const saved = data && data.state;
+      if (!saved || typeof saved !== 'object' || typeof saved.confirmed !== 'object' || (data.game && data.game !== (game.id || 'game'))) {
+        alert(ui.importBad);
+        return;
+      }
+      if (confirm(ui.loadConfirm)) loadState(saved);
+    });
+  }
+
+  // Replaces the game being played with a saved one, and picks it up where
+  // it was left.
+  function loadState(saved) {
+    state = upgrade(saved);
+    writeSave();
+    resetView();
+    toast(ui.loaded);
+    if (state.started) runPrologue();
+    else renderHome();
   }
 
   function load() {
@@ -611,7 +734,7 @@
       confirmedCount: () => Object.keys(state.confirmed).length,
       // A line of a paper listing guests or wishes, marked by the register.
       markGuest: (id, text) => markLine(L(text), !!state.confirmed[id], registerUse().guests[id]),
-      markWish: (id, text) => markLine(L(text), confirmedWishes().has(id), registerUse().wishes[id]),
+      markWish: (id, text) => markWishLine(L(text), confirmedWishes().has(id), registerUse().wishes[id]),
       guess: id => {
         const e = state.entries.find(e => e && (e.cid === id || charsForName(e.name).includes(charById[id])));
         return e ? { name: e.name, wish: e.wish, room: e.room } : {};
@@ -1049,7 +1172,7 @@
       }
 
       const advance = (label, next, effect, key, isChoice) => {
-        const b = el('button', 'choice', escapeHtml(label));
+        const b = el('button', key && state.taken[key] ? 'choice taken' : 'choice', escapeHtml(label));
         b.addEventListener('click', () => {
           box.remove();
           staggerIndex = 0;
@@ -1207,6 +1330,13 @@
   function markLine(text, confirmed, rows) {
     if (confirmed) return `~~${text}~~`;
     return rows && rows.length ? `${text} — ${rows.map(ui.rowRef).join(', ')}` : text;
+  }
+
+  // A line of the List of Wishes: struck through once confirmed, grayed out
+  // once written on any row.
+  function markWishLine(text, confirmed, rows) {
+    if (confirmed) return `~~${text}~~`;
+    return rows && rows.length ? `%%${text}%%` : text;
   }
 
   // Hand the player a paper with { start: false } during the story.
@@ -2034,14 +2164,60 @@
       name.addEventListener('keydown', e => { if (e.key === 'Enter') name.blur(); });
       row.appendChild(name);
 
-      const sel = field('select', 'reg-wish', i, 'wish', ui.wish);
-      sel.appendChild(new Option(ui.unknown, ''));
+      // The wish is typed, with the wishes suggested as a list, so any word of
+      // one finds it. The field empties on focus so the whole list shows (the
+      // wish stays as the placeholder), and anything left that matches exactly
+      // one wish is taken as that wish; "—" in the list clears the row's wish.
+      const wish = field('input', 'reg-wish', i, 'wish', ui.wish);
+      wish.spellcheck = false;
+      wish.autocomplete = 'off';
       // A row keeps its own choice, even if that wish has since been confirmed elsewhere.
-      wishOrder.forEach(w => { if (!taken.has(w.id) || w.id === g.wish) sel.appendChild(new Option(L(w), w.id)); });
-      sel.value = g.wish || '';
-      sel.disabled = locked;
-      sel.addEventListener('change', () => update(i, { wish: sel.value || undefined }));
-      row.appendChild(sel);
+      const choices = wishOrder.filter(w => !taken.has(w.id) || w.id === g.wish);
+      const list = el('datalist');
+      list.id = 'reg-wishes-' + i;
+      [ui.unknown, ...choices.map(w => L(w))].forEach(t => list.appendChild(new Option(t)));
+      wish.setAttribute('list', list.id);
+      const wishText = id => (id && wishById[id] ? L(wishById[id]) : '');
+      const norm = t => t.normalize('NFKC').toLowerCase().trim();
+      const current = () => (state.entries[i] || {}).wish;
+      const commit = id => {
+        wish.value = wishText(id);
+        wish.placeholder = ui.unknown;
+        if ((id || undefined) !== current()) update(i, { wish: id || undefined });
+      };
+      // What the player typed: a whole wish, "—", or a word of exactly one wish.
+      const resolve = () => {
+        const typed = norm(wish.value);
+        if (!typed) return commit(current());
+        if (typed === norm(ui.unknown)) return commit(undefined);
+        const exact = choices.find(w => norm(L(w)) === typed);
+        if (exact) return commit(exact.id);
+        const found = choices.filter(w => norm(L(w)).includes(typed));
+        if (found.length === 1) return commit(found[0].id);
+        wish.title = found.length ? ui.wishMany(wish.value.trim()) : ui.wishNone(wish.value.trim());
+        toast(wish.title);
+        commit(current());
+      };
+      wish.value = wishText(g.wish);
+      wish.placeholder = ui.unknown;
+      wish.disabled = locked;
+      wish.addEventListener('focus', () => {
+        wish.title = '';
+        wish.placeholder = wish.value || ui.unknown;
+        wish.value = '';
+      });
+      // Picking from the list fills in a whole wish: take it straight away.
+      wish.addEventListener('input', () => {
+        const typed = norm(wish.value);
+        if (typed === norm(ui.unknown) || choices.some(w => norm(L(w)) === typed)) resolve();
+      });
+      wish.addEventListener('blur', resolve);
+      wish.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); wish.blur(); }
+        if (e.key === 'Escape') { wish.value = ''; wish.blur(); }
+      });
+      row.appendChild(wish);
+      row.appendChild(list);
 
       const inp = field('input', 'reg-room', i, 'room', ui.room);
       inp.inputMode = 'numeric';
@@ -2416,26 +2592,99 @@
     return wrap;
   }
 
-  // The Aa button's popup, under the button; closed by a click elsewhere or Esc.
-  function toggleTextSizePopup() {
-    const old = $('#size-popup');
-    if (old) { old.remove(); return; }
-    const pop = el('div', 'size-popup');
-    pop.id = 'size-popup';
-    pop.appendChild(textSizeSlider());
+  // A popup under a top-bar button, filled by `fill(pop)`; the button opens
+  // and closes it, and a click elsewhere or Esc closes it too.
+  function togglePopup(button, id, cls, fill) {
+    const old = document.getElementById(id);
+    if (old) { old.close(); return; }
+    const pop = el('div', 'popup ' + cls);
+    pop.id = id;
+    fill(pop);
     document.body.appendChild(pop);
-    const r = $('#text-size').getBoundingClientRect();
+    const r = button.getBoundingClientRect();
     pop.style.top = (r.bottom + 6) + 'px';
     pop.style.right = Math.max(8, window.innerWidth - r.right) + 'px';
-    pop.querySelector('input').focus();
-    const close = e => {
-      if (e.type === 'keydown' ? e.key !== 'Escape' : pop.contains(e.target) || e.target === $('#text-size')) return;
-      pop.remove();
-      document.removeEventListener('pointerdown', close);
-      document.removeEventListener('keydown', close);
+    const onEvent = e => {
+      if (e.type === 'keydown' ? e.key !== 'Escape' : pop.contains(e.target) || button.contains(e.target)) return;
+      pop.close();
     };
-    document.addEventListener('pointerdown', close);
-    document.addEventListener('keydown', close);
+    pop.close = () => {
+      pop.remove();
+      document.removeEventListener('pointerdown', onEvent);
+      document.removeEventListener('keydown', onEvent);
+    };
+    document.addEventListener('pointerdown', onEvent);
+    document.addEventListener('keydown', onEvent);
+    const first = pop.querySelector('input, button');
+    if (first) first.focus();
+  }
+
+  // The Aa button's popup.
+  function toggleTextSizePopup() {
+    togglePopup($('#text-size'), 'size-popup', 'size-popup', pop => pop.appendChild(textSizeSlider()));
+  }
+
+  // The Save button's popup: the save slots, autosave, and saving to or
+  // loading from a file.
+  function toggleSavePopup() {
+    togglePopup($('#save-button'), 'save-popup', 'save-popup', fillSavePopup);
+  }
+
+  function fillSavePopup(pop) {
+    pop.innerHTML = '';
+    const button = (label, onClick, disabled) => {
+      const b = el('button', '', escapeHtml(label));
+      b.type = 'button';
+      b.disabled = !!disabled;
+      b.addEventListener('click', onClick);
+      return b;
+    };
+    const refill = () => { fillSavePopup(pop); };
+
+    const slots = el('div', 'save-slots');
+    for (let n = 1; n <= SLOTS; n++) {
+      const data = readSlot(n);
+      const row = el('div', 'save-slot');
+      const info = el('div', 'save-slot-info');
+      info.appendChild(el('span', 'save-slot-name', escapeHtml(ui.saveSlot(n))));
+      const when = data && new Date(data.savedAt).toLocaleString(state.lang, { dateStyle: 'short', timeStyle: 'short' });
+      info.appendChild(el('span', 'save-slot-detail', escapeHtml(data
+        ? ui.slotInfo(data.state.player, Object.keys(data.state.confirmed || {}).length, when)
+        : ui.slotEmpty)));
+      row.appendChild(info);
+      row.appendChild(button(ui.saveHere, () => {
+        if (data && !confirm(ui.overwriteConfirm(n))) return;
+        saveToSlot(n);
+        refill();
+      }));
+      row.appendChild(button(ui.loadHere, () => {
+        const fresh = readSlot(n);
+        if (fresh && confirm(ui.loadConfirm)) loadState(fresh.state);
+      }, !data));
+      slots.appendChild(row);
+    }
+    pop.appendChild(slots);
+
+    const files = el('div', 'save-files');
+    files.appendChild(button(ui.exportSave, exportSave));
+    const picker = el('input');
+    picker.type = 'file';
+    picker.accept = '.json,application/json';
+    picker.hidden = true;
+    picker.addEventListener('change', () => { if (picker.files[0]) importSave(picker.files[0]); picker.value = ''; });
+    files.appendChild(picker);
+    files.appendChild(button(ui.importSave, () => picker.click()));
+    pop.appendChild(files);
+
+    const auto = el('label', 'save-auto');
+    const box = el('input');
+    box.type = 'checkbox';
+    box.checked = autosave;
+    box.addEventListener('change', () => { setAutosave(box.checked); refill(); });
+    auto.appendChild(box);
+    auto.appendChild(document.createTextNode(' ' + ui.autosave));
+    pop.appendChild(auto);
+    pop.appendChild(el('p', 'save-auto-note', escapeHtml(autosave ? ui.autosaveOn : ui.autosaveOff)));
   }
 
   // The language is chosen here, before starting, and is fixed for that game.
@@ -2648,20 +2897,27 @@
 
   function reset() {
     state = freshState();
+    writeSave();
+    resetView();
+    renderHome();
+  }
+
+  // Clears everything drawn for the previous game, after `state` is replaced.
+  function resetView() {
+    const pop = $('#save-popup');
+    if (pop) pop.close();
     editing = null;
     openItem = null;
     notesShown = '';
     hintQuery = null;
     hintVia = 'name';
     $('#hints').innerHTML = '';
-    save();
     applyLanguage();
     ['#room-body', '#room-number', '#room-floor', '#room-name', '#room-time', '#recent', '#places'].forEach(sel => { $(sel).innerHTML = ''; });
     document.body.classList.remove('past');
     $('#memory').hidden = true;
     $('#lift-button').hidden = true;
     $('#prologue-button').hidden = true;
-    renderHome();
   }
 
   // ---------------------------------------------------------------------------
@@ -2735,6 +2991,7 @@
     $('#note-add').textContent = ui.noteAdd;
     $('#note-page-delete').textContent = ui.deletePage;
     $('#clip').textContent = ui.clip;
+    $('#save-button').textContent = ui.saveMenu;
     $('#text-size').title = ui.textSize;
     $('#text-size').setAttribute('aria-label', ui.textSize);
     $('#reset').title = ui.reset;
@@ -2781,6 +3038,11 @@
     $('#reset').addEventListener('click', () => { if (confirm(ui.resetConfirm)) reset(); });
     $('#text-size').addEventListener('click', toggleTextSizePopup);
     setTextSize(textSize);
+    $('#save-button').addEventListener('click', toggleSavePopup);
+    // With autosave off, the browser asks before leaving with unsaved progress.
+    window.addEventListener('beforeunload', e => {
+      if (!autosave && unsaved && state.started) { e.preventDefault(); e.returnValue = ''; }
+    });
     $('#debug-memory').addEventListener('click', () => { learn('memory'); renderNotebook(); save(); });
     $('#fates-button').addEventListener('click', showFates);
     $('#prologue-button').addEventListener('click', showPrologueLog);

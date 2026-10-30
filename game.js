@@ -9,7 +9,7 @@
  *     (see README.md for everything `s` offers: s.room, s.n, s.flag(),
  *      s.confirmed(id), s.confirmedCount(), s.visits(), s.note(), ...).
  *
- * Markup: blank line = new paragraph, *italic*, **bold**, ~~struck~~.
+ * Markup: blank line = new paragraph, *italic*, **bold**, ~~struck~~, %%grayed out%%.
  * Templates: {n} current room, {floor}, {room:charId}, {name:charId}, {wish:wishId},
  * {at} the hour being viewed in the past, {player} the player's name.
  *
@@ -412,7 +412,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
         if (s.flag('lobbyAfterCorpse')) return body;
         // Until the player has been back to the lobby.
         return T(
-          `${body.en}\n\nYou should report this to the receptionist.`,
+          `${body.en}\n\n**You should report this to the receptionist.**`,
           `${body.ja}\n\nフロント係に知らせた方がよさそうだ。`);
       },
       onEnter: s => s.set('diningCorpse'),
@@ -1436,6 +1436,7 @@ Small feathers are scattered across the bed, and a few more drift along the floo
         menu: {
           choices: [
             { text: T('Can you tell me about this hotel?', 'このホテルについて教えてもらえますか？'), next: 'hotel' },
+            { text: T('Who is your boss?', 'あなたの上司は誰ですか？'), next: 'boss' },
             // Shown from finding the body until the visit after reporting it.
             {
               text: T('There is a corpse in the dining room!', 'ダイニングルームに死体があります！'),
@@ -1448,7 +1449,6 @@ Small feathers are scattered across the bed, and a few more drift along the floo
               next: 'lead',
               when: s => s.flag('reportedCorpse'),
             },
-            { text: T('Who is your boss?', 'あなたの上司は誰ですか？'), next: 'boss' },
             // Shown whether or not the choices above have been picked.
             {
               text: T('I have identified 15 guests.', 'お客様を15人特定しました。'),

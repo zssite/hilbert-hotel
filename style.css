@@ -123,6 +123,9 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .choice { font-family: var(--serif); font-size: calc(1rem * var(--text-scale)); text-align: left; border-color: transparent; padding: 0.15em 0.4em; }
 .choice::before { content: "› "; color: var(--accent); }
 .choice:hover, .choice:focus-visible { border-color: var(--ink-faint); color: var(--ink); }
+/* a choice the player has picked before */
+.choice.taken { color: var(--ink-dim); }
+.choice.taken::before { color: var(--ink-dim); }
 
 /* ---- elevators: brass call buttons ---- */
 .lift-call { border-color: var(--accent); color: var(--accent); font-size: 0.75rem; padding: 0.1rem 0.6rem; margin-top: -0.15rem; }
@@ -229,7 +232,8 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .reg-left-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 0.75rem; margin-top: 0.4rem; }
 .reg-left h4 { margin: 0 0 0.2rem; font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-dim); font-weight: 400; }
 .reg-left ul { margin: 0; padding-left: 1.1em; line-height: 1.35; }
-.paper-text s { color: var(--ink-dim); }
+.paper-text s,
+.paper-text .dim { color: var(--ink-dim); }
 
 /* the inventory: what the player carries, and the one being read */
 .inv-list { list-style: none; margin: 0.4rem 0; padding: 0; }
@@ -376,12 +380,22 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .size-row { display: flex; align-items: center; justify-content: center; gap: 0.6rem; }
 .size-row input { width: 12rem; max-width: 60vw; accent-color: var(--accent); }
 .size-value { font-family: var(--mono); font-size: 0.85rem; min-width: 3em; color: var(--ink-dim); text-align: left; }
-.size-popup {
+.popup {
   position: fixed; z-index: 30;
   background: var(--paper); border: 1px solid var(--accent);
   padding: 0.6rem 0.9rem 0.8rem; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
 }
 .size-popup .size-slider { margin-top: 0; }
+/* the Save button's popup: slots, then files, then autosave */
+.save-popup { width: min(24rem, calc(100vw - 16px)); font-size: 0.9rem; }
+.save-slot { display: flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0; border-bottom: 1px solid var(--ink-faint); }
+.save-slot-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.save-slot-name { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); }
+.save-slot-detail { color: var(--ink-dim); font-size: 0.82rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.save-files { display: flex; gap: 0.4rem; flex-wrap: wrap; margin: 0.7rem 0; }
+.save-auto { display: flex; align-items: center; gap: 0.3rem; cursor: pointer; }
+.save-auto input { accent-color: var(--accent); }
+.save-auto-note { margin: 0.3rem 0 0; color: var(--ink-dim); font-size: 0.8rem; line-height: 1.4; }
 .home-note { font-size: 0.78rem; color: var(--ink-dim); margin: 1.4rem auto 0; max-width: 28rem; line-height: 1.5; }
 .home-note p { margin: 0 0 0.4em; }
 /* The fates screen: a toolbar, then a grid of guest cards. */
