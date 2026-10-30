@@ -65,6 +65,16 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .progress { color: var(--ink-dim); font-size: 0.85rem; }
 .topbar-actions { margin-left: auto; display: flex; gap: 0.5rem; }
 #nb-toggle[aria-expanded="true"] { border-color: var(--accent); color: var(--accent); }
+/* Hints: apart from the notebook's tabs, in the far corner of the top bar */
+.hints-button { margin-left: 0.75rem; }
+/* top-bar buttons with a shorter label for phones, and the ☰ menu that
+   holds the rest there (see below) */
+.label-short { display: none; }
+.phone-only { display: none; }
+.menu-popup { display: flex; flex-direction: column; gap: 0.4rem; min-width: 13rem; }
+.menu-popup .menu-item { text-align: left; }
+.menu-popup .size-slider { margin: 0.2rem 0; }
+.hints-button.active { border-color: var(--accent); color: var(--accent); }
 .nb-close { border: none; font-size: 1.2rem; padding: 0 0.9rem; color: var(--ink-dim); }
 .debug { border-style: dashed; color: var(--ink-dim); font-size: 0.75rem; }
 .debug-actions { display: contents; }
@@ -561,6 +571,11 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
   .topbar h1 { flex: 1 1 0; min-width: 0; font-size: 1rem; letter-spacing: 0.06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .topbar-actions { flex: none; gap: 0.35rem; }
   .topbar-actions button { padding: 0.25em 0.6em; }
+  .topbar .label-long { display: none; }
+  .topbar .label-short { display: inline; }
+  .topbar .phone-hide { display: none; }
+  .topbar .phone-only { display: inline-block; }
+  .hints-button { margin-left: 0.35rem; }
   .room { padding: 0.7rem 1rem 0.4rem; }
   .room-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.2rem 0.8rem; padding-bottom: 0.45rem; margin-bottom: 0.7rem; }
   .room-number { font-size: 1.3rem; }

@@ -17,11 +17,13 @@
       <button id="debug-memory" class="debug" type="button" hidden></button>
       <span id="debug-actions" class="debug-actions"></span>
       <button id="fates-button" type="button" hidden></button>
-      <button id="prologue-button" type="button" hidden></button>
+      <button id="prologue-button" class="phone-hide" type="button" hidden></button>
       <button id="nb-toggle" type="button" aria-controls="notebook"><span id="nb-toggle-label"></span> <span id="nb-toggle-count"></span></button>
-      <button id="save-button" type="button" aria-haspopup="dialog"></button>
-      <button id="text-size" type="button">Aa</button>
-      <button id="reset" type="button" title="Reset" aria-label="Reset">↺</button>
+      <button id="save-button" class="phone-hide" type="button" aria-haspopup="dialog"></button>
+      <button id="text-size" class="phone-hide" type="button">Aa</button>
+      <button id="reset" class="phone-hide" type="button" title="Reset" aria-label="Reset">↺</button>
+      <button id="menu-button" class="phone-only" type="button" aria-haspopup="menu">☰</button>
+      <button id="tab-hints" class="hints-button" type="button" aria-controls="hints" aria-pressed="false"></button>
     </div>
   </header>
 
@@ -55,7 +57,6 @@
         <button id="tab-inventory" class="tab active" type="button" role="tab" aria-selected="true"></button>
         <button id="tab-register" class="tab" type="button" role="tab" aria-selected="false"></button>
         <button id="tab-notes" class="tab" type="button" role="tab" aria-selected="false"></button>
-        <button id="tab-hints" class="tab" type="button" role="tab" aria-selected="false"></button>
         <button id="nb-close" class="nb-close" type="button" aria-label="Hide">×</button>
       </div>
       <div id="inventory" class="tab-panel inventory"></div>

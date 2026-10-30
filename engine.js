@@ -127,6 +127,7 @@
       deletePage: 'Delete page',
       deletePageConfirm: 'Delete this page and the notes you wrote on it?',
       fates: 'See everyone\'s fate',
+      fatesShort: 'Fates',
       fatesTitle: 'Everyone\'s fate',
       fatesSort: 'Sort',
       fatesByName: 'A–Z',
@@ -138,6 +139,8 @@
       back: 'Back',
       reset: 'Start over',
       saveMenu: 'Save',
+      menu: 'Menu',
+      saveLoad: 'Save / Load…',
       saveSlot: n => `Slot ${n}`,
       slotEmpty: 'Empty',
       slotInfo: (name, k, when) => `${name || '—'} · ${k} confirmed · ${when}`,
@@ -269,6 +272,7 @@
       deletePage: 'ページを削除',
       deletePageConfirm: 'このページと、そこに書いたメモを削除しますか？',
       fates: 'みんなの結末を見る',
+      fatesShort: '結末',
       fatesTitle: 'みんなの結末',
       fatesSort: '並べ替え',
       fatesByName: '名前順',
@@ -280,6 +284,8 @@
       back: '戻る',
       reset: '最初からやり直す',
       saveMenu: 'セーブ',
+      menu: 'メニュー',
+      saveLoad: 'セーブ／ロード…',
       saveSlot: n => `スロット${n}`,
       slotEmpty: '空き',
       slotInfo: (name, k, when) => `${name || '—'}・${k}人確定・${when}`,
@@ -2604,6 +2610,8 @@
     const r = button.getBoundingClientRect();
     pop.style.top = (r.bottom + 6) + 'px';
     pop.style.right = Math.max(8, window.innerWidth - r.right) + 'px';
+    // Slid back on-screen if hanging from a button away from the corner.
+    if (pop.getBoundingClientRect().left < 8) pop.style.right = Math.max(8, window.innerWidth - pop.offsetWidth - 8) + 'px';
     const onEvent = e => {
       if (e.type === 'keydown' ? e.key !== 'Escape' : pop.contains(e.target) || button.contains(e.target)) return;
       pop.close();
@@ -2625,9 +2633,27 @@
   }
 
   // The Save button's popup: the save slots, autosave, and saving to or
-  // loading from a file.
-  function toggleSavePopup() {
-    togglePopup($('#save-button'), 'save-popup', 'save-popup', fillSavePopup);
+  // loading from a file. Opened from the phone menu, it hangs under ☰.
+  function toggleSavePopup(anchor) {
+    togglePopup(anchor instanceof Element ? anchor : $('#save-button'), 'save-popup', 'save-popup', fillSavePopup);
+  }
+
+  // The ☰ button, on phones only (see style.css): the top-bar buttons that
+  // don't fit there (Prologue, Save, text size, Start over) as one menu.
+  function toggleMenuPopup() {
+    const menu = $('#menu-button');
+    togglePopup(menu, 'menu-popup', 'menu-popup', pop => {
+      const item = (label, onClick) => {
+        const b = el('button', 'menu-item', escapeHtml(label));
+        b.type = 'button';
+        b.addEventListener('click', () => { pop.close(); onClick(); });
+        pop.appendChild(b);
+      };
+      if (!$('#prologue-button').hidden) item(ui.prologueLog, showPrologueLog);
+      item(ui.saveLoad, () => toggleSavePopup(menu));
+      pop.appendChild(textSizeSlider());
+      item(ui.reset, () => { if (confirm(ui.resetConfirm)) reset(); });
+    });
   }
 
   function fillSavePopup(pop) {
@@ -2972,6 +2998,14 @@
   // the list and the dropdown never gives away the answer.
   let wishOrder = [];
 
+  // A top-bar button with a long label and a short one for phones (see
+  // style.css); the long one stays as its tooltip and accessible name.
+  function topbarLabel(button, long, short) {
+    button.innerHTML = `<span class="label-long">${escapeHtml(long)}</span><span class="label-short">${escapeHtml(short)}</span>`;
+    button.title = long;
+    button.setAttribute('aria-label', long);
+  }
+
   function applyLanguage() {
     ui = Object.assign({}, UI[state.lang], (game.ui || {})[state.lang]);
     wishOrder = game.wishes.slice().sort((a, b) => L(a).localeCompare(L(b), state.lang));
@@ -2985,13 +3019,15 @@
     $('#nb-toggle-label').textContent = ui.notebook;
     $('#present-button').textContent = ui.present;
     $('#lift-button').textContent = ui.useLift;
-    $('#fates-button').textContent = ui.fates;
+    topbarLabel($('#fates-button'), ui.fates, ui.fatesShort);
     $('#go-error').textContent = '';
     $('#note-input').placeholder = ui.notePlaceholder;
     $('#note-add').textContent = ui.noteAdd;
     $('#note-page-delete').textContent = ui.deletePage;
     $('#clip').textContent = ui.clip;
     $('#save-button').textContent = ui.saveMenu;
+    $('#menu-button').title = ui.menu;
+    $('#menu-button').setAttribute('aria-label', ui.menu);
     $('#text-size').title = ui.textSize;
     $('#text-size').setAttribute('aria-label', ui.textSize);
     $('#reset').title = ui.reset;
@@ -3039,6 +3075,7 @@
     $('#text-size').addEventListener('click', toggleTextSizePopup);
     setTextSize(textSize);
     $('#save-button').addEventListener('click', toggleSavePopup);
+    $('#menu-button').addEventListener('click', toggleMenuPopup);
     // With autosave off, the browser asks before leaving with unsaved progress.
     window.addEventListener('beforeunload', e => {
       if (!autosave && unsaved && state.started) { e.preventDefault(); e.returnValue = ''; }
@@ -3046,15 +3083,27 @@
     $('#debug-memory').addEventListener('click', () => { learn('memory'); renderNotebook(); save(); });
     $('#fates-button').addEventListener('click', showFates);
     $('#prologue-button').addEventListener('click', showPrologueLog);
-    ['inventory', 'register', 'notes', 'hints'].forEach(tab => {
-      $('#tab-' + tab).addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => {
-          t.classList.toggle('active', t.id === 'tab-' + tab);
-          t.setAttribute('aria-selected', String(t.id === 'tab-' + tab));
-        });
-        document.querySelectorAll('.tab-panel').forEach(p => { p.hidden = p.id !== tab; });
-        $('#tab-' + tab).classList.remove('ping');
+    // The notebook's tabs, plus Hints, whose button sits apart in the top
+    // bar's far corner so it isn't clicked by mistake. It opens the notebook
+    // on the hints, and a second click goes back to the tab before.
+    let lastTab = 'inventory';
+    const showTab = tab => {
+      if (tab !== 'hints') lastTab = tab;
+      document.querySelectorAll('.tab, #tab-hints').forEach(t => {
+        t.classList.toggle('active', t.id === 'tab-' + tab);
+        t.setAttribute(t.id === 'tab-hints' ? 'aria-pressed' : 'aria-selected', String(t.id === 'tab-' + tab));
       });
+      document.querySelectorAll('.tab-panel').forEach(p => { p.hidden = p.id !== tab; });
+      $('#tab-' + tab).classList.remove('ping');
+    };
+    ['inventory', 'register', 'notes'].forEach(tab => {
+      $('#tab-' + tab).addEventListener('click', () => showTab(tab));
+    });
+    $('#tab-hints').addEventListener('click', () => {
+      const shown = narrow() ? document.body.classList.contains('nb-open') : !state.nbHidden;
+      if (shown && !$('#hints').hidden) { showTab(lastTab); return; }
+      showTab('hints');
+      if (!shown) showNotebook(true);
     });
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && document.body.classList.contains('nb-open')) showNotebook(false);
