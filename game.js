@@ -497,7 +497,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 
 #3: "Sure, hun. What's that over there... AAAAH!"
 
-#2: "Oh sh*t, it's a body! We should get the lady at the front desk!"
+#2: "Oh sh*t, it's a body! We should get the girl at the front desk!"
 
 *#2 and #3 leave the room.*`,
           `*床に男が倒れて死んでいる。そばにメモが落ちている。*
@@ -514,7 +514,7 @@ Receptionist: "Emily, I think. She checked in this afternoon."`,
 
 #3：「いいわよ、ダーリン。あそこにあるのは何……きゃあっ！」
 
-#2：「やばっ！ 死体じゃん！ フロントの女の人呼ばないと！」
+#2：「やばっ！ 死体じゃん！ フロントのお姉さん呼ばないと！」
 
 *#2と#3は部屋を出ていく。*`),
         14: anon(
