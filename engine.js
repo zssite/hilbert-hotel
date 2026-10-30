@@ -105,6 +105,7 @@
       gridIntroHours: 'The guests are grouped by their hours on the Check-in List. Give a wish a range of hours (or a single hour), and everyone not listed in that range is crossed out of its row.',
       gridFrom: wish => `From: ${wish}`,
       gridTo: wish => `To: ${wish}`,
+      gridTime: 'Time',
       gotPaper: t => `Received: ${t}`,
       learned: name => `New skill: ${name}`,
       obtained: name => `Obtained: ${name}`,
@@ -252,6 +253,7 @@
       gridIntroHours: '宿泊客はチェックイン一覧の時刻ごとにまとめてある。願いに時刻の範囲（または一つの時刻）をつけると、その範囲の一覧にいない人は、その行で自動的に✗になる。',
       gridFrom: wish => `開始：${wish}`,
       gridTo: wish => `終了：${wish}`,
+      gridTime: '時刻',
       gotPaper: t => `受け取った：${t}`,
       learned: name => `新しいスキル：${name}`,
       obtained: name => `入手した：${name}`,
@@ -1990,9 +1992,11 @@
     const head = el('tr');
     const corner = el('th', 'grid-corner');
     if (times) {
-      // A row of hours above the names.
+      // A row of hours above the names. The corner labels the hour pickers
+      // at the start of each wish row, just below it.
       const hours = el('tr', 'grid-hours');
       corner.rowSpan = 2;
+      corner.appendChild(el('span', 'grid-time-label', escapeHtml(ui.gridTime)));
       hours.appendChild(corner);
       guests.forEach((c, ci) => {
         if (!starts.has(c.id)) return;
