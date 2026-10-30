@@ -85,7 +85,8 @@
       bigRoom: 'For a room above 999,999,999, you may write 0.',
       leftover: 'Unassigned names & wishes',
       sortBy: col => `Sort confirmed guests by ${{ name: 'name', wish: 'wish', room: 'room number' }[col]}`,
-      sortOff: 'Back to the usual order',
+      sortReverse: 'Reverse the order',
+      sortOff: 'Back to the order they were confirmed in',
       leftoverNone: 'Every name and wish is written down.',
       leftoverNames: 'Names',
       leftoverWishes: 'Wishes',
@@ -235,7 +236,8 @@
       bigRoom: '999,999,999より大きい部屋番号は 0 と書いてもよい。',
       leftover: '未記入',
       sortBy: col => `確定した宿泊客を${{ name: '名前', wish: '願い', room: '部屋番号' }[col]}順に並べる`,
-      sortOff: '元の順に戻す',
+      sortReverse: '逆順にする',
+      sortOff: '確定した順に戻す',
       leftoverNone: 'すべての名前と願いを書き込んだ。',
       leftoverNames: '名前',
       leftoverWishes: '願い',
@@ -1322,12 +1324,17 @@
     return !!(g && g.cid && charById[g.cid]);
   }
 
-  // Confirmed rows are shown first; the rest keep their order below them.
-  // Rows are numbered by where they appear, not where they're stored.
-  // Clicking a column heading sorts the confirmed rows by that column
-  // (room numbers compare as numbers); clicking it again puts them back
-  // in their usual order.
+  // Confirmed rows are shown first, in the order they were confirmed; the
+  // rest keep their order below them. Rows are numbered by where they
+  // appear, not where they're stored. Clicking a column heading sorts the
+  // confirmed rows by that column (room numbers compare as numbers);
+  // clicking it again reverses it, and a third click puts them back in
+  // their usual order.
   let regSort = null;  // null | 'name' | 'wish' | 'room'
+  let regDesc = false;
+
+  // When a confirmed row's guest was confirmed (0 for older saves, which keep row order).
+  const confirmOrder = i => +state.confirmed[state.entries[i].cid] || 0;
 
   function sortKey(i) {
     const g = state.entries[i];
@@ -1338,8 +1345,9 @@
   }
 
   function registerOrder() {
-    const byKey = (a, b) => regSort && isLocked(a) && isLocked(b)
-      ? sortKey(a).localeCompare(sortKey(b), state.lang, { numeric: true }) : 0;
+    const byKey = (a, b) => !(isLocked(a) && isLocked(b)) ? 0
+      : regSort ? (regDesc ? -1 : 1) * sortKey(a).localeCompare(sortKey(b), state.lang, { numeric: true })
+      : confirmOrder(a) - confirmOrder(b);
     return [...Array(game.characters.length).keys()].sort((a, b) => isLocked(b) - isLocked(a) || byKey(a, b) || a - b);
   }
 
@@ -1606,7 +1614,10 @@
     });
     const k = Math.floor(pending.length / batch) * batch;
     if (!k) return;
-    pending.slice(0, k).forEach(({ e, c }) => { state.confirmed[c.id] = true; e.cid = c.id; });
+    // Each guest is stored with the order it was confirmed in (1, 2, 3…), so the
+    // register can list them that way. Older saves hold `true` instead.
+    let n = Object.keys(state.confirmed).length;
+    pending.slice(0, k).forEach(({ e, c }) => { state.confirmed[c.id] = ++n; e.cid = c.id; });
     toast(ui.confirmToast(k));
     chime();
     // `onConfirm(s)` lets the story react, e.g. hand over a paper after 9.
@@ -2153,11 +2164,16 @@
     head.appendChild(el('span', 'reg-idx'));
     [['name', ui.name], ['wish', ui.wish], ['room', ui.room]].forEach(([col, label]) => {
       const on = regSort === col;
-      const b = el('button', `reg-${col} reg-sort` + (on ? ' on' : ''), escapeHtml(label) + (on ? ' ▲' : ''));
+      const b = el('button', `reg-${col} reg-sort` + (on ? ' on' : ''), escapeHtml(label) + (on ? (regDesc ? ' ▼' : ' ▲') : ''));
       b.type = 'button';
-      b.title = on ? ui.sortOff : ui.sortBy(col);
+      b.title = !on ? ui.sortBy(col) : regDesc ? ui.sortOff : ui.sortReverse;
       b.setAttribute('aria-pressed', String(on));
-      b.addEventListener('click', () => { regSort = on ? null : col; renderNotebook(); });
+      b.addEventListener('click', () => {
+        if (!on) { regSort = col; regDesc = false; }
+        else if (!regDesc) regDesc = true;
+        else { regSort = null; regDesc = false; }
+        renderNotebook();
+      });
       head.appendChild(b);
     });
     table.appendChild(head);

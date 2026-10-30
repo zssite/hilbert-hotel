@@ -231,7 +231,7 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
   padding: 0.3rem 0; border-bottom: 1px solid var(--ink-faint);
   font-size: 0.9rem;
 }
-.reg-head { font-family: var(--mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-dim); border-bottom: 2px solid var(--ink-dim); position: sticky; top: -0.5rem; background: var(--paper); z-index: 1; }
+.reg-head { font-family: var(--mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-dim); border-bottom: 2px solid var(--ink-dim); position: sticky; top: -0.5rem; background: var(--paper); z-index: 1; }
 .reg-sort { border: none; background: none; padding: 0; font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; text-align: left; cursor: pointer; }
 .reg-sort:hover, .reg-sort:focus-visible, .reg-sort.on { color: var(--accent); }
 .reg-sort:not(.on)::after { content: " ⇅"; opacity: 0.5; }
