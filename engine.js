@@ -162,6 +162,8 @@
       autosaveOn: 'The game saves itself after every move.',
       autosaveOff: 'Autosave is off: progress is only kept when you save. Reopening the page continues from your last save or load.',
       hide: 'Hide',
+      hideNotebook: 'Hide the notebook',
+      showNotebook: 'Show the notebook',
       clickToContinue: 'Click to continue',
     },
     ja: {
@@ -310,6 +312,8 @@
       autosaveOn: '一手ごとに自動でセーブされます。',
       autosaveOff: 'オートセーブはオフです。セーブしたときだけ進行状況が保存されます。ページを開き直すと、最後にセーブまたはロードしたところから再開します。',
       hide: '閉じる',
+      hideNotebook: '手帳を閉じる',
+      showNotebook: '手帳を開く',
       clickToContinue: 'クリックして続ける',
     },
   };
@@ -3001,6 +3005,12 @@
     document.body.classList.toggle('nb-hidden', !!state.nbHidden);
     const shown = narrow() ? document.body.classList.contains('nb-open') : !state.nbHidden;
     $('#nb-toggle').setAttribute('aria-expanded', String(shown));
+    // The arrow on the notebook's edge points the way the notebook will move.
+    const tab = $('#nb-tab');
+    tab.textContent = shown ? '›' : '‹';
+    tab.title = shown ? ui.hideNotebook : ui.showNotebook;
+    tab.setAttribute('aria-label', tab.title);
+    tab.setAttribute('aria-expanded', String(shown));
   }
 
   // ---------------------------------------------------------------------------
@@ -3103,9 +3113,11 @@
     });
     $('#present-button').addEventListener('click', () => goTo(state.room));
     $('#lift-button').addEventListener('click', rideElevator);
-    $('#nb-toggle').addEventListener('click', () => {
+    const toggleNotebook = () => {
       showNotebook(narrow() ? !document.body.classList.contains('nb-open') : !!state.nbHidden);
-    });
+    };
+    $('#nb-toggle').addEventListener('click', toggleNotebook);
+    $('#nb-tab').addEventListener('click', toggleNotebook);
     $('#nb-close').addEventListener('click', () => showNotebook(false));
     window.addEventListener('resize', renderNotebookShown);
     $('#reset').addEventListener('click', () => { if (confirm(ui.resetConfirm)) reset(); });

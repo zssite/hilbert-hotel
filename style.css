@@ -89,6 +89,16 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
   display: flex; flex-direction: column;
   padding: 1.25rem clamp(1rem, 5vw, 4rem) 1rem;
   min-height: 0;
+  position: relative;
+}
+/* the arrow tab on the room's right edge, against the notebook (or the
+   window's edge when the notebook is put away) */
+.nb-tab {
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  width: 1.4rem; padding: 1.1rem 0;
+  border-right: none; border-radius: 4px 0 0 4px;
+  background: var(--paper-2);
+  font-size: 1.2rem; line-height: 1; color: var(--ink-dim);
 }
 /* The plaque and the floor, name and time share one line, to leave the
    room text as much height as possible. */
@@ -560,7 +570,7 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
   .progress { display: none; }
   .screen-card { padding: 1.4rem 1rem; }
   .layout { grid-template-columns: 1fr; }
-  .room { padding: 1.2rem 1rem 0.8rem; }
+  .room { padding: 1.2rem 1.8rem 0.8rem 1rem; } /* room on the right for the notebook's arrow tab */
   .go-row { flex-wrap: wrap; }
   #go-input { flex: 1 1 8em; }
   .notebook {
@@ -587,7 +597,7 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
   .topbar .phone-hide { display: none; }
   .topbar .phone-only { display: inline-block; }
   .hints-button { margin-left: 0.35rem; }
-  .room { padding: 0.7rem 1rem 0.4rem; }
+  .room { padding: 0.7rem 1.8rem 0.4rem 1rem; }
   .room-head { display: flex; flex-wrap: wrap; align-items: center; gap: 0.2rem 0.8rem; padding-bottom: 0.45rem; margin-bottom: 0.7rem; }
   .room-number { font-size: 1.3rem; }
   .room-meta { flex-wrap: wrap; gap: 0.2rem 0.8rem; margin-top: 0; }
