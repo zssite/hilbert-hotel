@@ -2105,7 +2105,7 @@ The name can be figured out using the check-in times and process of elimination.
       {
         id: 'hrt8mr', wish: 'revive', needs: ['hint:hu0iqx'],
         question: T(`How do I figure out the room number of the owner of this wish?`, `この願いの持ち主の部屋番号はどうやって分かる？`),
-        text: T(`Whoever brought her back checked into the room she woke up in.`, `彼女を生き返らせた人物は、彼女が目を覚ました部屋にチェックインしていた。`),
+        text: T(`Whoever brought her back checked into the room she woke up in. Remember the rooms you were asked to visit in the beginning.`, `彼女を生き返らせた人物は、彼女が目を覚ました部屋にチェックインしていた。最初に行くように言われた部屋を思い出そう。`),
       },
       {
         id: 'htmd77', wish: 'troubles',
