@@ -2237,8 +2237,11 @@
       const wishText = id => (id && wishById[id] ? L(wishById[id]) : '');
       const norm = t => t.normalize('NFKC').toLowerCase().trim();
       const current = () => (state.entries[i] || {}).wish;
+      // A box holds one line, so a long wish is shown over it, wrapped, until it's focused.
+      const face = el('span', 'reg-wish-face');
+      face.setAttribute('aria-hidden', 'true');
       const commit = id => {
-        wish.value = wishText(id);
+        wish.value = face.textContent = wishText(id);
         clear.hidden = locked || !id;
         if ((id || undefined) !== current()) update(i, { wish: id || undefined });
       };
@@ -2253,7 +2256,7 @@
         toast(found.length ? ui.wishMany(wish.value.trim()) : ui.wishNone(wish.value.trim()));
         commit(current());
       };
-      wish.value = wishText(g.wish);
+      wish.value = face.textContent = wishText(g.wish);
       wish.placeholder = ui.unknown;
       wish.disabled = locked;
       clear.hidden = locked || !g.wish;
@@ -2277,6 +2280,7 @@
       clear.addEventListener('mousedown', e => e.preventDefault());
       clear.addEventListener('click', () => { commit(undefined); wish.focus(); });
       cell.appendChild(wish);
+      cell.appendChild(face);
       cell.appendChild(clear);
       cell.appendChild(list);
       row.appendChild(cell);
