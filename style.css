@@ -252,19 +252,19 @@ button.primary:hover, button.primary:focus-visible { filter: brightness(1.1); co
 .reg-row select option { background: var(--paper); color: var(--ink); }
 /* The box and its wrapped face share one grid square, so a long wish makes the row taller. */
 .reg-wish-cell { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; min-width: 0; }
-.reg-row .reg-wish, .reg-wish-face { grid-area: 1 / 1; line-height: 1.25; }
-.reg-row .reg-wish { align-self: stretch; }
-/* A wrapped wish makes its row taller: keep every underline on the row's last line. */
-.reg-row:not(.reg-head) { align-items: end; }
-.reg-row:not(.reg-head) .reg-idx { padding-bottom: 0.3em; }
+.reg-wish-cell .reg-wish, .reg-wish-face { grid-area: 1 / 1; line-height: 1.25; }
+.reg-wish-cell .reg-wish { align-self: stretch; }
+/* A wrapped wish makes its row taller: everything else stays on its first line. */
+.reg-row:not(.reg-head) { align-items: start; }
+.reg-row:not(.reg-head) .reg-idx { padding-top: 0.3em; }
 .reg-wish-face {
   pointer-events: none; white-space: normal; overflow-wrap: anywhere;
   padding: 0.2em 0.3em calc(0.2em + 1px); font-size: 0.85rem; font-family: var(--mono);
 }
-.reg-row .reg-wish:not(:focus):not(:placeholder-shown) { color: transparent; -webkit-text-fill-color: transparent; }
+.reg-wish-cell .reg-wish:not(:focus):not(:placeholder-shown) { color: transparent; -webkit-text-fill-color: transparent; }
 /* While typing, the box is a plain one-line box again. */
 .reg-wish-cell:focus-within .reg-wish-face { display: none; }
-.reg-wish-clear { grid-area: 1 / 2; align-self: end; padding-bottom: 0.15em; }
+.reg-wish-clear { grid-area: 1 / 2; align-self: start; margin-top: 0.25em; }
 .reg-wish-clear { flex: none; border: none; padding: 0 0.3em; color: var(--ink-dim); font-size: 1rem; line-height: 1; }
 .reg-wish-clear:hover, .reg-wish-clear:focus-visible { color: var(--accent); }
 .reg-hint { font-size: 0.8rem; color: var(--ink-dim); font-style: italic; margin: 0.2rem 0 0.4rem; }
