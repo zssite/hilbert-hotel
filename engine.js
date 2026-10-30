@@ -84,6 +84,8 @@
       namePlaceholder: 'name',
       bigRoom: 'For a room above 999,999,999, you may write 0.',
       leftover: 'Unassigned names & wishes',
+      sortBy: col => `Sort confirmed guests by ${{ name: 'name', wish: 'wish', room: 'room number' }[col]}`,
+      sortOff: 'Back to the usual order',
       leftoverNone: 'Every name and wish is written down.',
       leftoverNames: 'Names',
       leftoverWishes: 'Wishes',
@@ -229,6 +231,8 @@
       namePlaceholder: '名前',
       bigRoom: '999,999,999より大きい部屋番号は 0 と書いてもよい。',
       leftover: '未記入',
+      sortBy: col => `確定した宿泊客を${{ name: '名前', wish: '願い', room: '部屋番号' }[col]}順に並べる`,
+      sortOff: '元の順に戻す',
       leftoverNone: 'すべての名前と願いを書き込んだ。',
       leftoverNames: '名前',
       leftoverWishes: '願い',
@@ -1312,8 +1316,23 @@
 
   // Confirmed rows are shown first; the rest keep their order below them.
   // Rows are numbered by where they appear, not where they're stored.
+  // Clicking a column heading sorts the confirmed rows by that column
+  // (room numbers compare as numbers); clicking it again puts them back
+  // in their usual order.
+  let regSort = null;  // null | 'name' | 'wish' | 'room'
+
+  function sortKey(i) {
+    const g = state.entries[i];
+    const c = charById[g.cid];
+    if (regSort === 'name') return (state.lang === 'ja' && c.kana) || charName(c);
+    if (regSort === 'wish') return wishById[c.wish] ? L(wishById[c.wish]) : '';
+    return g.room || '';
+  }
+
   function registerOrder() {
-    return [...Array(game.characters.length).keys()].sort((a, b) => isLocked(b) - isLocked(a) || a - b);
+    const byKey = (a, b) => regSort && isLocked(a) && isLocked(b)
+      ? sortKey(a).localeCompare(sortKey(b), state.lang, { numeric: true }) : 0;
+    return [...Array(game.characters.length).keys()].sort((a, b) => isLocked(b) - isLocked(a) || byKey(a, b) || a - b);
   }
 
   // The unconfirmed rows (by their shown number) each guest and wish is written on.
@@ -2122,9 +2141,15 @@
     table.appendChild(leftover);
     const head = el('div', 'reg-row reg-head');
     head.appendChild(el('span', 'reg-idx'));
-    head.appendChild(el('span', 'reg-name', escapeHtml(ui.name)));
-    head.appendChild(el('span', 'reg-wish', escapeHtml(ui.wish)));
-    head.appendChild(el('span', 'reg-room', escapeHtml(ui.room)));
+    [['name', ui.name], ['wish', ui.wish], ['room', ui.room]].forEach(([col, label]) => {
+      const on = regSort === col;
+      const b = el('button', `reg-${col} reg-sort` + (on ? ' on' : ''), escapeHtml(label) + (on ? ' ▲' : ''));
+      b.type = 'button';
+      b.title = on ? ui.sortOff : ui.sortBy(col);
+      b.setAttribute('aria-pressed', String(on));
+      b.addEventListener('click', () => { regSort = on ? null : col; renderNotebook(); });
+      head.appendChild(b);
+    });
     table.appendChild(head);
 
     const update = (i, fields) => {
